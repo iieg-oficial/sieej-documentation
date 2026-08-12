@@ -1,0 +1,660 @@
+{
+  "generado": "2026-08-12",
+  "descripcion": "Inventario de pipelines del SIEEJ. La seccion 'documentacion_estatica' proviene de los HTML y markdown de referencia (fotografias que pueden estar desactualizadas). La seccion 'fuente_viva' proviene de Airflow y la BD de produccion, y es la fuente de verdad del estado actual.",
+  "fuentes": {
+    "documentacion_estatica": {
+      "html_documents": "/home/euclides-marmota/Documentos/IIEG/sieej/general-documentation/etls-pipelines-readmes/html-documents",
+      "views_md": "/home/euclides-marmota/Documentos/IIEG/sieej/general-documentation/etl-views/views-md",
+      "fecha_snapshot_views_md": "2026-05-20"
+    },
+    "fuente_viva": {
+      "estado": "pendiente_acceso_red",
+      "airflow": null,
+      "bd_produccion": null
+    }
+  },
+  "resumen": {
+    "html_pipelines": 22,
+    "bds_documentadas_views_md": 20,
+    "bds_infraestructura_geo": [
+      "cvegeo",
+      "iieg"
+    ],
+    "total_vistas_documentadas": 53,
+    "pipelines_inventariados": 22
+  },
+  "cross_check_estatico": {
+    "html_sin_vistas_documentadas": [
+      "conapo",
+      "escuelas",
+      "ilmm",
+      "participacion_ciudadana"
+    ],
+    "vistas_sin_html": [],
+    "alias_nombres": {
+      "censos_economicos": "censo_economico"
+    },
+    "notas": [
+      "cvegeo e iieg solo exponen vistas de sistema PostGIS (geometry_columns/geography_columns); se clasifican como infraestructura geoespacial, no pipelines.",
+      "conapo.html podria ser documento sombrilla de productos CONAPO (marginacion, intensidad_migratoria); verificar contra Airflow.",
+      "escuelas.html y centros_educativos.html podrian referir a fuentes relacionadas; verificar cual esta activo en produccion."
+    ]
+  },
+  "pipelines": {
+    "agropecuario_siap": {
+      "nombre": "agropecuario_siap",
+      "documentacion_html": {
+        "archivo": "agropecuario_siap.html",
+        "titulo": "Agropecuario SIAP — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [
+        {
+          "esquema": "public",
+          "vista": "view_agricola_jalisco",
+          "archivo_md": "agropecuario_siap__public__view_agricola_jalisco.md"
+        }
+      ],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "documentado"
+    },
+    "asg_imss": {
+      "nombre": "asg_imss",
+      "documentacion_html": {
+        "archivo": "asg_imss.html",
+        "titulo": "ASG IMSS — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [
+        {
+          "esquema": "public",
+          "vista": "v_asg_imss",
+          "archivo_md": "asg_imss__public__v_asg_imss.md"
+        }
+      ],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "documentado"
+    },
+    "censo_economico": {
+      "nombre": "censo_economico",
+      "documentacion_html": {
+        "archivo": "censos_economicos.html",
+        "titulo": "Censos Económicos — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": "censos_economicos",
+      "vistas_documentadas": [
+        {
+          "esquema": "public",
+          "vista": "vw_economico_estatal_2019",
+          "archivo_md": "censo_economico__public__vw_economico_estatal_2019.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "vw_economico_estatal_2024",
+          "archivo_md": "censo_economico__public__vw_economico_estatal_2024.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "vw_economico_municipal_2019",
+          "archivo_md": "censo_economico__public__vw_economico_municipal_2019.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "vw_economico_municipal_2024",
+          "archivo_md": "censo_economico__public__vw_economico_municipal_2024.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "vw_economico_nacional_2019",
+          "archivo_md": "censo_economico__public__vw_economico_nacional_2019.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "vw_economico_nacional_2024",
+          "archivo_md": "censo_economico__public__vw_economico_nacional_2024.md"
+        }
+      ],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "documentado"
+    },
+    "censo_poblacion": {
+      "nombre": "censo_poblacion",
+      "documentacion_html": {
+        "archivo": "censo_poblacion.html",
+        "titulo": "Censo de Población — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [
+        {
+          "esquema": "public",
+          "vista": "view_inegi_2010",
+          "archivo_md": "censo_poblacion__public__view_inegi_2010.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "view_inegi_2015",
+          "archivo_md": "censo_poblacion__public__view_inegi_2015.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "view_inegi_2020",
+          "archivo_md": "censo_poblacion__public__view_inegi_2020.md"
+        }
+      ],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "documentado"
+    },
+    "centros_educativos": {
+      "nombre": "centros_educativos",
+      "documentacion_html": {
+        "archivo": "centros_educativos.html",
+        "titulo": "Centros Educativos (SIGED) — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [
+        {
+          "esquema": "public",
+          "vista": "v_centros_educativos",
+          "archivo_md": "centros_educativos__public__v_centros_educativos.md"
+        }
+      ],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "documentado"
+    },
+    "conapo": {
+      "nombre": "conapo",
+      "documentacion_html": {
+        "archivo": "conapo.html",
+        "titulo": "CONAPO — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "html_sin_vistas_documentadas"
+    },
+    "datamexico": {
+      "nombre": "datamexico",
+      "documentacion_html": {
+        "archivo": "datamexico.html",
+        "titulo": "DataMéxico — Comercio Exterior — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [
+        {
+          "esquema": "public",
+          "vista": "v_flujo_comercio",
+          "archivo_md": "datamexico__public__v_flujo_comercio.md"
+        }
+      ],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "documentado"
+    },
+    "delitos_fuero_comun": {
+      "nombre": "delitos_fuero_comun",
+      "documentacion_html": {
+        "archivo": "delitos_fuero_comun.html",
+        "titulo": "Delitos del Fuero Común — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [
+        {
+          "esquema": "public",
+          "vista": "v_delitos_comparables_general",
+          "archivo_md": "delitos_fuero_comun__public__v_delitos_comparables_general.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_delitos_serie_historica",
+          "archivo_md": "delitos_fuero_comun__public__v_delitos_serie_historica.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_extorsion",
+          "archivo_md": "delitos_fuero_comun__public__v_extorsion.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_feminicidio",
+          "archivo_md": "delitos_fuero_comun__public__v_feminicidio.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_homicidio_doloso",
+          "archivo_md": "delitos_fuero_comun__public__v_homicidio_doloso.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_narcomenudeo",
+          "archivo_md": "delitos_fuero_comun__public__v_narcomenudeo.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_otros_fuero_comun",
+          "archivo_md": "delitos_fuero_comun__public__v_otros_fuero_comun.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_otros_libertad_personal",
+          "archivo_md": "delitos_fuero_comun__public__v_otros_libertad_personal.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_otros_libertad_sexual",
+          "archivo_md": "delitos_fuero_comun__public__v_otros_libertad_sexual.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_otros_patrimonio",
+          "archivo_md": "delitos_fuero_comun__public__v_otros_patrimonio.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_otros_sociedad",
+          "archivo_md": "delitos_fuero_comun__public__v_otros_sociedad.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_otros_vida_integridad",
+          "archivo_md": "delitos_fuero_comun__public__v_otros_vida_integridad.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_servidores_publicos",
+          "archivo_md": "delitos_fuero_comun__public__v_servidores_publicos.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_tentativa_extorsion",
+          "archivo_md": "delitos_fuero_comun__public__v_tentativa_extorsion.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_tentativa_feminicidio",
+          "archivo_md": "delitos_fuero_comun__public__v_tentativa_feminicidio.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_tentativa_homicidio_doloso",
+          "archivo_md": "delitos_fuero_comun__public__v_tentativa_homicidio_doloso.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_trata_personas",
+          "archivo_md": "delitos_fuero_comun__public__v_trata_personas.md"
+        }
+      ],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "documentado"
+    },
+    "denue": {
+      "nombre": "denue",
+      "documentacion_html": {
+        "archivo": "denue.html",
+        "titulo": "DENUE — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [
+        {
+          "esquema": "public",
+          "vista": "v_establecimientos",
+          "archivo_md": "denue__public__v_establecimientos.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_establecimientos_jalisco",
+          "archivo_md": "denue__public__v_establecimientos_jalisco.md"
+        }
+      ],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "documentado"
+    },
+    "efipem": {
+      "nombre": "efipem",
+      "documentacion_html": {
+        "archivo": "efipem.html",
+        "titulo": "EFIPEM — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [
+        {
+          "esquema": "public",
+          "vista": "v_efipem",
+          "archivo_md": "efipem__public__v_efipem.md"
+        }
+      ],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "documentado"
+    },
+    "escuelas": {
+      "nombre": "escuelas",
+      "documentacion_html": {
+        "archivo": "escuelas.html",
+        "titulo": "Escuelas — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "html_sin_vistas_documentadas"
+    },
+    "establecimientos_de_salud": {
+      "nombre": "establecimientos_de_salud",
+      "documentacion_html": {
+        "archivo": "establecimientos_de_salud.html",
+        "titulo": "Establecimientos de Salud (CLUES) — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [
+        {
+          "esquema": "public",
+          "vista": "v_establecimientos",
+          "archivo_md": "establecimientos_de_salud__public__v_establecimientos.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_establecimientos_activos_jalisco",
+          "archivo_md": "establecimientos_de_salud__public__v_establecimientos_activos_jalisco.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_establecimientos_jalisco",
+          "archivo_md": "establecimientos_de_salud__public__v_establecimientos_jalisco.md"
+        }
+      ],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "documentado"
+    },
+    "etef": {
+      "nombre": "etef",
+      "documentacion_html": {
+        "archivo": "etef.html",
+        "titulo": "ETEF — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [
+        {
+          "esquema": "public",
+          "vista": "v_etef",
+          "archivo_md": "etef__public__v_etef.md"
+        }
+      ],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "documentado"
+    },
+    "fiscalia": {
+      "nombre": "fiscalia",
+      "documentacion_html": {
+        "archivo": "fiscalia.html",
+        "titulo": "Fiscalía Jalisco — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [
+        {
+          "esquema": "public",
+          "vista": "delitos_vw",
+          "archivo_md": "fiscalia__public__delitos_vw.md"
+        }
+      ],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "documentado"
+    },
+    "ilmm": {
+      "nombre": "ilmm",
+      "documentacion_html": {
+        "archivo": "ilmm.html",
+        "titulo": "ILMM — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "html_sin_vistas_documentadas"
+    },
+    "inpc": {
+      "nombre": "inpc",
+      "documentacion_html": {
+        "archivo": "inpc.html",
+        "titulo": "INPC — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [
+        {
+          "esquema": "public",
+          "vista": "v_inpc_ciudades",
+          "archivo_md": "inpc__public__v_inpc_ciudades.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_inpc_entidades",
+          "archivo_md": "inpc__public__v_inpc_entidades.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "v_inpc_nacional",
+          "archivo_md": "inpc__public__v_inpc_nacional.md"
+        }
+      ],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "documentado"
+    },
+    "intensidad_migratoria": {
+      "nombre": "intensidad_migratoria",
+      "documentacion_html": {
+        "archivo": "intensidad_migratoria.html",
+        "titulo": "Intensidad Migratoria — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [
+        {
+          "esquema": "public",
+          "vista": "view_iim_entidades",
+          "archivo_md": "intensidad_migratoria__public__view_iim_entidades.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "view_iim_municipios_jalisco",
+          "archivo_md": "intensidad_migratoria__public__view_iim_municipios_jalisco.md"
+        }
+      ],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "documentado"
+    },
+    "marginacion": {
+      "nombre": "marginacion",
+      "documentacion_html": {
+        "archivo": "marginacion.html",
+        "titulo": "Marginación — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [
+        {
+          "esquema": "public",
+          "vista": "view_marginacion_estatal",
+          "archivo_md": "marginacion__public__view_marginacion_estatal.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "view_marginacion_localidades",
+          "archivo_md": "marginacion__public__view_marginacion_localidades.md"
+        },
+        {
+          "esquema": "public",
+          "vista": "view_marginacion_municipal",
+          "archivo_md": "marginacion__public__view_marginacion_municipal.md"
+        }
+      ],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "documentado"
+    },
+    "participacion_ciudadana": {
+      "nombre": "participacion_ciudadana",
+      "documentacion_html": {
+        "archivo": "participacion_ciudadana.html",
+        "titulo": "Participación Ciudadana — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "html_sin_vistas_documentadas"
+    },
+    "pobreza_multidimensional": {
+      "nombre": "pobreza_multidimensional",
+      "documentacion_html": {
+        "archivo": "pobreza_multidimensional.html",
+        "titulo": "Pobreza Multidimensional — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [
+        {
+          "esquema": "public",
+          "vista": "vw_pobreza_multidimencional",
+          "archivo_md": "pobreza_multidimensional__public__vw_pobreza_multidimencional.md"
+        }
+      ],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "documentado"
+    },
+    "produccion_ganadera": {
+      "nombre": "produccion_ganadera",
+      "documentacion_html": {
+        "archivo": "produccion_ganadera.html",
+        "titulo": "Producción Ganadera SIAP — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [
+        {
+          "esquema": "public",
+          "vista": "view_ganadera_jalisco",
+          "archivo_md": "produccion_ganadera__public__view_ganadera_jalisco.md"
+        }
+      ],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "documentado"
+    },
+    "repd": {
+      "nombre": "repd",
+      "documentacion_html": {
+        "archivo": "repd.html",
+        "titulo": "REPD — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [
+        {
+          "esquema": "public",
+          "vista": "stg_repd_case_current_vw",
+          "archivo_md": "repd__public__stg_repd_case_current_vw.md"
+        }
+      ],
+      "fuente_viva": {
+        "estado": "pendiente",
+        "dag_airflow": null,
+        "bd_existe": null,
+        "vistas_en_bd": null
+      },
+      "clasificacion_estatica": "documentado"
+    }
+  }
+}

@@ -10,11 +10,11 @@ construir() {
     /venv/bin/python -m sieej_datalayer || echo "[builder] datalayer reportó error; se continúa con los datos previos"
 
     echo "[builder] construyendo el sitio…"
-    if (cd /app/web && npm run build); then
-        rsync -a --delete /app/web/dist/ /sitio/
+    if (cd /app/web && npm run build) \
+        && rsync -a --delete --chmod=D755,F644 /app/web/dist/ /sitio/; then
         echo "[builder] $(date -Iseconds) sitio publicado en /sitio"
     else
-        echo "[builder] el build de Astro falló; se conserva el sitio previo"
+        echo "[builder] build o publicación fallaron; se conserva el sitio previo"
         return 1
     fi
 }

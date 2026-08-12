@@ -7,8 +7,8 @@
  * disponible degrada con gracia: conserva la copia previa si existe y avisa,
  * pero nunca rompe el build.
  */
-import { cpSync, existsSync, mkdirSync, readdirSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { chmodSync, cpSync, existsSync, mkdirSync, readdirSync, statSync } from "node:fs";
+import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const raiz = dirname(fileURLToPath(import.meta.url));
@@ -28,6 +28,23 @@ if (!existsSync(origenAbs)) {
   process.exit(0);
 }
 
-cpSync(origenAbs, destino, { recursive: true });
+// Sin archivos/directorios ocultos (p. ej. .claude/): solo documentación pública.
+cpSync(origenAbs, destino, {
+  recursive: true,
+  filter: (src) => !basename(src).startsWith("."),
+});
+
+// Permisos legibles para el servidor web, sin importar los modos del origen.
+const normalizar = (ruta) => {
+  const info = statSync(ruta);
+  if (info.isDirectory()) {
+    chmodSync(ruta, 0o755);
+    for (const entrada of readdirSync(ruta)) normalizar(join(ruta, entrada));
+  } else {
+    chmodSync(ruta, 0o644);
+  }
+};
+normalizar(destino);
+
 const html = readdirSync(destino).filter((f) => f.endsWith(".html")).length;
 console.log(`[copy-docs] ${html} documentos HTML copiados a ${join("public", "docs")}.`);

@@ -6,7 +6,7 @@
 
 ## Fase 0 — Flujo de desarrollo (agente: git-flujo)
 
-- [ ] **T0.1** Bootstrap del flujo de desarrollo — rama `chore/flujo-desarrollo`
+- [x] **T0.1** Bootstrap del flujo de desarrollo — rama `chore/flujo-desarrollo`
   - Incluye: `.gitignore`, agentes en `.claude/agents/`, `docs/arquitectura.md`,
     `data/inventario.json`, `CONTRIBUTING.md`, plantilla de PR, convención de commits,
     este tablero y `.pre-commit-config.yaml`.
@@ -15,7 +15,7 @@
 
 ## Fase 1 — Capa de datos (agente: datos-backend)
 
-- [ ] **T1.1** Esqueleto del paquete `datalayer` — rama `feature/datalayer-base`
+- [x] **T1.1** Esqueleto del paquete `datalayer` — rama `feature/datalayer-base`
   - `pyproject.toml`, `sieej_datalayer/` con configuración por variables de entorno
     (Pydantic Settings) y modelos de datos del contrato (`inventario`, `numeralia`, `vistas`).
   - CT: `pip install -e .` y `pytest` en verde; sin credenciales hardcodeadas.

@@ -1,0 +1,188 @@
+/* Sistema de diseño sobrio institucional del SIEEJ.
+   Paleta alineada con la documentación HTML de pipelines (morado IIEG). */
+
+:root {
+  --brand: #5c2472;
+  --brand-oscuro: #431a54;
+  --acento: #ff8300;
+  --fondo: #f4f6f9;
+  --tarjeta: #ffffff;
+  --tinta: #1f2733;
+  --tinta-suave: #475467;
+  --silenciado: #667085;
+  --linea: #e3e8ef;
+  --exito: #1a7f4e;
+  --alerta-fondo: #fff4e5;
+  --alerta-borde: #ffd8a8;
+  --error: #b42318;
+  --error-fondo: #fef3f2;
+  --radio: 12px;
+  --sombra: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --ancho-max: 1080px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--tinta);
+  font-family:
+    system-ui,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.contenedor {
+  max-width: var(--ancho-max);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.25;
+  color: var(--tinta);
+}
+
+h2 {
+  font-size: 1.6rem;
+  color: var(--brand);
+  margin: 0 0 0.75rem;
+}
+
+h3 {
+  font-size: 1.15rem;
+  margin: 1.25rem 0 0.5rem;
+}
+
+a {
+  color: var(--brand);
+}
+
+a:hover {
+  color: var(--brand-oscuro);
+}
+
+:focus-visible {
+  outline: 3px solid var(--acento);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.salto-contenido {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--brand);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  z-index: 100;
+}
+
+.salto-contenido:focus {
+  left: 0;
+}
+
+section.bloque {
+  padding: 3rem 0 2rem;
+  scroll-margin-top: 4.5rem;
+}
+
+.tarjeta {
+  background: var(--tarjeta);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 1.4rem 1.5rem;
+}
+
+.insignia {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 0.15rem 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.insignia--ok {
+  background: #e8f5ee;
+  border-color: #b7e0c8;
+  color: var(--exito);
+}
+
+.insignia--pendiente {
+  background: var(--alerta-fondo);
+  border-color: var(--alerta-borde);
+  color: #8a4b00;
+}
+
+.insignia--desactualizado {
+  background: var(--error-fondo);
+  border-color: #f5c6c2;
+  color: var(--error);
+}
+
+.insignia--neutra {
+  background: #eef1f5;
+  border-color: var(--linea);
+  color: var(--tinta-suave);
+}
+
+.aviso {
+  border-radius: var(--radio);
+  border: 1px solid var(--alerta-borde);
+  background: var(--alerta-fondo);
+  color: #7a4200;
+  padding: 0.8rem 1.1rem;
+  margin: 1rem 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.5rem 0.65rem;
+  border-bottom: 1px solid var(--linea);
+  vertical-align: top;
+}
+
+th {
+  color: var(--tinta-suave);
+  font-weight: 600;
+  background: #f8fafc;
+}
+
+.tabla-envoltura {
+  overflow-x: auto;
+}
+
+@media (max-width: 640px) {
+  body {
+    font-size: 15px;
+  }
+
+  section.bloque {
+    padding: 2rem 0 1.25rem;
+  }
+}

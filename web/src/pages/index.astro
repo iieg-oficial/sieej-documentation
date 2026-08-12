@@ -1,0 +1,47 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <section class="heroe" aria-labelledby="titulo-heroe">
+    <div class="contenedor">
+      <p class="heroe__ceja">IIEG · Instituto de Información Estadística y Geográfica de Jalisco</p>
+      <h1 id="titulo-heroe">Sistema de Información Estratégica del Estado de Jalisco</h1>
+      <p class="heroe__resumen">
+        Documentación pública del SIEEJ: qué es el sistema, el catálogo de sus pipelines ETL en
+        producción, la numeralia que cruza Airflow con la base de datos, y la estructura de sus
+        vistas materializadas.
+      </p>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .heroe {
+    background: linear-gradient(160deg, var(--brand) 0%, var(--brand-oscuro) 100%);
+    color: #fff;
+    padding: 3.5rem 0 3rem;
+  }
+
+  .heroe__ceja {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.78rem;
+    opacity: 0.85;
+    margin: 0 0 0.5rem;
+  }
+
+  .heroe h1 {
+    color: #fff;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    margin: 0 0 0.75rem;
+    max-width: 46rem;
+  }
+
+  .heroe__resumen {
+    max-width: 44rem;
+    font-size: 1.05rem;
+    opacity: 0.95;
+    margin: 0;
+  }
+</style>

@@ -38,7 +38,7 @@
 
 ## Fase 2 — Landing Astro (agente: frontend-astro)
 
-- [ ] **T2.1** Scaffold de Astro + layout + sistema de diseño — rama `feature/web-scaffold`
+- [x] **T2.1** Scaffold de Astro + layout + sistema de diseño — rama `feature/web-scaffold`
   - Proyecto Astro estático en `web/`, layout base, paleta institucional, tipografía,
     navegación, footer, metadatos SEO/OG, es-MX.
   - CT: `npm run build` sin errores ni warnings.

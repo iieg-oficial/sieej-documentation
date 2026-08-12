@@ -20,7 +20,7 @@
     (Pydantic Settings) y modelos de datos del contrato (`inventario`, `numeralia`, `vistas`).
   - CT: `pip install -e .` y `pytest` en verde; sin credenciales hardcodeadas.
   - Dependencias: T0.1.
-- [ ] **T1.2** Cliente de la API REST de Airflow — rama `feature/datalayer-airflow`
+- [x] **T1.2** Cliente de la API REST de Airflow — rama `feature/datalayer-airflow`
   - DAGs (activos/pausados), última corrida y estado, conteos de éxitos/fallos recientes.
   - CT: tests unitarios con respuestas simuladas de la API; manejo de fuente caída.
   - Dependencias: T1.1.

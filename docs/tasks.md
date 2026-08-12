@@ -82,7 +82,7 @@
     sitio al volumen servido; webhook opcional para disparo desde Airflow.
   - CT: una corrida del builder reconstruye el sitio end-to-end en local.
   - Dependencias: T1.4, T3.1.
-- [ ] **T3.3** `docker-compose.yml` + `.env.example` + README — rama `chore/compose`
+- [x] **T3.3** `docker-compose.yml` + `.env.example` + README — rama `chore/compose`
   - Compose raíz con healthchecks y `depends_on` condicionado; `.env.example` completo;
     README con arquitectura, arranque y accesos de red requeridos (BD y Airflow externos).
   - CT: `docker compose up` levanta el sistema completo con healthchecks en verde.

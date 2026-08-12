@@ -1,0 +1,167 @@
+---
+import inventario from "../../../data/inventario.json";
+
+// El catálogo se deriva por completo del inventario generado por
+// sieej_datalayer: nada de listas de pipelines escritas a mano.
+
+const SUFIJO_TITULO = /\s*[—-]\s*Documentaci[oó]n.*$/i;
+
+const ETIQUETAS: Record<string, { texto: string; clase: string }> = {
+  documentado: { texto: "En producción · documentado", clase: "insignia--ok" },
+  documentacion_pendiente: { texto: "Documentación pendiente", clase: "insignia--pendiente" },
+  posible_desactualizado: {
+    texto: "Posible documentación desactualizada",
+    clase: "insignia--desactualizado",
+  },
+  sin_verificar: { texto: "Sin verificar contra producción", clase: "insignia--neutra" },
+};
+
+const pipelines = Object.values(inventario.pipelines).map((p) => ({
+  ...p,
+  titulo: p.documentacion_html
+    ? p.documentacion_html.titulo.replace(SUFIJO_TITULO, "")
+    : p.nombre.replaceAll("_", " "),
+  etiqueta: ETIQUETAS[p.clasificacion] ?? ETIQUETAS.sin_verificar,
+}));
+
+const verificado = inventario.resumen.verificado_contra_produccion;
+const generado = new Date(inventario.generado).toLocaleDateString("es-MX", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<section id="catalogo" class="bloque" aria-labelledby="titulo-catalogo">
+  <div class="contenedor">
+    <h2 id="titulo-catalogo">Catálogo de pipelines en producción</h2>
+    <p class="introduccion">
+      Un pipeline por fuente de información: cada tarjeta enlaza a su documentación técnica cuando
+      existe. Inventario generado el {generado}.
+    </p>
+    {
+      !verificado && (
+        <p class="aviso" role="status">
+          Este catálogo aún no se ha verificado contra Airflow y la base de datos de producción:
+          refleja la documentación estática disponible. El cruce con las fuentes vivas se aplicará
+          en la siguiente reconstrucción con acceso a ellas.
+        </p>
+      )
+    }
+    <ul class="rejilla" role="list">
+      {
+        pipelines.map((p) => (
+          <li class="tarjeta tarjeta-pipeline">
+            <div class="tarjeta-pipeline__cabecera">
+              <h3 class="tarjeta-pipeline__titulo">{p.titulo}</h3>
+              <span class={`insignia ${p.etiqueta.clase}`}>{p.etiqueta.texto}</span>
+            </div>
+            <p class="tarjeta-pipeline__meta">
+              <code>{p.nombre}</code>
+              {p.vistas_documentadas.length > 0 && (
+                <span> · {p.vistas_documentadas.length} vista(s) documentada(s)</span>
+              )}
+              {typeof p.vistas_en_bd === "number" && (
+                <span> · {p.vistas_en_bd} vista(s) en BD</span>
+              )}
+            </p>
+            {p.dag && (
+              <p class="tarjeta-pipeline__meta">
+                DAG <code>{p.dag.dag_id}</code>
+                {p.dag.ultima_corrida_estado && <span> · última corrida: {p.dag.ultima_corrida_estado}</span>}
+              </p>
+            )}
+            <p class="tarjeta-pipeline__acciones">
+              {p.documentacion_html ? (
+                <a href={`/docs/${p.documentacion_html.archivo}`}>
+                  Ver documentación
+                  <span class="visualmente-oculto"> de {p.titulo}</span>
+                </a>
+              ) : (
+                <span class="silenciado">Sin documento técnico publicado</span>
+              )}
+              {p.vistas_documentadas.length > 0 || typeof p.vistas_en_bd === "number" ? (
+                <a href={`/vistas/${p.nombre}/`}>
+                  Estructura de vistas
+                  <span class="visualmente-oculto"> de {p.titulo}</span>
+                </a>
+              ) : null}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .introduccion {
+    color: var(--tinta-suave);
+    max-width: 46rem;
+  }
+
+  .rejilla {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+
+  .tarjeta-pipeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .tarjeta-pipeline__cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .tarjeta-pipeline__titulo {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .tarjeta-pipeline__meta {
+    margin: 0;
+    color: var(--silenciado);
+    font-size: 0.88rem;
+  }
+
+  .tarjeta-pipeline__acciones {
+    margin: 0.5rem 0 0;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-size: 0.95rem;
+  }
+
+  .silenciado {
+    color: var(--silenciado);
+  }
+
+  .visualmente-oculto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  code {
+    background: #f0ebf4;
+    border-radius: 4px;
+    padding: 0 0.3rem;
+    font-size: 0.85em;
+  }
+</style>

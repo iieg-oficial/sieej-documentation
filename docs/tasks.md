@@ -53,7 +53,7 @@
     nuevos sin cambios de código); degrada con aviso si el directorio no está disponible.
   - CT: los 22 HTML + `assets/` accesibles bajo `/docs/` en el build local.
   - Dependencias: T2.1.
-- [ ] **T2.4** Catálogo de pipelines — rama `feature/web-catalogo`
+- [x] **T2.4** Catálogo de pipelines — rama `feature/web-catalogo`
   - Tarjetas desde `data/inventario.json`: enlace al HTML cuando existe, insignia
     "documentación pendiente" cuando no, marca "posible desactualizado" para HTML sin
     pipeline activo.

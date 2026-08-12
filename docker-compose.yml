@@ -1,0 +1,70 @@
+# Landing de documentación del SIEEJ.
+# `docker compose up` levanta el sistema completo: builder (datos + Astro)
+# y web (nginx). La BD de producción y Airflow son servicios EXTERNOS:
+# no se levantan aquí; los contenedores se conectan a ellos por red.
+
+name: sieej-documentation
+
+services:
+  builder:
+    build:
+      context: .
+      dockerfile: builder/Dockerfile
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATA_DIR: /app/data
+      DOCS_HTML_DIR: /fuentes/html-documents
+      VIEWS_MD_DIR: /fuentes/views-md
+    volumes:
+      - sitio:/sitio
+      - datos:/app/data
+      # Rutas en el host con la documentación generada fuera de este repo
+      - ${DOCS_HTML_DIR_HOST:-./docs}:/fuentes/html-documents:ro
+      - ${VIEWS_MD_DIR_HOST:-./docs}:/fuentes/views-md:ro
+    healthcheck:
+      test: ["CMD", "test", "-f", "/sitio/index.html"]
+      interval: 15s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+    depends_on:
+      builder:
+        condition: service_healthy
+    ports:
+      - "${WEB_PORT:-8080}:8080"
+    volumes:
+      # nocopy: el volumen lo puebla ÚNICAMENTE el builder (uid 1000); sin esto,
+      # el contenido root de la imagen nginx inicializaría el volumen y el
+      # builder no podría sobreescribirlo.
+      - type: volume
+        source: sitio
+        target: /usr/share/nginx/html
+        read_only: true
+        volume:
+          nocopy: true
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/salud"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  # Ruta de escalamiento futura (caché de la API en el esquema híbrido).
+  # No se levanta por defecto: docker compose --profile cache up
+  redis:
+    image: redis:7-alpine
+    profiles: ["cache"]
+    restart: unless-stopped
+
+volumes:
+  sitio:
+  datos:

@@ -1,0 +1,15 @@
+.git/
+.github/
+.claude/
+.venv/
+**/node_modules/
+web/dist/
+web/.astro/
+web/public/docs/
+**/__pycache__/
+**/.pytest_cache/
+**/.ruff_cache/
+*.egg-info/
+.env
+.env.*
+docs/

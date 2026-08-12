@@ -72,7 +72,7 @@
 
 ## Fase 3 — Infraestructura (agentes: datos-backend + git-flujo)
 
-- [ ] **T3.1** Dockerfile de `web` — rama `chore/docker-web`
+- [x] **T3.1** Dockerfile de `web` — rama `chore/docker-web`
   - Multi-stage: Node (datos + `astro build`) → nginx sirviendo `dist/`, usuario no-root,
     healthcheck HTTP.
   - CT: `docker build` y contenedor sano sirviendo el sitio.

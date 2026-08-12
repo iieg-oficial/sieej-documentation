@@ -59,7 +59,7 @@
     pipeline activo.
   - CT: catálogo refleja el inventario sin listas hardcodeadas.
   - Dependencias: T2.1, T2.3.
-- [ ] **T2.5** Numeralia con cross check — rama `feature/web-numeralia`
+- [x] **T2.5** Numeralia con cross check — rama `feature/web-numeralia`
   - Cifras de Airflow y BD desde `data/numeralia.json`; consistencia evidenciada y
     discrepancias marcadas visualmente; aviso de antigüedad si `datos_obsoletos`.
   - CT: renderiza los tres orígenes y sus discrepancias; degrada con gracia.

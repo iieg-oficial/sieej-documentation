@@ -46,9 +46,14 @@ def generar(settings: Settings, transport=None, connect=None) -> dict[str, BaseM
     return {"inventario.json": inventario, "numeralia.json": numeralia, "vistas.json": vistas}
 
 
-def _fuente_viva_degradada(nuevo: dict, previo: dict) -> bool:
-    """True si alguna fuente viva pasó de `ok` (previo) a no-`ok` (nuevo)."""
-    for clave in ("airflow", "bd"):
+def _fuente_degradada(nuevo: dict, previo: dict) -> bool:
+    """True si alguna fuente pasó de `ok` (previo) a no-`ok` (nuevo).
+
+    Aplica también a la documentación estática: si el directorio de HTML o de
+    markdown no está disponible en esta corrida, no se sobreescriben datos
+    buenos con vacíos.
+    """
+    for clave in ("airflow", "bd", "docs_html", "views_md"):
         estado_nuevo = nuevo.get("fuentes", {}).get(clave, {}).get("estado")
         estado_previo = previo.get("fuentes", {}).get(clave, {}).get("estado")
         if estado_previo == EstadoFuente.OK.value and estado_nuevo != EstadoFuente.OK.value:
@@ -69,7 +74,7 @@ def escribir(settings: Settings, resultados: dict[str, BaseModel]) -> dict[str, 
                 previo = json.loads(destino.read_text(encoding="utf-8"))
             except (json.JSONDecodeError, OSError):
                 previo = None
-            if previo and _fuente_viva_degradada(nuevo, previo):
+            if previo and _fuente_degradada(nuevo, previo):
                 previo["datos_obsoletos"] = True
                 destino.write_text(
                     json.dumps(previo, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"

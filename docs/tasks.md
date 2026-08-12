@@ -77,7 +77,7 @@
     healthcheck HTTP.
   - CT: `docker build` y contenedor sano sirviendo el sitio.
   - Dependencias: T2.4.
-- [ ] **T3.2** Servicio `builder` con reconstrucción programada — rama `chore/docker-builder`
+- [x] **T3.2** Servicio `builder` con reconstrucción programada — rama `chore/docker-builder`
   - Imagen Python+Node con supercronic; `REBUILD_CRON` regenera JSON y reconstruye el
     sitio al volumen servido; webhook opcional para disparo desde Airflow.
   - CT: una corrida del builder reconstruye el sitio end-to-end en local.

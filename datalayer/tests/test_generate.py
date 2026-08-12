@@ -57,6 +57,21 @@ def test_degradacion_conserva_json_previo_bueno(tmp_path):
     assert acciones["inventario.json"] == "escrito"
 
 
+def test_docs_ausentes_conservan_json_previo(tmp_path):
+    # Corrida previa con documentación estática disponible
+    generar_y_escribir(_settings(tmp_path))
+    previo = json.loads((tmp_path / "inventario.json").read_text())
+    assert previo["fuentes"]["docs_html"]["estado"] == "ok"
+
+    # Nueva corrida sin los directorios de documentación: no debe vaciar nada
+    sin_docs = Settings(_env_file=None, data_dir=tmp_path)
+    acciones = generar_y_escribir(sin_docs)
+    assert acciones["inventario.json"] == "conservado_previo"
+    conservado = json.loads((tmp_path / "inventario.json").read_text())
+    assert conservado["datos_obsoletos"] is True
+    assert set(conservado["pipelines"]) == set(previo["pipelines"])
+
+
 def test_json_previo_corrupto_no_rompe(tmp_path):
     settings = _settings(tmp_path)
     (tmp_path / "numeralia.json").write_text("{corrupto", encoding="utf-8")

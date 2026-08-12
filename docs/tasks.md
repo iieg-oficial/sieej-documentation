@@ -48,7 +48,7 @@
     de desarrollo, **fiel** a `sieej_definicion_caracteristicas_objetivos.md`.
   - CT: contenido cotejado contra el documento fuente; sin contenido inventado.
   - Dependencias: T2.1.
-- [ ] **T2.3** Copia de HTML de pipelines en build — rama `feature/web-docs-html`
+- [x] **T2.3** Copia de HTML de pipelines en build — rama `feature/web-docs-html`
   - Script de build que copia `DOCS_HTML_DIR` → `web/public/docs/` (glob, absorbe archivos
     nuevos sin cambios de código); degrada con aviso si el directorio no está disponible.
   - CT: los 22 HTML + `assets/` accesibles bajo `/docs/` en el build local.

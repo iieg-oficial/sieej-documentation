@@ -1,0 +1,229 @@
+---
+import numeralia from "../../../data/numeralia.json";
+
+// Cifras del sistema desde data/numeralia.json (generado por sieej_datalayer).
+// La sección evidencia el cross check Airflow ↔ BD ↔ documentación: cifras
+// lado a lado y discrepancias señaladas con texto, nunca ocultas.
+
+type Fuente = { estado: string; detalle?: string | null };
+
+const fuentes = numeralia.fuentes as Record<string, Fuente>;
+
+const ESTADOS_FUENTE: Record<string, { texto: string; clase: string }> = {
+  ok: { texto: "Fuente consultada", clase: "insignia--ok" },
+  caida: { texto: "Fuente no disponible", clase: "insignia--desactualizado" },
+  sin_configurar: { texto: "Fuente no consultada aún", clase: "insignia--neutra" },
+};
+
+const numero = (v: unknown) =>
+  typeof v === "number" ? v.toLocaleString("es-MX") : "—";
+
+const grupos = [
+  {
+    titulo: "Documentación estática",
+    fuente: fuentes.docs_html,
+    cifras: [
+      { etiqueta: "Pipelines con documento HTML", valor: numeralia.documentacion.html_pipelines },
+      { etiqueta: "Bases de datos documentadas", valor: numeralia.documentacion.bases_documentadas },
+      { etiqueta: "Vistas documentadas", valor: numeralia.documentacion.vistas_documentadas },
+    ],
+  },
+  {
+    titulo: "Apache Airflow (producción)",
+    fuente: fuentes.airflow,
+    cifras: [
+      { etiqueta: "DAGs activos", valor: numeralia.airflow.dags_activos },
+      { etiqueta: "DAGs en total", valor: numeralia.airflow.dags_total },
+      { etiqueta: "Corridas recientes exitosas", valor: numeralia.airflow.corridas_recientes_exitos },
+      { etiqueta: "Corridas recientes fallidas", valor: numeralia.airflow.corridas_recientes_fallos },
+    ],
+  },
+  {
+    titulo: "Base de datos (producción)",
+    fuente: fuentes.bd,
+    cifras: [
+      { etiqueta: "Bases de pipelines", valor: numeralia.bd.bases_pipeline },
+      { etiqueta: "Vistas en total", valor: numeralia.bd.vistas_total },
+      { etiqueta: "Vistas materializadas", valor: numeralia.bd.matviews_total },
+      { etiqueta: "Registros totales", valor: numeralia.bd.registros_totales },
+    ],
+  },
+];
+
+const crossCheck = numeralia.cross_check;
+const cifrasComparadas = [
+  { etiqueta: "pipelines documentados", valor: crossCheck.cifras?.pipelines_documentados },
+  { etiqueta: "DAGs activos", valor: crossCheck.cifras?.dags_activos },
+  { etiqueta: "bases con vistas", valor: crossCheck.cifras?.bases_con_vistas },
+];
+
+const generado = new Date(numeralia.generado).toLocaleString("es-MX", {
+  dateStyle: "long",
+  timeStyle: "short",
+});
+---
+
+<section id="numeralia" class="bloque" aria-labelledby="titulo-numeralia">
+  <div class="contenedor">
+    <h2 id="titulo-numeralia">Numeralia</h2>
+    <p class="introduccion">
+      Cifras del sistema obtenidas de dos fuentes vivas —la API de Airflow y la base de datos de
+      producción— cruzadas entre sí y contra la documentación estática. Última generación:
+      {generado}.
+    </p>
+
+    {
+      numeralia.datos_obsoletos && (
+        <p class="aviso" role="status">
+          Una fuente viva no respondió en la última reconstrucción: se muestran los últimos datos
+          válidos disponibles.
+        </p>
+      )
+    }
+
+    <div class="grupos">
+      {
+        grupos.map((grupo) => {
+          const estado = ESTADOS_FUENTE[grupo.fuente?.estado] ?? ESTADOS_FUENTE.sin_configurar;
+          return (
+            <article class="tarjeta grupo" aria-label={grupo.titulo}>
+              <header class="grupo__cabecera">
+                <h3>{grupo.titulo}</h3>
+                <span class={`insignia ${estado.clase}`}>{estado.texto}</span>
+              </header>
+              <dl class="cifras">
+                {grupo.cifras.map((c) => (
+                  <div class="cifra">
+                    <dt>{c.etiqueta}</dt>
+                    <dd>{numero(c.valor)}</dd>
+                  </div>
+                ))}
+              </dl>
+            </article>
+          );
+        })
+      }
+    </div>
+
+    <article class="tarjeta cross-check" aria-labelledby="titulo-crosscheck">
+      <h3 id="titulo-crosscheck">Cross check entre fuentes</h3>
+      {
+        crossCheck.consistente ? (
+          <p class="estado-consistente">
+            <span class="insignia insignia--ok">Consistente</span> Las cifras de documentación,
+            Airflow y base de datos coinciden.
+          </p>
+        ) : (
+          <p class="estado-consistente">
+            <span class="insignia insignia--pendiente">Con observaciones</span> Hay diferencias o
+            fuentes pendientes de consultar; el detalle se lista abajo.
+          </p>
+        )
+      }
+      <p class="comparativa">
+        {
+          cifrasComparadas.map((c, i) => (
+            <span>
+              {i > 0 && <span aria-hidden="true"> / </span>}
+              <strong>{numero(c.valor)}</strong> {c.etiqueta}
+            </span>
+          ))
+        }
+      </p>
+      {
+        crossCheck.discrepancias?.length > 0 && (
+          <>
+            <h4>Discrepancias detectadas</h4>
+            <ul class="discrepancias">
+              {crossCheck.discrepancias.map((d: string) => (
+                <li>{d}</li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+    </article>
+  </div>
+</section>
+
+<style>
+  .introduccion {
+    color: var(--tinta-suave);
+    max-width: 46rem;
+  }
+
+  .grupos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .grupo__cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .grupo__cabecera h3 {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .cifras {
+    margin: 1rem 0 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem 1rem;
+  }
+
+  .cifra dt {
+    font-size: 0.8rem;
+    color: var(--silenciado);
+  }
+
+  .cifra dd {
+    margin: 0.1rem 0 0;
+    font-size: 1.55rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--tinta);
+  }
+
+  .cross-check {
+    margin-top: 1rem;
+  }
+
+  .cross-check h3 {
+    margin-top: 0;
+  }
+
+  .estado-consistente {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .comparativa {
+    font-size: 1.05rem;
+    color: var(--tinta-suave);
+  }
+
+  .comparativa strong {
+    color: var(--tinta);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .discrepancias {
+    margin: 0.4rem 0 0;
+    padding-left: 1.2rem;
+  }
+
+  .discrepancias li {
+    margin-bottom: 0.35rem;
+    color: var(--tinta-suave);
+  }
+</style>

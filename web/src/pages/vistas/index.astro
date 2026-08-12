@@ -1,0 +1,109 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import vistas from "../../../../data/vistas.json";
+
+const bdOk = vistas.fuentes?.bd?.estado === "ok";
+const basesPipeline = vistas.bases.filter((b) => !b.es_infraestructura);
+const basesInfra = vistas.bases.filter((b) => b.es_infraestructura);
+const generado = new Date(vistas.generado).toLocaleDateString("es-MX", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<Layout
+  titulo="Estructura de vistas materializadas — SIEEJ"
+  descripcion="Estructura de las vistas y vistas materializadas de cada base de datos del SIEEJ: columnas, tipos y descripciones."
+>
+  <section class="bloque" aria-labelledby="titulo-vistas">
+    <div class="contenedor">
+      <h2 id="titulo-vistas">Estructura de las vistas materializadas</h2>
+      <p class="introduccion">
+        Cada pipeline del SIEEJ expone sus resultados como vistas en su propia base de datos. Aquí
+        se documenta la estructura de cada una: columnas, tipos y descripciones. Información
+        generada el {generado}.
+      </p>
+      {
+        !bdOk && (
+          <p class="aviso" role="status">
+            La estructura mostrada proviene de la documentación estática: la introspección directa
+            de la base de datos de producción está pendiente de acceso. En cuanto la
+            reconstrucción corra con acceso a la BD, esta sección reflejará el estado real y
+            señalará cualquier diferencia.
+          </p>
+        )
+      }
+
+      <ul class="lista-bases" role="list">
+        {
+          basesPipeline.map((base) => (
+            <li class="tarjeta base">
+              <h3>
+                <a href={`/vistas/${base.nombre}/`}>{base.nombre}</a>
+              </h3>
+              <p class="base__meta">
+                {base.vistas.length} vista(s)
+                {base.vistas.some((v) => v.tipo === "MATERIALIZED VIEW") &&
+                  " · incluye materializadas"}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+
+      {
+        basesInfra.length > 0 && (
+          <>
+            <h3 class="subtitulo-infra">Bases de infraestructura geoespacial</h3>
+            <p class="introduccion">
+              Estas bases solo exponen vistas de sistema de PostGIS; no corresponden a pipelines.
+            </p>
+            <ul class="lista-bases" role="list">
+              {basesInfra.map((base) => (
+                <li class="tarjeta base">
+                  <h3>
+                    <a href={`/vistas/${base.nombre}/`}>{base.nombre}</a>
+                  </h3>
+                  <p class="base__meta">{base.vistas.length} vista(s) de sistema</p>
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .introduccion {
+    color: var(--tinta-suave);
+    max-width: 46rem;
+  }
+
+  .lista-bases {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+
+  .base h3 {
+    margin: 0 0 0.25rem;
+    font-size: 1.02rem;
+    font-family: ui-monospace, "Cascadia Code", Menlo, monospace;
+  }
+
+  .base__meta {
+    margin: 0;
+    color: var(--silenciado);
+    font-size: 0.88rem;
+  }
+
+  .subtitulo-infra {
+    margin-top: 2.5rem;
+  }
+</style>

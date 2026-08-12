@@ -64,7 +64,7 @@
     discrepancias marcadas visualmente; aviso de antigüedad si `datos_obsoletos`.
   - CT: renderiza los tres orígenes y sus discrepancias; degrada con gracia.
   - Dependencias: T2.1, T1.4.
-- [ ] **T2.6** Estructura de vistas materializadas — rama `feature/web-vistas`
+- [x] **T2.6** Estructura de vistas materializadas — rama `feature/web-vistas`
   - Navegable por base de datos desde `data/vistas.json`: columnas, tipos, descripciones;
     banderas `solo_en_bd` / `solo_en_docs`.
   - CT: navegación por BD funcional; discrepancias visibles.

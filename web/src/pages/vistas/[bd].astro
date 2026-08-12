@@ -1,0 +1,173 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import vistas from "../../../../data/vistas.json";
+
+export function getStaticPaths() {
+  return vistas.bases.map((base) => ({
+    params: { bd: base.nombre },
+    props: { base },
+  }));
+}
+
+const { base } = Astro.props;
+const bdOk = vistas.fuentes?.bd?.estado === "ok";
+
+const TIPO_INSIGNIA: Record<string, string> = {
+  VIEW: "insignia--neutra",
+  "MATERIALIZED VIEW": "insignia--ok",
+};
+---
+
+<Layout
+  titulo={`${base.nombre} — Estructura de vistas — SIEEJ`}
+  descripcion={`Columnas, tipos y descripciones de las vistas de la base de datos ${base.nombre} del SIEEJ.`}
+>
+  <section class="bloque" aria-labelledby="titulo-bd">
+    <div class="contenedor">
+      <nav aria-label="Miga de pan" class="miga">
+        <a href="/vistas/">Estructura de vistas</a>
+        <span aria-hidden="true"> / </span>
+        <span aria-current="page">{base.nombre}</span>
+      </nav>
+      <h2 id="titulo-bd"><code>{base.nombre}</code></h2>
+      {
+        base.es_infraestructura && (
+          <p class="aviso" role="note">
+            Base de infraestructura geoespacial: sus vistas son de sistema (PostGIS), no producto
+            de un pipeline.
+          </p>
+        )
+      }
+      {
+        !bdOk && (
+          <p class="aviso" role="status">
+            Estructura según la documentación estática; la introspección de la BD de producción
+            está pendiente de acceso.
+          </p>
+        )
+      }
+
+      {
+        base.vistas.map((vista) => (
+          <article class="tarjeta vista" aria-label={`Vista ${vista.nombre}`}>
+            <header class="vista__cabecera">
+              <h3>
+                <code>
+                  {vista.esquema}.{vista.nombre}
+                </code>
+              </h3>
+              <p class="vista__insignias">
+                <span class={`insignia ${TIPO_INSIGNIA[vista.tipo] ?? "insignia--neutra"}`}>
+                  {vista.tipo === "MATERIALIZED VIEW" ? "Vista materializada" : "Vista"}
+                </span>
+                {vista.solo_en_bd && (
+                  <span class="insignia insignia--pendiente">
+                    En la BD, sin documentación estática
+                  </span>
+                )}
+                {vista.solo_en_docs && (
+                  <span class="insignia insignia--desactualizado">
+                    Documentada, no encontrada en la BD
+                  </span>
+                )}
+              </p>
+            </header>
+            <p class="vista__meta">
+              {typeof vista.registros === "number" && (
+                <span>{vista.registros.toLocaleString("es-MX")} registro(s) · </span>
+              )}
+              {vista.columnas.length} columna(s)
+            </p>
+            {vista.columnas.length > 0 && (
+              <div class="tabla-envoltura">
+                <table>
+                  <caption class="visualmente-oculto">
+                    Columnas de {vista.esquema}.{vista.nombre}
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Columna</th>
+                      <th scope="col">Tipo</th>
+                      <th scope="col">Nulos</th>
+                      <th scope="col">Descripción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {vista.columnas.map((col) => (
+                      <tr>
+                        <td>{col.posicion}</td>
+                        <td>
+                          <code>{col.nombre}</code>
+                        </td>
+                        <td>{col.tipo}</td>
+                        <td>{col.nullable ? "Sí" : "No"}</td>
+                        <td>{col.descripcion ?? "—"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .miga {
+    font-size: 0.9rem;
+    color: var(--silenciado);
+    margin-bottom: 0.75rem;
+  }
+
+  .vista {
+    margin-top: 1.25rem;
+  }
+
+  .vista__cabecera {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+
+  .vista__cabecera h3 {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .vista__insignias {
+    margin: 0;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .vista__meta {
+    color: var(--silenciado);
+    font-size: 0.88rem;
+    margin: 0.35rem 0 0.75rem;
+  }
+
+  .visualmente-oculto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  code {
+    background: #f0ebf4;
+    border-radius: 4px;
+    padding: 0 0.3rem;
+  }
+</style>

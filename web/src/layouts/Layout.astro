@@ -1,0 +1,159 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  titulo?: string;
+  descripcion?: string;
+}
+
+const {
+  titulo = "SIEEJ — Sistema de Información Estratégica del Estado de Jalisco",
+  descripcion = "Documentación pública del SIEEJ: qué es el sistema, catálogo de pipelines ETL en producción, numeralia y estructura de sus vistas materializadas.",
+} = Astro.props;
+
+const enlaces = [
+  { href: "/#sieej", texto: "El SIEEJ" },
+  { href: "/#catalogo", texto: "Catálogo" },
+  { href: "/#numeralia", texto: "Numeralia" },
+  { href: "/vistas/", texto: "Vistas" },
+];
+---
+
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo}</title>
+    <meta name="description" content={descripcion} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:site_name" content="SIEEJ · IIEG" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body>
+    <a class="salto-contenido" href="#contenido">Ir al contenido principal</a>
+    <header class="encabezado">
+      <div class="contenedor encabezado__interior">
+        <a href="/" class="marca" aria-label="SIEEJ, inicio">
+          <span class="marca__sigla">SIEEJ</span>
+          <span class="marca__detalle">Sistema de Información Estratégica del Estado de Jalisco</span>
+        </a>
+        <nav aria-label="Navegación principal">
+          <ul class="navegacion">
+            {
+              enlaces.map((enlace) => (
+                <li>
+                  <a href={enlace.href}>{enlace.texto}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenido">
+      <slot />
+    </main>
+
+    <footer class="pie">
+      <div class="contenedor">
+        <p>
+          <strong>IIEG</strong> — Instituto de Información Estadística y Geográfica de Jalisco.
+          Sistema de Información Estratégica del Estado de Jalisco (SIEEJ).
+        </p>
+        <p class="pie__nota">
+          La información contenida en el Sistema de Información es pública y está en todo momento a
+          disposición para su consulta.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .encabezado {
+    background: var(--brand);
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  }
+
+  .encabezado__interior {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 3.5rem;
+    flex-wrap: wrap;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+  }
+
+  .marca {
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .marca__sigla {
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+  }
+
+  .marca__detalle {
+    font-size: 0.78rem;
+    opacity: 0.92;
+  }
+
+  .navegacion {
+    list-style: none;
+    display: flex;
+    gap: 1.1rem;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+
+  .navegacion a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.95rem;
+    opacity: 0.95;
+  }
+
+  .navegacion a:hover,
+  .navegacion a:focus-visible {
+    text-decoration: underline;
+    opacity: 1;
+  }
+
+  .pie {
+    border-top: 4px solid var(--brand);
+    background: var(--tarjeta);
+    margin-top: 3rem;
+    padding: 1.5rem 0 2rem;
+    color: var(--tinta-suave);
+    font-size: 0.9rem;
+  }
+
+  .pie__nota {
+    color: var(--silenciado);
+  }
+
+  @media (max-width: 640px) {
+    .marca__detalle {
+      display: none;
+    }
+  }
+</style>

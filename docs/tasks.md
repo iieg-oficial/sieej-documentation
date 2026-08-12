@@ -90,7 +90,7 @@
 
 ## Fase 4 — QA (agente: qa-revisor)
 
-- [ ] **T4.1** Verificación de criterios de aceptación — sin rama (solo lectura)
+- [x] **T4.1** Verificación de criterios de aceptación — sin rama (solo lectura)
   - Build limpio, links a los 22 HTML, sin secretos en código ni historial, accesibilidad,
     fidelidad del contenido, convenciones de git, tablero al día.
   - CT: reporte con hallazgos por severidad; bloqueantes en cero.

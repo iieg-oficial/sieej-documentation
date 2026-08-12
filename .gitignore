@@ -1,0 +1,47 @@
+# Entorno y credenciales
+.env
+.env.*
+!.env.example
+
+# Node / Astro
+node_modules/
+dist/
+.astro/
+npm-debug.log*
+
+# HTML de pipelines copiados en build (se generan fuera de este repo)
+web/public/docs/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+build/
+
+# Docker
+*.pid
+
+# Editor / SO
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Claude Code: solo se versionan los agentes de este proyecto y las reglas de commits;
+# el resto de .claude/ es tooling local del equipo (flujo ETL) y estado de sesión
+.claude/*
+!.claude/agents/
+.claude/agents/*
+!.claude/agents/explorador-analista.md
+!.claude/agents/arquitecto.md
+!.claude/agents/git-flujo.md
+!.claude/agents/frontend-astro.md
+!.claude/agents/datos-backend.md
+!.claude/agents/qa-revisor.md
+!.claude/rules/
+.claude/rules/*
+!.claude/rules/commits.md

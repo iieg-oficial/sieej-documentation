@@ -43,7 +43,7 @@
     navegación, footer, metadatos SEO/OG, es-MX.
   - CT: `npm run build` sin errores ni warnings.
   - Dependencias: T0.1.
-- [ ] **T2.2** Sección "El SIEEJ" — rama `feature/web-seccion-sieej`
+- [x] **T2.2** Sección "El SIEEJ" — rama `feature/web-seccion-sieej`
   - Información estratégica estatal, definición, objetivos, qué es un ETL y paradigma
     de desarrollo, **fiel** a `sieej_definicion_caracteristicas_objetivos.md`.
   - CT: contenido cotejado contra el documento fuente; sin contenido inventado.

@@ -24,7 +24,7 @@
   - DAGs (activos/pausados), última corrida y estado, conteos de éxitos/fallos recientes.
   - CT: tests unitarios con respuestas simuladas de la API; manejo de fuente caída.
   - Dependencias: T1.1.
-- [ ] **T1.3** Introspección de PostgreSQL — rama `feature/datalayer-introspeccion`
+- [x] **T1.3** Introspección de PostgreSQL — rama `feature/datalayer-introspeccion`
   - Bases, vistas/matviews (`pg_matviews`, `pg_views`), columnas y tipos
     (`information_schema.columns`), comentarios (`col_description`), conteos y fechas.
   - CT: tests unitarios con conexión simulada; consultas 100 % de solo lectura.

@@ -1,0 +1,42 @@
+{
+  "generado": "2026-08-12T06:46:01.722058Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "sin_configurar",
+      "detalle": "Faltan AIRFLOW_BASE_URL/AIRFLOW_USERNAME/AIRFLOW_PASSWORD",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "sin_configurar",
+      "detalle": "Faltan PG_HOST/PG_USER/PG_PASSWORD",
+      "consultado_en": null
+    },
+    "docs_html": {
+      "estado": "ok",
+      "detalle": "22 documentos HTML",
+      "consultado_en": "2026-08-12T06:46:01.724510Z"
+    },
+    "views_md": {
+      "estado": "ok",
+      "detalle": "53 vistas en 20 bases",
+      "consultado_en": "2026-08-12T06:46:01.776457Z"
+    }
+  },
+  "airflow": {},
+  "bd": {},
+  "documentacion": {
+    "html_pipelines": 22,
+    "bases_documentadas": 18,
+    "vistas_documentadas": 49
+  },
+  "cross_check": {
+    "consistente": true,
+    "cifras": {
+      "pipelines_documentados": 22,
+      "dags_activos": null,
+      "bases_con_vistas": null
+    },
+    "discrepancias": []
+  }
+}

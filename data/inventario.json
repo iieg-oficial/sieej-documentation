@@ -1,44 +1,42 @@
 {
-  "generado": "2026-08-12",
-  "descripcion": "Inventario de pipelines del SIEEJ. La seccion 'documentacion_estatica' proviene de los HTML y markdown de referencia (fotografias que pueden estar desactualizadas). La seccion 'fuente_viva' proviene de Airflow y la BD de produccion, y es la fuente de verdad del estado actual.",
+  "generado": "2026-08-12T06:46:01.722058Z",
+  "datos_obsoletos": false,
   "fuentes": {
-    "documentacion_estatica": {
-      "html_documents": "/home/euclides-marmota/Documentos/IIEG/sieej/general-documentation/etls-pipelines-readmes/html-documents",
-      "views_md": "/home/euclides-marmota/Documentos/IIEG/sieej/general-documentation/etl-views/views-md",
-      "fecha_snapshot_views_md": "2026-05-20"
+    "airflow": {
+      "estado": "sin_configurar",
+      "detalle": "Faltan AIRFLOW_BASE_URL/AIRFLOW_USERNAME/AIRFLOW_PASSWORD",
+      "consultado_en": null
     },
-    "fuente_viva": {
-      "estado": "pendiente_acceso_red",
-      "airflow": null,
-      "bd_produccion": null
+    "bd": {
+      "estado": "sin_configurar",
+      "detalle": "Faltan PG_HOST/PG_USER/PG_PASSWORD",
+      "consultado_en": null
+    },
+    "docs_html": {
+      "estado": "ok",
+      "detalle": "22 documentos HTML",
+      "consultado_en": "2026-08-12T06:46:01.724510Z"
+    },
+    "views_md": {
+      "estado": "ok",
+      "detalle": "53 vistas en 20 bases",
+      "consultado_en": "2026-08-12T06:46:01.776457Z"
     }
   },
   "resumen": {
-    "html_pipelines": 22,
-    "bds_documentadas_views_md": 20,
-    "bds_infraestructura_geo": [
-      "cvegeo",
-      "iieg"
-    ],
-    "total_vistas_documentadas": 53,
-    "pipelines_inventariados": 22
+    "pipelines": 22,
+    "con_html": 22,
+    "dags_emparejados": 0,
+    "bases_en_bd": null,
+    "verificado_contra_produccion": false
   },
-  "cross_check_estatico": {
-    "html_sin_vistas_documentadas": [
-      "conapo",
-      "escuelas",
-      "ilmm",
-      "participacion_ciudadana"
-    ],
-    "vistas_sin_html": [],
+  "cross_check": {
+    "pipelines_sin_html": [],
+    "html_sin_pipeline_vivo": [],
+    "dags_sin_pipeline": [],
     "alias_nombres": {
       "censos_economicos": "censo_economico"
-    },
-    "notas": [
-      "cvegeo e iieg solo exponen vistas de sistema PostGIS (geometry_columns/geography_columns); se clasifican como infraestructura geoespacial, no pipelines.",
-      "conapo.html podria ser documento sombrilla de productos CONAPO (marginacion, intensidad_migratoria); verificar contra Airflow.",
-      "escuelas.html y centros_educativos.html podrian referir a fuentes relacionadas; verificar cual esta activo en produccion."
-    ]
+    }
   },
   "pipelines": {
     "agropecuario_siap": {
@@ -49,19 +47,12 @@
       },
       "alias_html": null,
       "vistas_documentadas": [
-        {
-          "esquema": "public",
-          "vista": "view_agricola_jalisco",
-          "archivo_md": "agropecuario_siap__public__view_agricola_jalisco.md"
-        }
+        "view_agricola_jalisco"
       ],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "documentado"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "asg_imss": {
       "nombre": "asg_imss",
@@ -71,19 +62,12 @@
       },
       "alias_html": null,
       "vistas_documentadas": [
-        {
-          "esquema": "public",
-          "vista": "v_asg_imss",
-          "archivo_md": "asg_imss__public__v_asg_imss.md"
-        }
+        "v_asg_imss"
       ],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "documentado"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "censo_economico": {
       "nombre": "censo_economico",
@@ -93,44 +77,17 @@
       },
       "alias_html": "censos_economicos",
       "vistas_documentadas": [
-        {
-          "esquema": "public",
-          "vista": "vw_economico_estatal_2019",
-          "archivo_md": "censo_economico__public__vw_economico_estatal_2019.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "vw_economico_estatal_2024",
-          "archivo_md": "censo_economico__public__vw_economico_estatal_2024.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "vw_economico_municipal_2019",
-          "archivo_md": "censo_economico__public__vw_economico_municipal_2019.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "vw_economico_municipal_2024",
-          "archivo_md": "censo_economico__public__vw_economico_municipal_2024.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "vw_economico_nacional_2019",
-          "archivo_md": "censo_economico__public__vw_economico_nacional_2019.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "vw_economico_nacional_2024",
-          "archivo_md": "censo_economico__public__vw_economico_nacional_2024.md"
-        }
+        "vw_economico_estatal_2019",
+        "vw_economico_estatal_2024",
+        "vw_economico_municipal_2019",
+        "vw_economico_municipal_2024",
+        "vw_economico_nacional_2019",
+        "vw_economico_nacional_2024"
       ],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "documentado"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "censo_poblacion": {
       "nombre": "censo_poblacion",
@@ -140,29 +97,14 @@
       },
       "alias_html": null,
       "vistas_documentadas": [
-        {
-          "esquema": "public",
-          "vista": "view_inegi_2010",
-          "archivo_md": "censo_poblacion__public__view_inegi_2010.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "view_inegi_2015",
-          "archivo_md": "censo_poblacion__public__view_inegi_2015.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "view_inegi_2020",
-          "archivo_md": "censo_poblacion__public__view_inegi_2020.md"
-        }
+        "view_inegi_2010",
+        "view_inegi_2015",
+        "view_inegi_2020"
       ],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "documentado"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "centros_educativos": {
       "nombre": "centros_educativos",
@@ -172,19 +114,12 @@
       },
       "alias_html": null,
       "vistas_documentadas": [
-        {
-          "esquema": "public",
-          "vista": "v_centros_educativos",
-          "archivo_md": "centros_educativos__public__v_centros_educativos.md"
-        }
+        "v_centros_educativos"
       ],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "documentado"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "conapo": {
       "nombre": "conapo",
@@ -194,13 +129,10 @@
       },
       "alias_html": null,
       "vistas_documentadas": [],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "html_sin_vistas_documentadas"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "datamexico": {
       "nombre": "datamexico",
@@ -210,19 +142,12 @@
       },
       "alias_html": null,
       "vistas_documentadas": [
-        {
-          "esquema": "public",
-          "vista": "v_flujo_comercio",
-          "archivo_md": "datamexico__public__v_flujo_comercio.md"
-        }
+        "v_flujo_comercio"
       ],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "documentado"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "delitos_fuero_comun": {
       "nombre": "delitos_fuero_comun",
@@ -232,99 +157,28 @@
       },
       "alias_html": null,
       "vistas_documentadas": [
-        {
-          "esquema": "public",
-          "vista": "v_delitos_comparables_general",
-          "archivo_md": "delitos_fuero_comun__public__v_delitos_comparables_general.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_delitos_serie_historica",
-          "archivo_md": "delitos_fuero_comun__public__v_delitos_serie_historica.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_extorsion",
-          "archivo_md": "delitos_fuero_comun__public__v_extorsion.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_feminicidio",
-          "archivo_md": "delitos_fuero_comun__public__v_feminicidio.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_homicidio_doloso",
-          "archivo_md": "delitos_fuero_comun__public__v_homicidio_doloso.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_narcomenudeo",
-          "archivo_md": "delitos_fuero_comun__public__v_narcomenudeo.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_otros_fuero_comun",
-          "archivo_md": "delitos_fuero_comun__public__v_otros_fuero_comun.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_otros_libertad_personal",
-          "archivo_md": "delitos_fuero_comun__public__v_otros_libertad_personal.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_otros_libertad_sexual",
-          "archivo_md": "delitos_fuero_comun__public__v_otros_libertad_sexual.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_otros_patrimonio",
-          "archivo_md": "delitos_fuero_comun__public__v_otros_patrimonio.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_otros_sociedad",
-          "archivo_md": "delitos_fuero_comun__public__v_otros_sociedad.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_otros_vida_integridad",
-          "archivo_md": "delitos_fuero_comun__public__v_otros_vida_integridad.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_servidores_publicos",
-          "archivo_md": "delitos_fuero_comun__public__v_servidores_publicos.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_tentativa_extorsion",
-          "archivo_md": "delitos_fuero_comun__public__v_tentativa_extorsion.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_tentativa_feminicidio",
-          "archivo_md": "delitos_fuero_comun__public__v_tentativa_feminicidio.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_tentativa_homicidio_doloso",
-          "archivo_md": "delitos_fuero_comun__public__v_tentativa_homicidio_doloso.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_trata_personas",
-          "archivo_md": "delitos_fuero_comun__public__v_trata_personas.md"
-        }
+        "v_delitos_comparables_general",
+        "v_delitos_serie_historica",
+        "v_extorsion",
+        "v_feminicidio",
+        "v_homicidio_doloso",
+        "v_narcomenudeo",
+        "v_otros_fuero_comun",
+        "v_otros_libertad_personal",
+        "v_otros_libertad_sexual",
+        "v_otros_patrimonio",
+        "v_otros_sociedad",
+        "v_otros_vida_integridad",
+        "v_servidores_publicos",
+        "v_tentativa_extorsion",
+        "v_tentativa_feminicidio",
+        "v_tentativa_homicidio_doloso",
+        "v_trata_personas"
       ],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "documentado"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "denue": {
       "nombre": "denue",
@@ -334,24 +188,13 @@
       },
       "alias_html": null,
       "vistas_documentadas": [
-        {
-          "esquema": "public",
-          "vista": "v_establecimientos",
-          "archivo_md": "denue__public__v_establecimientos.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_establecimientos_jalisco",
-          "archivo_md": "denue__public__v_establecimientos_jalisco.md"
-        }
+        "v_establecimientos",
+        "v_establecimientos_jalisco"
       ],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "documentado"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "efipem": {
       "nombre": "efipem",
@@ -361,19 +204,12 @@
       },
       "alias_html": null,
       "vistas_documentadas": [
-        {
-          "esquema": "public",
-          "vista": "v_efipem",
-          "archivo_md": "efipem__public__v_efipem.md"
-        }
+        "v_efipem"
       ],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "documentado"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "escuelas": {
       "nombre": "escuelas",
@@ -383,13 +219,10 @@
       },
       "alias_html": null,
       "vistas_documentadas": [],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "html_sin_vistas_documentadas"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "establecimientos_de_salud": {
       "nombre": "establecimientos_de_salud",
@@ -399,29 +232,14 @@
       },
       "alias_html": null,
       "vistas_documentadas": [
-        {
-          "esquema": "public",
-          "vista": "v_establecimientos",
-          "archivo_md": "establecimientos_de_salud__public__v_establecimientos.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_establecimientos_activos_jalisco",
-          "archivo_md": "establecimientos_de_salud__public__v_establecimientos_activos_jalisco.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_establecimientos_jalisco",
-          "archivo_md": "establecimientos_de_salud__public__v_establecimientos_jalisco.md"
-        }
+        "v_establecimientos",
+        "v_establecimientos_activos_jalisco",
+        "v_establecimientos_jalisco"
       ],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "documentado"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "etef": {
       "nombre": "etef",
@@ -431,19 +249,12 @@
       },
       "alias_html": null,
       "vistas_documentadas": [
-        {
-          "esquema": "public",
-          "vista": "v_etef",
-          "archivo_md": "etef__public__v_etef.md"
-        }
+        "v_etef"
       ],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "documentado"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "fiscalia": {
       "nombre": "fiscalia",
@@ -453,19 +264,12 @@
       },
       "alias_html": null,
       "vistas_documentadas": [
-        {
-          "esquema": "public",
-          "vista": "delitos_vw",
-          "archivo_md": "fiscalia__public__delitos_vw.md"
-        }
+        "delitos_vw"
       ],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "documentado"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "ilmm": {
       "nombre": "ilmm",
@@ -475,13 +279,10 @@
       },
       "alias_html": null,
       "vistas_documentadas": [],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "html_sin_vistas_documentadas"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "inpc": {
       "nombre": "inpc",
@@ -491,29 +292,14 @@
       },
       "alias_html": null,
       "vistas_documentadas": [
-        {
-          "esquema": "public",
-          "vista": "v_inpc_ciudades",
-          "archivo_md": "inpc__public__v_inpc_ciudades.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_inpc_entidades",
-          "archivo_md": "inpc__public__v_inpc_entidades.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "v_inpc_nacional",
-          "archivo_md": "inpc__public__v_inpc_nacional.md"
-        }
+        "v_inpc_ciudades",
+        "v_inpc_entidades",
+        "v_inpc_nacional"
       ],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "documentado"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "intensidad_migratoria": {
       "nombre": "intensidad_migratoria",
@@ -523,24 +309,13 @@
       },
       "alias_html": null,
       "vistas_documentadas": [
-        {
-          "esquema": "public",
-          "vista": "view_iim_entidades",
-          "archivo_md": "intensidad_migratoria__public__view_iim_entidades.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "view_iim_municipios_jalisco",
-          "archivo_md": "intensidad_migratoria__public__view_iim_municipios_jalisco.md"
-        }
+        "view_iim_entidades",
+        "view_iim_municipios_jalisco"
       ],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "documentado"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "marginacion": {
       "nombre": "marginacion",
@@ -550,29 +325,14 @@
       },
       "alias_html": null,
       "vistas_documentadas": [
-        {
-          "esquema": "public",
-          "vista": "view_marginacion_estatal",
-          "archivo_md": "marginacion__public__view_marginacion_estatal.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "view_marginacion_localidades",
-          "archivo_md": "marginacion__public__view_marginacion_localidades.md"
-        },
-        {
-          "esquema": "public",
-          "vista": "view_marginacion_municipal",
-          "archivo_md": "marginacion__public__view_marginacion_municipal.md"
-        }
+        "view_marginacion_estatal",
+        "view_marginacion_localidades",
+        "view_marginacion_municipal"
       ],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "documentado"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "participacion_ciudadana": {
       "nombre": "participacion_ciudadana",
@@ -582,13 +342,10 @@
       },
       "alias_html": null,
       "vistas_documentadas": [],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "html_sin_vistas_documentadas"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "pobreza_multidimensional": {
       "nombre": "pobreza_multidimensional",
@@ -598,19 +355,12 @@
       },
       "alias_html": null,
       "vistas_documentadas": [
-        {
-          "esquema": "public",
-          "vista": "vw_pobreza_multidimencional",
-          "archivo_md": "pobreza_multidimensional__public__vw_pobreza_multidimencional.md"
-        }
+        "vw_pobreza_multidimencional"
       ],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "documentado"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "produccion_ganadera": {
       "nombre": "produccion_ganadera",
@@ -620,19 +370,12 @@
       },
       "alias_html": null,
       "vistas_documentadas": [
-        {
-          "esquema": "public",
-          "vista": "view_ganadera_jalisco",
-          "archivo_md": "produccion_ganadera__public__view_ganadera_jalisco.md"
-        }
+        "view_ganadera_jalisco"
       ],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "documentado"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     },
     "repd": {
       "nombre": "repd",
@@ -642,19 +385,12 @@
       },
       "alias_html": null,
       "vistas_documentadas": [
-        {
-          "esquema": "public",
-          "vista": "stg_repd_case_current_vw",
-          "archivo_md": "repd__public__stg_repd_case_current_vw.md"
-        }
+        "stg_repd_case_current_vw"
       ],
-      "fuente_viva": {
-        "estado": "pendiente",
-        "dag_airflow": null,
-        "bd_existe": null,
-        "vistas_en_bd": null
-      },
-      "clasificacion_estatica": "documentado"
+      "dag": null,
+      "bd_existe": null,
+      "vistas_en_bd": null,
+      "clasificacion": "sin_verificar"
     }
   }
 }

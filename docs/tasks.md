@@ -29,7 +29,7 @@
     (`information_schema.columns`), comentarios (`col_description`), conteos y fechas.
   - CT: tests unitarios con conexión simulada; consultas 100 % de solo lectura.
   - Dependencias: T1.1.
-- [ ] **T1.4** Cross check + CLI generador de JSON con degradación — rama `feature/datalayer-crosscheck`
+- [x] **T1.4** Cross check + CLI generador de JSON con degradación — rama `feature/datalayer-crosscheck`
   - Cruce Airflow↔BD↔documentación estática; genera `data/*.json`; si una fuente cae,
     reutiliza el último JSON válido y marca `datos_obsoletos`; nunca truena el build.
   - CT: `python -m sieej_datalayer` genera los 3 JSON sin acceso a fuentes vivas

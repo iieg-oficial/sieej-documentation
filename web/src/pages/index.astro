@@ -8,7 +8,13 @@ import SeccionNumeralia from "../components/SeccionNumeralia.astro";
 <Layout>
   <section class="heroe" aria-labelledby="titulo-heroe">
     <div class="contenedor">
-      <p class="heroe__ceja">IIEG · Instituto de Información Estadística y Geográfica de Jalisco</p>
+      <div class="heroe__logos">
+        <img src="/logos/logo_iieg.svg" alt="IIEG — Instituto de Información Estadística y Geográfica de Jalisco" class="heroe__logo-iieg" />
+        <span class="heroe__logo-sep" aria-hidden="true"></span>
+        <img src="/logos/logo_jal.svg" alt="Gobierno del Estado de Jalisco" class="heroe__logo-jal" />
+      </div>
+      <p class="heroe__direccion">Dirección del Sistema de Información</p>
+      <p class="heroe__ceja">IIEG · Sistema de Información</p>
       <h1 id="titulo-heroe">Sistema de Información Estratégica del Estado de Jalisco</h1>
       <p class="heroe__resumen">
         Documentación pública del SIEEJ: qué es el sistema, el catálogo de sus pipelines ETL en
@@ -27,7 +33,40 @@ import SeccionNumeralia from "../components/SeccionNumeralia.astro";
   .heroe {
     background: linear-gradient(160deg, var(--brand) 0%, var(--brand-oscuro) 100%);
     color: #fff;
-    padding: 3.5rem 0 3rem;
+    padding: 2.5rem 0 3rem;
+  }
+
+  /* Fila de logos homologada con docs/index.html (hero-logos) */
+  .heroe__logos {
+    display: flex;
+    align-items: center;
+    margin-bottom: 22px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  }
+
+  .heroe__logo-iieg {
+    height: 66px;
+    width: auto;
+  }
+
+  .heroe__logo-sep {
+    width: 1px;
+    height: 54px;
+    background: rgba(255, 255, 255, 0.28);
+    margin: 0 20px;
+  }
+
+  .heroe__logo-jal {
+    height: 50px;
+    width: auto;
+  }
+
+  .heroe__direccion {
+    margin: 8px 0 18px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.82);
+    letter-spacing: 0.02em;
   }
 
   .heroe__ceja {

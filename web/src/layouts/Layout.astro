@@ -62,9 +62,14 @@ const enlaces = [
 
     <footer class="pie">
       <div class="contenedor">
+        <div class="pie__logos">
+          <img src="/logos/logo_iieg.svg" alt="IIEG — Instituto de Información Estadística y Geográfica de Jalisco" class="pie__logo-iieg" />
+          <span class="pie__logo-sep" aria-hidden="true"></span>
+          <img src="/logos/logo_jal.svg" alt="Gobierno del Estado de Jalisco" class="pie__logo-jal" />
+        </div>
         <p>
-          <strong>IIEG</strong> — Instituto de Información Estadística y Geográfica de Jalisco.
-          Sistema de Información Estratégica del Estado de Jalisco (SIEEJ).
+          Sistema de Información Estratégica del Estado de Jalisco (SIEEJ) · Dirección del Sistema
+          de Información.
         </p>
         <p class="pie__nota">
           La información contenida en el Sistema de Información es pública y está en todo momento a
@@ -108,7 +113,7 @@ const enlaces = [
   .marca__sigla {
     font-size: 1.2rem;
     font-weight: 800;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.14em;
   }
 
   .marca__detalle {
@@ -138,17 +143,41 @@ const enlaces = [
     opacity: 1;
   }
 
+  /* Barra de pie en gris pizarra, con los logos institucionales (identidad IIEG) */
   .pie {
     border-top: 4px solid var(--brand);
-    background: var(--tarjeta);
+    background: var(--pizarra);
     margin-top: 3rem;
-    padding: 1.5rem 0 2rem;
-    color: var(--tinta-suave);
+    padding: 1.75rem 0 2rem;
+    color: rgba(255, 255, 255, 0.92);
     font-size: 0.9rem;
   }
 
+  .pie__logos {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .pie__logo-iieg {
+    height: 44px;
+    width: auto;
+  }
+
+  .pie__logo-sep {
+    width: 1px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.28);
+    margin: 0 16px;
+  }
+
+  .pie__logo-jal {
+    height: 34px;
+    width: auto;
+  }
+
   .pie__nota {
-    color: var(--silenciado);
+    color: rgba(255, 255, 255, 0.72);
   }
 
   @media (max-width: 640px) {

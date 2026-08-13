@@ -77,6 +77,13 @@
   - CT: home y docs comparten tipografía y logos; build limpio.
   - Dependencias: T2.1, T2.3.
 
+- [x] **T2.8** Retirar el índice de pipelines de docs/ — rama `update/docs-sin-indice`
+  - El catálogo de la landing reemplaza a `docs/index.html`: se excluye de la copia, el
+    destino se limpia en cada build (sin arrastrar archivos retirados del origen) y nginx
+    redirige `/docs/` → `/#catalogo`.
+  - CT: `/docs/index.html` ya no se publica; los 22 documentos siguen accesibles.
+  - Dependencias: T2.7.
+
 ## Fase 3 — Infraestructura (agentes: datos-backend + git-flujo)
 
 - [x] **T3.1** Dockerfile de `web` — rama `chore/docker-web`

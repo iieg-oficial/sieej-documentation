@@ -84,6 +84,12 @@
   - CT: `/docs/index.html` ya no se publica; los 22 documentos siguen accesibles.
   - Dependencias: T2.7.
 
+- [x] **T2.9** Texto curado de definición y objetivos del SIEEJ — rama `update/web-texto-sieej`
+  - Las tarjetas «¿Qué es el SIEEJ?» y «Objetivos del SIEEJ» usan el texto de
+    `definiciones_sieej_para_landing.md` (definición + objetivo general + 3 objetivos).
+  - CT: contenido cotejado contra el archivo curado; build limpio.
+  - Dependencias: T2.2.
+
 ## Fase 3 — Infraestructura (agentes: datos-backend + git-flujo)
 
 - [x] **T3.1** Dockerfile de `web` — rama `chore/docker-web`

@@ -1,15 +1,67 @@
 /* Sistema de diseño sobrio institucional del SIEEJ.
-   Paleta alineada con la documentación HTML de pipelines (morado IIEG). */
+   Identidad visual IIEG (04_identidad_visual.md): Poppins, púrpura #5C2472,
+   gris pizarra #465055, naranja #FF8300; JetBrains Mono para código. */
+
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/poppins-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/poppins-600.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/poppins-700.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("/fonts/poppins-800.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/jetbrains-mono-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/jetbrains-mono-600.woff2") format("woff2");
+}
 
 :root {
   --brand: #5c2472;
   --brand-oscuro: #431a54;
   --acento: #ff8300;
-  --fondo: #f4f6f9;
+  --pizarra: #465055;
+  --fondo: #eef2f3;
   --tarjeta: #ffffff;
-  --tinta: #1f2733;
-  --tinta-suave: #475467;
+  --tinta: #384145;
+  --tinta-suave: #465055;
   --silenciado: #667085;
+  --fuente-principal: "Poppins", Arial, "Segoe UI", sans-serif;
+  --fuente-codigo: "JetBrains Mono", Consolas, Menlo, monospace;
   --linea: #e3e8ef;
   --exito: #1a7f4e;
   --alerta-fondo: #fff4e5;
@@ -33,15 +85,15 @@ body {
   margin: 0;
   background: var(--fondo);
   color: var(--tinta);
-  font-family:
-    system-ui,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    Arial,
-    sans-serif;
+  font-family: var(--fuente-principal);
   font-size: 16px;
   line-height: 1.6;
+}
+
+code,
+pre,
+kbd {
+  font-family: var(--fuente-codigo);
 }
 
 .contenedor {

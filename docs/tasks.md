@@ -70,6 +70,13 @@
   - CT: navegación por BD funcional; discrepancias visibles.
   - Dependencias: T2.1, T1.4.
 
+- [x] **T2.7** Homologación de identidad visual con docs/ — rama `feature/web-identidad-visual`
+  - Tipografía institucional (Poppins + JetBrains Mono, autoalojadas), logos IIEG/Jalisco en
+    hero, header y footer (barra gris pizarra), fondo `#EEF2F3`; inyección de las mismas
+    webfonts en los HTML copiados de `docs/` para unificar el tipo de letra.
+  - CT: home y docs comparten tipografía y logos; build limpio.
+  - Dependencias: T2.1, T2.3.
+
 ## Fase 3 — Infraestructura (agentes: datos-backend + git-flujo)
 
 - [x] **T3.1** Dockerfile de `web` — rama `chore/docker-web`

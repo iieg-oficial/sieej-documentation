@@ -79,6 +79,26 @@
     </div>
 
     <div class="tarjeta">
+      <h3>Características del SIEEJ</h3>
+      <p>
+        Las dependencias estatales y federales poseen datos que pueden analizarse de forma
+        enriquecida, en formatos muy diversos: tablas (Excel o CSV), bases de datos o sistemas más
+        complejos como APIs. Analizarlos exige un método sistemático de captación. Para las fuentes
+        federales, disponibles en portales de datos abiertos, el SIEEJ monta un subsistema que
+        descarga la información según el calendario de cada fuente, verifica su consistencia,
+        limpia y estructura los datos, resguarda los crudos y los aloja para su consulta, con
+        procesos escalables, auditables y replicables. Para las dependencias estatales, otro
+        subsistema les permite vincular su información con un diagnóstico previo, un checklist de
+        validación y verificaciones estructurales de cada archivo entregado.
+      </p>
+      <p>
+        En su construcción se emplean tecnologías de código abierto: Apache Airflow orquesta las
+        tareas de extracción y transformación; el Cliente de adquisición SIEEJ es la plataforma
+        donde las dependencias estatales vinculan su información; PostgreSQL resguarda los datos,
+        con PostGIS para la información geoespacial y Geoserver para compartirla. La información
+        se visualiza con la plataforma Mirador IIEG y llega al público a través de los productos
+        del instituto, como MapaLab, los Cuadernillos municipales e Igibot.
+      </p>
       <figure class="diagrama">
         <img
           src="/img/sistema_informacion_estrategica_estado_jalisco_SIEEJ_0.svg"
@@ -88,6 +108,16 @@
           loading="lazy"
         />
         <figcaption>Diagrama general del Sistema de Información Estratégica del Estado de Jalisco.</figcaption>
+      </figure>
+      <figure class="diagrama">
+        <img
+          src="/img/sistema_informacion_estrategica_estado_jalisco_SIEEJ_1.webp"
+          alt="Diagrama técnico del flujo de datos del SIEEJ: los datos entran por Apache Airflow y el Cliente de adquisición SIEEJ, se almacenan en PostgreSQL con PostGIS, se comparten mediante Geoserver y se consultan a través de Mirador IIEG y los productos del instituto."
+          width="1670"
+          height="942"
+          loading="lazy"
+        />
+        <figcaption>Diagrama general del flujo que siguen los datos dentro del SIEEJ</figcaption>
       </figure>
     </div>
 
@@ -152,7 +182,7 @@
 
 <style>
   .diagrama {
-    margin: 0;
+    margin: 1.25rem 0 0;
     text-align: center;
   }
 

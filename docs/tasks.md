@@ -90,6 +90,12 @@
   - CT: contenido cotejado contra el archivo curado; build limpio.
   - Dependencias: T2.2.
 
+- [x] **T2.10** Diagrama general del SIEEJ tras los objetivos — rama `update/web-diagrama-sieej`
+  - `sistema_informacion_estrategica_estado_jalisco_SIEEJ_0.svg` en tarjeta propia con
+    `figure/figcaption`, alt descriptivo y carga diferida.
+  - CT: diagrama visible y responsivo tras la tarjeta de objetivos; build limpio.
+  - Dependencias: T2.9.
+
 ## Fase 3 — Infraestructura (agentes: datos-backend + git-flujo)
 
 - [x] **T3.1** Dockerfile de `web` — rama `chore/docker-web`

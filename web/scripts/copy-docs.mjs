@@ -14,6 +14,7 @@ import {
   mkdirSync,
   readFileSync,
   readdirSync,
+  rmSync,
   statSync,
   writeFileSync,
 } from "node:fs";
@@ -37,10 +38,17 @@ if (!existsSync(origenAbs)) {
   process.exit(0);
 }
 
-// Sin archivos/directorios ocultos (p. ej. .claude/): solo documentación pública.
+// Copia limpia: se vacía el destino para no arrastrar archivos que ya no
+// existen en el origen (la degradación de arriba solo aplica si el origen
+// no está disponible).
+rmSync(destino, { recursive: true, force: true });
+mkdirSync(destino, { recursive: true });
+
+// Sin archivos/directorios ocultos (p. ej. .claude/) y sin el index.html:
+// el catálogo de la landing reemplaza al índice de pipelines.
 cpSync(origenAbs, destino, {
   recursive: true,
-  filter: (src) => !basename(src).startsWith("."),
+  filter: (src) => !basename(src).startsWith(".") && basename(src) !== "index.html",
 });
 
 // Permisos legibles para el servidor web, sin importar los modos del origen.

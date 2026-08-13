@@ -99,7 +99,7 @@
 - [x] **T2.11** Sección «Características del SIEEJ» — rama `update/web-caracteristicas-sieej`
   - Tras «Objetivos del SIEEJ»: resúmenes (≤7 líneas) de las explicaciones de ambas figuras
     (fuente: sieej_definicion_caracteristicas_objetivos.md) seguidos de los diagramas
-    SIEEJ_0.svg y SIEEJ_1.svg, este último con la leyenda «Diagrama general del flujo que
+    SIEEJ_0.svg y SIEEJ_1 (servido como WebP optimizado: el SVG fuente pesa 3 MB por PNGs incrustados), este último con la leyenda «Diagrama general del flujo que
     siguen los datos dentro del SIEEJ».
   - CT: sección visible con los dos resúmenes y las dos figuras; build limpio.
   - Dependencias: T2.10.

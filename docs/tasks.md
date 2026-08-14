@@ -121,6 +121,12 @@
   - CT: contenido cotejado contra el archivo; build limpio.
   - Dependencias: T2.13.
 
+- [x] **T2.15** Quitar negritas de la sección «El SIEEJ» — rama `update/web-sin-negritas`
+  - Se retiran todas las negritas del texto, conservando únicamente «Mirador IIEG» en
+    «Tecnologías del sistema».
+  - CT: una sola negrita restante; build limpio.
+  - Dependencias: T2.14.
+
 ## Fase 3 — Infraestructura (agentes: datos-backend + git-flujo)
 
 - [x] **T3.1** Dockerfile de `web` — rama `chore/docker-web`

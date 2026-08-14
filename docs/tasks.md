@@ -110,6 +110,11 @@
   - CT: orden párrafo→figura→párrafo→figura; build limpio.
   - Dependencias: T2.11.
 
+- [x] **T2.13** Retirar la tarjeta «¿Qué es un flujo ETL?» — rama `update/web-sin-etl`
+  - Se elimina la tarjeta de la sección «El SIEEJ»; el resto no cambia.
+  - CT: la tarjeta ya no aparece; build limpio.
+  - Dependencias: T2.12.
+
 ## Fase 3 — Infraestructura (agentes: datos-backend + git-flujo)
 
 - [x] **T3.1** Dockerfile de `web` — rama `chore/docker-web`

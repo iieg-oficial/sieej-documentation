@@ -104,6 +104,12 @@
   - CT: sección visible con los dos resúmenes y las dos figuras; build limpio.
   - Dependencias: T2.10.
 
+- [x] **T2.12** Reorden de «Características del SIEEJ» — rama `update/web-orden-caracteristicas`
+  - El diagrama general va inmediatamente después del primer párrafo (captación); el
+    diagrama de flujo permanece tras el párrafo de tecnologías.
+  - CT: orden párrafo→figura→párrafo→figura; build limpio.
+  - Dependencias: T2.11.
+
 ## Fase 3 — Infraestructura (agentes: datos-backend + git-flujo)
 
 - [x] **T3.1** Dockerfile de `web` — rama `chore/docker-web`

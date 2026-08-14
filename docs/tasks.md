@@ -115,6 +115,12 @@
   - CT: la tarjeta ya no aparece; build limpio.
   - Dependencias: T2.12.
 
+- [x] **T2.14** Texto definitivo de la sección «El SIEEJ» — rama `update/web-texto-mejorado`
+  - Todas las tarjetas de la sección usan el texto de `texto_mejorado_para_landing_sieej.md`;
+    imágenes y su orden intactos; secciones desde el catálogo sin cambios.
+  - CT: contenido cotejado contra el archivo; build limpio.
+  - Dependencias: T2.13.
+
 ## Fase 3 — Infraestructura (agentes: datos-backend + git-flujo)
 
 - [x] **T3.1** Dockerfile de `web` — rama `chore/docker-web`

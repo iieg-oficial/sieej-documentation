@@ -127,6 +127,29 @@
   - CT: una sola negrita restante; build limpio.
   - Dependencias: T2.14.
 
+- [ ] **T2.16** Visor ampliado de los diagramas del SIEEJ — rama `feature/web-visor-diagramas`
+  - Componente reutilizable (`web/src/components/VisorDiagrama.astro`) que envuelve una figura
+    y agrega un botón «Ampliar»; al pulsarlo abre la imagen a tamaño completo en una ventana
+    modal (`<dialog>` nativo, sin dependencias externas) sobre un fondo atenuado, con la
+    leyenda de la figura y botón de cierre. Se aplica a los dos diagramas de «Características
+    del SIEEJ»: el diagrama general del SIEEJ (`SIEEJ_0.svg`) y el diagrama general del flujo
+    que siguen los datos dentro del SIEEJ (`SIEEJ_1.webp`).
+  - Accesibilidad: botón con nombre accesible por diagrama, cierre con `Esc` y con clic en el
+    fondo, foco atrapado dentro del modal y devuelto al botón de origen al cerrar, `alt`
+    conservado. Sin JS el sitio sigue siendo legible (la figura se muestra igual, el botón
+    solo aparece cuando el script está disponible).
+  - CT: los dos diagramas abren y cierran en modal en escritorio y móvil; navegación por
+    teclado completa; `npm run build` limpio; sin regresión visual en el resto de la sección.
+  - Dependencias: T2.15.
+
+- [ ] **T2.17** Zoom y desplazamiento dentro del visor — rama `feature/web-visor-zoom`
+  - Dentro del modal, la imagen se puede acercar/alejar y desplazar para leer las etiquetas
+    del diagrama de flujo (1670×942), que a ancho de pantalla completo queda ilegible en
+    móvil. Controles visibles (`+`, `−`, restablecer) además de rueda/pellizco y arrastre.
+  - CT: el texto del diagrama de flujo es legible en un viewport de 375 px; los controles son
+    operables por teclado; `npm run build` limpio.
+  - Dependencias: T2.16.
+
 ## Fase 3 — Infraestructura (agentes: datos-backend + git-flujo)
 
 - [x] **T3.1** Dockerfile de `web` — rama `chore/docker-web`

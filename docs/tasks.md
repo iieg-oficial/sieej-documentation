@@ -142,7 +142,7 @@
     teclado completa; `npm run build` limpio; sin regresión visual en el resto de la sección.
   - Dependencias: T2.15.
 
-- [ ] **T2.17** Zoom y desplazamiento dentro del visor — rama `feature/web-visor-zoom`
+- [x] **T2.17** Zoom y desplazamiento dentro del visor — rama `feature/web-visor-zoom`
   - Dentro del modal, la imagen se puede acercar/alejar y desplazar para leer las etiquetas
     del diagrama de flujo (1670×942), que a ancho de pantalla completo queda ilegible en
     móvil. Controles visibles (`+`, `−`, restablecer) además de rueda/pellizco y arrastre.

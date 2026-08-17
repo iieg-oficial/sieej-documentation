@@ -1,7 +1,8 @@
 ---
 // Figura de diagrama con botón «Ampliar»: abre la imagen a tamaño completo en una
-// ventana modal (<dialog> nativo, sin dependencias externas). Sin JavaScript la
-// figura se muestra igual y el botón permanece oculto.
+// ventana modal (<dialog> nativo, sin dependencias externas), con zoom y
+// desplazamiento. Sin JavaScript la figura se muestra igual y el botón permanece
+// oculto.
 interface Props {
   src: string;
   alt: string;
@@ -39,7 +40,23 @@ const { src, alt, ancho, alto, leyenda } = Astro.props;
   <dialog class="visor" aria-label={leyenda} data-modal>
     <div class="visor-barra">
       <p class="visor-leyenda">{leyenda}</p>
-      <button type="button" class="visor-cerrar" data-cerrar aria-label="Cerrar el visor">
+      <div class="visor-controles">
+        <button type="button" class="visor-boton" data-alejar aria-label="Alejar">
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <path d="M3 8h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+          </svg>
+        </button>
+        <span class="visor-nivel" data-nivel aria-live="polite">100%</span>
+        <button type="button" class="visor-boton" data-acercar aria-label="Acercar">
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <path d="M8 3v10M3 8h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+          </svg>
+        </button>
+        <button type="button" class="visor-boton visor-boton-texto" data-restablecer>
+          Restablecer
+        </button>
+      </div>
+      <button type="button" class="visor-boton visor-cerrar" data-cerrar aria-label="Cerrar el visor">
         <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
           <path
             d="M2 2l12 12M14 2L2 14"
@@ -50,34 +67,207 @@ const { src, alt, ancho, alto, leyenda } = Astro.props;
         </svg>
       </button>
     </div>
-    <div class="visor-lienzo">
-      <img src={src} alt={alt} width={ancho} height={alto} />
+    <div
+      class="visor-lienzo"
+      data-lienzo
+      tabindex="0"
+      role="group"
+      aria-label="Imagen ampliable: usa las teclas más y menos para acercar o alejar y las flechas para desplazarte"
+    >
+      <img src={src} alt={alt} width={ancho} height={alto} data-ampliada />
     </div>
   </dialog>
 </figure>
 
 <script>
+  const ESCALA_MIN = 1;
+  const ESCALA_MAX = 6;
+  const PASO = 1.4;
+  const PASO_TECLA = 60;
+
   for (const figura of document.querySelectorAll<HTMLElement>('[data-visor]')) {
     const modal = figura.querySelector<HTMLDialogElement>('[data-modal]');
     const abrir = figura.querySelector<HTMLButtonElement>('[data-abrir]');
     const cerrar = figura.querySelector<HTMLButtonElement>('[data-cerrar]');
     const imagen = figura.querySelector<HTMLImageElement>('[data-imagen]');
+    const lienzo = figura.querySelector<HTMLElement>('[data-lienzo]');
+    const ampliada = figura.querySelector<HTMLImageElement>('[data-ampliada]');
+    const acercar = figura.querySelector<HTMLButtonElement>('[data-acercar]');
+    const alejar = figura.querySelector<HTMLButtonElement>('[data-alejar]');
+    const restablecer = figura.querySelector<HTMLButtonElement>('[data-restablecer]');
+    const nivel = figura.querySelector<HTMLElement>('[data-nivel]');
 
-    if (!modal || !abrir || !cerrar || typeof modal.showModal !== 'function') continue;
+    if (
+      !modal ||
+      !abrir ||
+      !cerrar ||
+      !lienzo ||
+      !ampliada ||
+      !acercar ||
+      !alejar ||
+      !restablecer ||
+      !nivel ||
+      typeof modal.showModal !== 'function'
+    ) {
+      continue;
+    }
 
-    abrir.hidden = false;
-    imagen?.classList.add('ampliable');
+    let escala = 1;
+    let x = 0;
+    let y = 0;
 
-    const mostrar = () => modal.showModal();
+    // Punteros activos sobre el lienzo: uno = arrastre, dos = pellizco.
+    const punteros = new Map<number, { x: number; y: number }>();
+    let distanciaInicial = 0;
+    let escalaInicial = 1;
+
+    const limites = () => ({
+      x: Math.max(0, (ampliada.offsetWidth * escala - lienzo.clientWidth) / 2),
+      y: Math.max(0, (ampliada.offsetHeight * escala - lienzo.clientHeight) / 2),
+    });
+
+    const aplicar = () => {
+      const maximo = limites();
+      x = Math.min(maximo.x, Math.max(-maximo.x, x));
+      y = Math.min(maximo.y, Math.max(-maximo.y, y));
+      ampliada.style.transform = `translate(${x}px, ${y}px) scale(${escala})`;
+      lienzo.classList.toggle('desplazable', escala > ESCALA_MIN);
+      nivel.textContent = `${Math.round(escala * 100)}%`;
+
+      const activo = document.activeElement;
+      alejar.disabled = escala <= ESCALA_MIN;
+      acercar.disabled = escala >= ESCALA_MAX;
+      restablecer.disabled = escala === ESCALA_MIN && x === 0 && y === 0;
+      // Si el botón que tenía el foco se acaba de deshabilitar, el foco no se pierde.
+      if (activo instanceof HTMLButtonElement && activo.disabled) lienzo.focus();
+    };
+
+    // Cambia el zoom manteniendo fijo el punto (anclaX, anclaY), en coordenadas
+    // relativas al centro del lienzo. Sin ancla, hace zoom sobre el centro.
+    const escalarA = (nueva: number, anclaX = 0, anclaY = 0) => {
+      const objetivo = Math.min(ESCALA_MAX, Math.max(ESCALA_MIN, nueva));
+      if (objetivo === escala) return;
+      x = anclaX - ((anclaX - x) / escala) * objetivo;
+      y = anclaY - ((anclaY - y) / escala) * objetivo;
+      escala = objetivo;
+      aplicar();
+    };
+
+    const reiniciar = () => {
+      escala = 1;
+      x = 0;
+      y = 0;
+      aplicar();
+    };
+
+    const centroLienzo = () => {
+      const caja = lienzo.getBoundingClientRect();
+      return { x: caja.left + caja.width / 2, y: caja.top + caja.height / 2 };
+    };
+
+    const mostrar = () => {
+      reiniciar();
+      modal.showModal();
+    };
 
     abrir.addEventListener('click', mostrar);
     imagen?.addEventListener('click', mostrar);
+    imagen?.classList.add('ampliable');
+    abrir.hidden = false;
+
     cerrar.addEventListener('click', () => modal.close());
+    modal.addEventListener('close', reiniciar);
 
     // Clic en el fondo atenuado: el destino del evento es el propio <dialog>.
     modal.addEventListener('click', (evento) => {
       if (evento.target === modal) modal.close();
     });
+
+    acercar.addEventListener('click', () => escalarA(escala * PASO));
+    alejar.addEventListener('click', () => escalarA(escala / PASO));
+    restablecer.addEventListener('click', reiniciar);
+
+    lienzo.addEventListener(
+      'wheel',
+      (evento) => {
+        evento.preventDefault();
+        const centro = centroLienzo();
+        escalarA(
+          escala * (evento.deltaY < 0 ? PASO : 1 / PASO),
+          evento.clientX - centro.x,
+          evento.clientY - centro.y,
+        );
+      },
+      { passive: false },
+    );
+
+    lienzo.addEventListener('keydown', (evento) => {
+      const acciones: Record<string, () => void> = {
+        '+': () => escalarA(escala * PASO),
+        '=': () => escalarA(escala * PASO),
+        '-': () => escalarA(escala / PASO),
+        _: () => escalarA(escala / PASO),
+        '0': reiniciar,
+        ArrowLeft: () => { x += PASO_TECLA; aplicar(); },
+        ArrowRight: () => { x -= PASO_TECLA; aplicar(); },
+        ArrowUp: () => { y += PASO_TECLA; aplicar(); },
+        ArrowDown: () => { y -= PASO_TECLA; aplicar(); },
+      };
+      const accion = acciones[evento.key];
+      if (!accion) return;
+      evento.preventDefault();
+      accion();
+    });
+
+    const distanciaEntrePunteros = () => {
+      const [a, b] = [...punteros.values()];
+      return Math.hypot(a.x - b.x, a.y - b.y);
+    };
+
+    lienzo.addEventListener('pointerdown', (evento) => {
+      lienzo.setPointerCapture(evento.pointerId);
+      punteros.set(evento.pointerId, { x: evento.clientX, y: evento.clientY });
+      if (punteros.size === 2) {
+        distanciaInicial = distanciaEntrePunteros();
+        escalaInicial = escala;
+      }
+    });
+
+    lienzo.addEventListener('pointermove', (evento) => {
+      const previo = punteros.get(evento.pointerId);
+      if (!previo) return;
+      const actual = { x: evento.clientX, y: evento.clientY };
+      punteros.set(evento.pointerId, actual);
+
+      if (punteros.size === 2 && distanciaInicial > 0) {
+        const centro = centroLienzo();
+        const medio = [...punteros.values()].reduce(
+          (suma, p) => ({ x: suma.x + p.x / 2, y: suma.y + p.y / 2 }),
+          { x: 0, y: 0 },
+        );
+        escalarA(
+          (escalaInicial * distanciaEntrePunteros()) / distanciaInicial,
+          medio.x - centro.x,
+          medio.y - centro.y,
+        );
+        return;
+      }
+
+      if (punteros.size === 1 && escala > ESCALA_MIN) {
+        x += actual.x - previo.x;
+        y += actual.y - previo.y;
+        aplicar();
+      }
+    });
+
+    for (const evento of ['pointerup', 'pointercancel', 'lostpointercapture'] as const) {
+      lienzo.addEventListener(evento, (e) => {
+        punteros.delete(e.pointerId);
+        if (punteros.size < 2) distanciaInicial = 0;
+      });
+    }
+
+    aplicar();
   }
 </script>
 
@@ -145,45 +335,93 @@ const { src, alt, ancho, alto, leyenda } = Astro.props;
 
   .visor-barra {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem 1rem;
     padding: 0.75rem 1rem;
     border-bottom: 1px solid var(--linea);
   }
 
   .visor-leyenda {
     margin: 0;
+    flex: 1 1 12rem;
     text-align: left;
     font-size: 0.9rem;
     color: var(--tinta-suave);
   }
 
-  .visor-cerrar {
-    flex-shrink: 0;
-    margin-left: auto;
+  .visor-controles {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .visor-nivel {
+    min-width: 3.5rem;
+    text-align: center;
+    font-family: var(--fuente-codigo);
+    font-size: 0.8rem;
+    color: var(--silenciado);
+  }
+
+  .visor-boton {
     display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: 0.4rem;
     border: 1px solid var(--linea);
     border-radius: var(--radio);
     background: var(--tarjeta);
     color: var(--tinta-suave);
+    font-family: inherit;
+    font-size: 0.8rem;
     cursor: pointer;
   }
 
-  .visor-cerrar:hover {
+  .visor-boton-texto {
+    padding: 0.4rem 0.7rem;
+  }
+
+  .visor-boton:hover:not(:disabled) {
     border-color: var(--brand);
     color: var(--brand);
   }
 
+  .visor-boton:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+
+  .visor-cerrar {
+    margin-left: auto;
+  }
+
   .visor-lienzo {
-    overflow: auto;
+    flex: 1 1 auto;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
     padding: 1rem;
+    touch-action: none;
+  }
+
+  .visor-lienzo.desplazable {
+    cursor: grab;
+  }
+
+  .visor-lienzo.desplazable:active {
+    cursor: grabbing;
   }
 
   .visor-lienzo img {
     display: block;
-    margin: 0 auto;
     max-width: 100%;
+    max-height: 100%;
+    width: auto;
     height: auto;
+    transform-origin: center;
+    will-change: transform;
   }
 </style>

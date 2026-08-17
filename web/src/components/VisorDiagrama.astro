@@ -1,0 +1,189 @@
+---
+// Figura de diagrama con botón «Ampliar»: abre la imagen a tamaño completo en una
+// ventana modal (<dialog> nativo, sin dependencias externas). Sin JavaScript la
+// figura se muestra igual y el botón permanece oculto.
+interface Props {
+  src: string;
+  alt: string;
+  ancho: number;
+  alto: number;
+  leyenda: string;
+}
+
+const { src, alt, ancho, alto, leyenda } = Astro.props;
+---
+
+<figure class="diagrama" data-visor>
+  <img
+    src={src}
+    alt={alt}
+    width={ancho}
+    height={alto}
+    loading="lazy"
+    data-imagen
+  />
+  <figcaption>{leyenda}</figcaption>
+  <button type="button" class="ampliar" hidden data-abrir aria-label={`Ampliar ${leyenda}`}>
+    <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+      <path
+        d="M10 1h5v5M6 15H1v-5M15 1l-5.5 5.5M1 15l5.5-5.5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+    </svg>
+    Ampliar
+  </button>
+
+  <dialog class="visor" aria-label={leyenda} data-modal>
+    <div class="visor-barra">
+      <p class="visor-leyenda">{leyenda}</p>
+      <button type="button" class="visor-cerrar" data-cerrar aria-label="Cerrar el visor">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+          <path
+            d="M2 2l12 12M14 2L2 14"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="visor-lienzo">
+      <img src={src} alt={alt} width={ancho} height={alto} />
+    </div>
+  </dialog>
+</figure>
+
+<script>
+  for (const figura of document.querySelectorAll<HTMLElement>('[data-visor]')) {
+    const modal = figura.querySelector<HTMLDialogElement>('[data-modal]');
+    const abrir = figura.querySelector<HTMLButtonElement>('[data-abrir]');
+    const cerrar = figura.querySelector<HTMLButtonElement>('[data-cerrar]');
+    const imagen = figura.querySelector<HTMLImageElement>('[data-imagen]');
+
+    if (!modal || !abrir || !cerrar || typeof modal.showModal !== 'function') continue;
+
+    abrir.hidden = false;
+    imagen?.classList.add('ampliable');
+
+    const mostrar = () => modal.showModal();
+
+    abrir.addEventListener('click', mostrar);
+    imagen?.addEventListener('click', mostrar);
+    cerrar.addEventListener('click', () => modal.close());
+
+    // Clic en el fondo atenuado: el destino del evento es el propio <dialog>.
+    modal.addEventListener('click', (evento) => {
+      if (evento.target === modal) modal.close();
+    });
+  }
+</script>
+
+<style>
+  .diagrama {
+    margin: 1.25rem 0 0;
+    text-align: center;
+  }
+
+  .diagrama > img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .diagrama > img.ampliable {
+    cursor: zoom-in;
+  }
+
+  .diagrama figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--silenciado);
+  }
+
+  .ampliar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--linea);
+    border-radius: var(--radio);
+    background: var(--tarjeta);
+    color: var(--brand);
+    font-family: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+
+  .ampliar:hover {
+    border-color: var(--brand);
+    color: var(--brand-oscuro);
+  }
+
+  .visor {
+    width: min(96vw, 1400px);
+    max-width: none;
+    max-height: 92vh;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radio);
+    background: var(--tarjeta);
+    color: var(--tinta);
+    box-shadow: 0 12px 32px rgba(16, 24, 40, 0.28);
+  }
+
+  .visor::backdrop {
+    background: rgba(16, 24, 40, 0.75);
+  }
+
+  .visor[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .visor-barra {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--linea);
+  }
+
+  .visor-leyenda {
+    margin: 0;
+    text-align: left;
+    font-size: 0.9rem;
+    color: var(--tinta-suave);
+  }
+
+  .visor-cerrar {
+    flex-shrink: 0;
+    margin-left: auto;
+    display: inline-flex;
+    padding: 0.4rem;
+    border: 1px solid var(--linea);
+    border-radius: var(--radio);
+    background: var(--tarjeta);
+    color: var(--tinta-suave);
+    cursor: pointer;
+  }
+
+  .visor-cerrar:hover {
+    border-color: var(--brand);
+    color: var(--brand);
+  }
+
+  .visor-lienzo {
+    overflow: auto;
+    padding: 1rem;
+  }
+
+  .visor-lienzo img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+  }
+</style>

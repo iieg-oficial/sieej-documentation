@@ -127,7 +127,7 @@
   - CT: una sola negrita restante; build limpio.
   - Dependencias: T2.14.
 
-- [ ] **T2.16** Visor ampliado de los diagramas del SIEEJ — rama `feature/web-visor-diagramas`
+- [x] **T2.16** Visor ampliado de los diagramas del SIEEJ — rama `feature/web-visor-diagramas`
   - Componente reutilizable (`web/src/components/VisorDiagrama.astro`) que envuelve una figura
     y agrega un botón «Ampliar»; al pulsarlo abre la imagen a tamaño completo en una ventana
     modal (`<dialog>` nativo, sin dependencias externas) sobre un fondo atenuado, con la

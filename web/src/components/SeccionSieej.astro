@@ -2,6 +2,7 @@
 // Contenido fiel al material fuente de general-documentation/:
 // texto_mejorado_para_landing_sieej.md (versión definitiva para la landing).
 // Sin contenido inventado.
+import VisorDiagrama from './VisorDiagrama.astro';
 ---
 
 <section id="sieej" class="bloque" aria-labelledby="titulo-sieej">
@@ -98,16 +99,13 @@
         que garantiza la trazabilidad de la información y facilita la incorporación progresiva de
         nuevas fuentes de datos.
       </p>
-      <figure class="diagrama">
-        <img
-          src="/img/sistema_informacion_estrategica_estado_jalisco_SIEEJ_0.svg"
-          alt="Diagrama general del SIEEJ: las dependencias estatales y federales aportan sus datos, el sistema los capta, procesa y almacena, y la información se difunde a través de los productos y plataformas del IIEG."
-          width="962"
-          height="484"
-          loading="lazy"
-        />
-        <figcaption>Diagrama general del Sistema de Información Estratégica del Estado de Jalisco.</figcaption>
-      </figure>
+      <VisorDiagrama
+        src="/img/sistema_informacion_estrategica_estado_jalisco_SIEEJ_0.svg"
+        alt="Diagrama general del SIEEJ: las dependencias estatales y federales aportan sus datos, el sistema los capta, procesa y almacena, y la información se difunde a través de los productos y plataformas del IIEG."
+        ancho={962}
+        alto={484}
+        leyenda="Diagrama general del Sistema de Información Estratégica del Estado de Jalisco."
+      />
       <p>En su construcción se emplean tecnologías de código abierto:</p>
       <ol>
         <li>Apache Airflow orquesta las tareas de extracción y transformación.</li>
@@ -126,16 +124,13 @@
           Cuadernillos municipales, el Laboratorio de Datos, etc.
         </li>
       </ol>
-      <figure class="diagrama">
-        <img
-          src="/img/sistema_informacion_estrategica_estado_jalisco_SIEEJ_1.webp"
-          alt="Diagrama técnico del flujo de datos del SIEEJ: los datos entran por Apache Airflow y el Cliente de adquisición SIEEJ, se almacenan en PostgreSQL con PostGIS, se comparten mediante Geoserver y se consultan a través de Mirador IIEG y los productos del instituto."
-          width="1670"
-          height="942"
-          loading="lazy"
-        />
-        <figcaption>Diagrama general del flujo que siguen los datos dentro del SIEEJ</figcaption>
-      </figure>
+      <VisorDiagrama
+        src="/img/sistema_informacion_estrategica_estado_jalisco_SIEEJ_1.webp"
+        alt="Diagrama técnico del flujo de datos del SIEEJ: los datos entran por Apache Airflow y el Cliente de adquisición SIEEJ, se almacenan en PostgreSQL con PostGIS, se comparten mediante Geoserver y se consultan a través de Mirador IIEG y los productos del instituto."
+        ancho={1670}
+        alto={942}
+        leyenda="Diagrama general del flujo que siguen los datos dentro del SIEEJ"
+      />
     </div>
 
     <div class="tarjeta">
@@ -188,20 +183,3 @@
   </div>
 </section>
 
-<style>
-  .diagrama {
-    margin: 1.25rem 0 0;
-    text-align: center;
-  }
-
-  .diagrama img {
-    max-width: 100%;
-    height: auto;
-  }
-
-  .diagrama figcaption {
-    margin-top: 0.5rem;
-    font-size: 0.85rem;
-    color: var(--silenciado);
-  }
-</style>

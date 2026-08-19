@@ -176,8 +176,33 @@
   - CT: reporte con hallazgos por severidad; bloqueantes en cero.
   - Dependencias: todas las anteriores.
 
-## Pendiente de acceso de red (bloqueadas)
+## Fase 5 — Inventario vivo contra producción (agente: datos-backend)
 
-- [ ] **T5.1** Inventario vivo: cruce real contra Airflow y BD de producción
-  - Ejecutar `datalayer` con acceso a `iieg-airflow` / `iieg-db-etl` y regenerar los JSON.
-  - Dependencias: T1.4 + acceso de red (VPN o ejecución en red interna) + credenciales por `.env`.
+> VPN y acceso SSH a `iieg-db-etl` / `iieg-airflow` disponibles desde 2026-08-18. Postgres
+> (`5432`) y la API de Airflow (`8080`) no son alcanzables directo por IP — solo el puerto SSH
+> lo es — así que el acceso pasa por **túneles SSH** reenviados a `localhost`, reutilizando los
+> hosts ya definidos en `~/.ssh/config`.
+
+- [ ] **T5.1.1** Túneles SSH hacia Postgres y Airflow — rama `feature/datalayer-tunel-ssh`
+  - Script que abre los reenvíos locales hacia `postgis_db` (`iieg-db-etl:5432`) y la API de
+    Airflow (`iieg-airflow:8080`), documentado en el README.
+  - CT: con el script corriendo, `localhost:<puerto>` responde para ambos túneles.
+  - Dependencias: acceso SSH por VPN (ya disponible).
+- [ ] **T5.1.2** Cableado de `.env`/README hacia los túneles — rama `chore/datalayer-tunel-config`
+  - `.env.example` documenta `PG_HOST`/`AIRFLOW_BASE_URL` apuntando a `localhost` + los puertos
+    reenviados; README explica que el túnel de T5.1.1 debe estar activo antes de correr
+    `sieej_datalayer` o `docker compose up` con fuentes vivas.
+  - CT: con el túnel activo, `python -m sieej_datalayer` intenta conectar a los endpoints
+    correctos (verificable aunque aún falten credenciales de aplicación).
+  - Dependencias: T5.1.1.
+- [ ] **T5.1.3** Ejecutar el cruce real y regenerar `data/*.json` — rama `feature/datalayer-cruce-vivo`
+  - Correr `sieej_datalayer` con credenciales de solo lectura reales de Airflow y PostgreSQL;
+    verificar clasificación de pipelines, discrepancias y `verificado_contra_produccion: true`.
+  - CT: los 3 JSON se regeneran desde fuentes vivas sin degradar; commit de los JSON resultantes.
+  - Dependencias: T5.1.2 + credenciales de solo lectura de Airflow y PostgreSQL (pendientes).
+- [ ] **T5.1.4** Verificación end-to-end del cruce en el sitio — rama `chore/verificacion-cruce-vivo`
+  - Reconstruir el stack con los datos vivos; confirmar que catálogo, numeralia y vistas ya no
+    muestran el aviso "sin verificar contra producción" y que las discrepancias reales (si las
+    hay) se ven correctamente.
+  - CT: sitio reconstruido reflejando datos vivos; tablero actualizado (T5.1 completa).
+  - Dependencias: T5.1.3.

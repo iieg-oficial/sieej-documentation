@@ -110,6 +110,28 @@ reales que impiden avanzar T5.1 completa:
    `/api/v1` (retirado) a `/api/v2` (Airflow 3). Falta confirmar contra el servidor real si
    también cambió el esquema de autenticación (Airflow 3 suele usar JWT en vez de HTTP Basic).
 
+## Impacto funcional real: ninguno todavía
+
+Vale la pena decirlo sin rodeos: **el sitio que corre en `localhost:18081` sigue exactamente
+igual que antes de esta sesión.** Nada de lo producido aquí cambió lo que el usuario final ve
+o lo que el sistema hace en producción. Desglosado:
+
+- Lo único que es **código ejecutable** en esta sesión es `scripts/tunel-produccion.sh`
+  (`feature/datalayer-tunel-ssh`, PR #36). Es una herramienta de infraestructura para uso
+  manual — no está integrada a `datalayer/`, a `docker-compose.yml` ni al `builder`, así que
+  el proceso de reconstrucción automática del sitio no la usa ni se ve afectado por ella.
+- Todo lo demás (`.env.example`, `README.md`, `docs/tasks.md`, los dos runbooks, este mismo
+  archivo) es **documentación y configuración de referencia**: texto que orienta a un humano,
+  no lógica que el sistema ejecute solo.
+- Ninguna PR de esta sesión se mergeó a `main`, salvo el desglose del tablero
+  (`docs/desglose-t5.1`), que tampoco cambia comportamiento — solo reorganiza tareas.
+- El paquete `datalayer/` (Python), el sitio `web/` (Astro) y el `docker-compose.yml` quedan
+  **byte por byte igual** que al cierre de la sesión anterior (2026-08-17).
+
+Lo que sí se logró es información nueva y verificada (Airflow alcanzable y es v3; Postgres
+bloqueado por política del servidor) que evita repetir ese descubrimiento en la próxima
+sesión — pero es conocimiento, no funcionalidad entregada.
+
 ## Cómo retomar
 
 1. Resolver el bloqueador de Postgres (fuera del alcance de Claude Code — requiere acción de

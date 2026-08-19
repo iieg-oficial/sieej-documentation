@@ -185,8 +185,15 @@
 
 - [ ] **T5.1.1** Túneles SSH hacia Postgres y Airflow — rama `feature/datalayer-tunel-ssh`
   - Script que abre los reenvíos locales hacia `postgis_db` (`iieg-db-etl:5432`) y la API de
-    Airflow (`iieg-airflow:8080`), documentado en el README.
-  - CT: con el script corriendo, `localhost:<puerto>` responde para ambos túneles.
+    Airflow (`iieg-airflow:8080`), documentado en el README. Detecta y reporta con claridad
+    si el servidor rechaza el reenvío, en vez de colgarse en silencio.
+  - **Hallazgo (2026-08-18):** el túnel a Airflow funciona (tráfico HTTP real confirmado). El
+    túnel a Postgres es rechazado por el `sshd` de `iieg-db-etl`
+    (`administratively prohibited` — política `AllowTcpForwarding`/`PermitOpen` del servidor).
+    Requiere que un administrador de `iieg-db-etl` habilite el reenvío para esta llave/usuario,
+    o una ruta de acceso alternativa. **Bloquea T5.1.2 y T5.1.3 en su parte de Postgres.**
+  - CT: con el script corriendo, `localhost:<puerto>` responde para ambos túneles. **Cumplido
+    solo para Airflow**; queda abierta hasta resolver el bloqueo de Postgres.
   - Dependencias: acceso SSH por VPN (ya disponible).
 - [ ] **T5.1.2** Cableado de `.env`/README hacia los túneles — rama `chore/datalayer-tunel-config`
   - `.env.example` documenta `PG_HOST`/`AIRFLOW_BASE_URL` apuntando a `localhost` + los puertos
@@ -194,12 +201,18 @@
     `sieej_datalayer` o `docker compose up` con fuentes vivas.
   - CT: con el túnel activo, `python -m sieej_datalayer` intenta conectar a los endpoints
     correctos (verificable aunque aún falten credenciales de aplicación).
-  - Dependencias: T5.1.1.
+  - Dependencias: T5.1.1 (el lado de Airflow ya se puede cablear; el de Postgres queda pendiente
+    del desbloqueo del túnel).
 - [ ] **T5.1.3** Ejecutar el cruce real y regenerar `data/*.json` — rama `feature/datalayer-cruce-vivo`
   - Correr `sieej_datalayer` con credenciales de solo lectura reales de Airflow y PostgreSQL;
     verificar clasificación de pipelines, discrepancias y `verificado_contra_produccion: true`.
+  - **Hallazgo (2026-08-18):** el Airflow de producción es **v3**, que expone `/api/v2` (el
+    `/api/v1` que usa hoy `datalayer/sieej_datalayer/airflow_client.py` fue retirado). El
+    cliente necesita migrarse a v2 antes de que esta tarea pueda completarse, además del
+    desbloqueo del túnel de Postgres.
   - CT: los 3 JSON se regeneran desde fuentes vivas sin degradar; commit de los JSON resultantes.
-  - Dependencias: T5.1.2 + credenciales de solo lectura de Airflow y PostgreSQL (pendientes).
+  - Dependencias: T5.1.2 + credenciales de solo lectura de Airflow y PostgreSQL (pendientes) +
+    migración del cliente de Airflow a `/api/v2` + desbloqueo del túnel de Postgres.
 - [ ] **T5.1.4** Verificación end-to-end del cruce en el sitio — rama `chore/verificacion-cruce-vivo`
   - Reconstruir el stack con los datos vivos; confirmar que catálogo, numeralia y vistas ya no
     muestran el aviso "sin verificar contra producción" y que las discrepancias reales (si las

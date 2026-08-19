@@ -78,14 +78,14 @@ en grande y explorar con zoom. Los archivos tocados son
 `docs/tasks.md`. El paquete `datalayer/`, los datos de `data/` y `docker-compose.yml` no se
 tocaron.
 
-## Verificación hecha (y la que falta)
+## Verificación
 
 - `npm run build` limpio en `web/`: 22 páginas construidas, sin errores ni advertencias.
 - Marcado generado revisado en `web/dist/index.html`: los dos `<dialog>` y los controles de
   zoom aparecen una vez por diagrama, y el script quedó incrustado una sola vez.
-- **Pendiente**: la comprobación visual y táctil en un navegador real. En esa sesión no había
-  herramientas de navegador disponibles, así que quedó del lado del usuario. Vale la pena
-  cotejar el modal en un viewport de 375 px y el pellizco en un dispositivo táctil.
+- **Comprobación visual y táctil en el navegador: hecha por el usuario**, de forma manual y con
+  resultado correcto. En esa sesión Claude Code no tenía herramientas de navegador disponibles,
+  así que esa parte de la verificación quedó de su lado.
 - El stack de Docker en `localhost:18081` sirve el build anterior hasta que se reconstruya
   (`docker compose up -d --build`).
 
@@ -106,9 +106,9 @@ tocaron.
 
 ## Cómo retomar
 
-No queda trabajo abierto de esta sesión. Si se retoma el visor, los puntos naturales son:
+No queda trabajo abierto de esta sesión: el visor está mergeado en `main` y verificado. Si se
+retoma, los puntos naturales son:
 
-1. Hacer la verificación visual pendiente y corregir lo que aparezca en móvil.
-2. Reutilizar `VisorDiagrama.astro` si se agregan más diagramas a la landing — ya es genérico.
-3. Considerar servir el diagrama de flujo en mayor resolución dentro del modal: hoy el WebP de
+1. Reutilizar `VisorDiagrama.astro` si se agregan más diagramas a la landing — ya es genérico.
+2. Considerar servir el diagrama de flujo en mayor resolución dentro del modal: hoy el WebP de
    115 KB es la misma imagen que la miniatura, y a zoom alto se pixela.

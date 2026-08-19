@@ -193,13 +193,22 @@
     reenviados; README explica que el túnel de T5.1.1 debe estar activo antes de correr
     `sieej_datalayer` o `docker compose up` con fuentes vivas.
   - CT: con el túnel activo, `python -m sieej_datalayer` intenta conectar a los endpoints
-    correctos (verificable aunque aún falten credenciales de aplicación).
-  - Dependencias: T5.1.1.
+    correctos (verificable aunque aún falten credenciales de aplicación). **Verificado para
+    Airflow**: con el túnel abierto, `consultar_airflow()` llega al servidor real (404 por la
+    versión de API, no por conectividad — ver hallazgo de Airflow v3 en T5.1.3). El lado de
+    Postgres queda documentado pero no verificable hasta que T5.1.1 desbloquee su túnel.
+  - Dependencias: T5.1.1 (el lado de Airflow ya se puede cablear; el de Postgres queda pendiente
+    del desbloqueo del túnel).
 - [ ] **T5.1.3** Ejecutar el cruce real y regenerar `data/*.json` — rama `feature/datalayer-cruce-vivo`
   - Correr `sieej_datalayer` con credenciales de solo lectura reales de Airflow y PostgreSQL;
     verificar clasificación de pipelines, discrepancias y `verificado_contra_produccion: true`.
+  - **Hallazgo (2026-08-18):** el Airflow de producción es **v3**, que expone `/api/v2` (el
+    `/api/v1` que usa hoy `datalayer/sieej_datalayer/airflow_client.py` fue retirado —
+    confirmado con un 404 real contra el servidor vía túnel). El cliente necesita migrarse a
+    v2 antes de que esta tarea pueda completarse, además del desbloqueo del túnel de Postgres.
   - CT: los 3 JSON se regeneran desde fuentes vivas sin degradar; commit de los JSON resultantes.
-  - Dependencias: T5.1.2 + credenciales de solo lectura de Airflow y PostgreSQL (pendientes).
+  - Dependencias: T5.1.2 + credenciales de solo lectura de Airflow y PostgreSQL (pendientes) +
+    migración del cliente de Airflow a `/api/v2` + desbloqueo del túnel de Postgres.
 - [ ] **T5.1.4** Verificación end-to-end del cruce en el sitio — rama `chore/verificacion-cruce-vivo`
   - Reconstruir el stack con los datos vivos; confirmar que catálogo, numeralia y vistas ya no
     muestran el aviso "sin verificar contra producción" y que las discrepancias reales (si las

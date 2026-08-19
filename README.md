@@ -47,6 +47,22 @@ Ambos son **servicios externos existentes**: no se levantan en este Compose. El 
 el de Airflow deben ser de **solo lectura**; además toda conexión a PostgreSQL se abre con
 `default_transaction_read_only=on`.
 
+### Acceso vía túnel SSH (fuera de la red interna del IIEG)
+
+Ninguno de los dos puertos de arriba es alcanzable directo por IP desde fuera de la red del
+IIEG — solo el puerto SSH de cada host lo es. Con VPN activa y los hosts `iieg-db-etl` /
+`iieg-airflow` definidos en `~/.ssh/config`, abre el túnel antes de correr `sieej_datalayer` o
+`docker compose up` con fuentes vivas:
+
+```bash
+./scripts/tunel-produccion.sh   # ver scripts/README.md para detalles y estado conocido
+```
+
+Con el túnel activo, `.env` apunta a `localhost` + los puertos reenviados (ver
+`.env.example`). **Estado al 2026-08-18**: el túnel a Airflow funciona; el túnel a Postgres es
+rechazado por el `sshd` de `iieg-db-etl` (política `AllowTcpForwarding`/`PermitOpen` del
+servidor) — pendiente de que un administrador de ese host lo habilite.
+
 ## Desarrollo local
 
 ```bash

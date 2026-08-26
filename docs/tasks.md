@@ -188,15 +188,15 @@
     Airflow (`iieg-airflow:8080`), documentado en el README.
   - CT: con el script corriendo, `localhost:<puerto>` responde para ambos túneles.
   - Dependencias: acceso SSH por VPN (ya disponible).
-- [ ] **T5.1.2** Cableado de `.env`/README hacia los túneles — rama `chore/datalayer-tunel-config`
-  - `.env.example` documenta `PG_HOST`/`AIRFLOW_BASE_URL` apuntando a `localhost` + los puertos
-    reenviados; README explica que el túnel de T5.1.1 debe estar activo antes de correr
-    `sieej_datalayer` o `docker compose up` con fuentes vivas.
-  - CT: con el túnel activo, `python -m sieej_datalayer` intenta conectar a los endpoints
-    correctos (verificable aunque aún falten credenciales de aplicación). **Verificado para
-    Airflow**: con el túnel abierto, `consultar_airflow()` llega al servidor real (404 por la
-    versión de API, no por conectividad — ver hallazgo de Airflow v3 en T5.1.3). El lado de
-    Postgres queda documentado pero no verificable hasta que T5.1.1 desbloquee su túnel.
+- [ ] **T5.1.2** Cableado de `.env`/README hacia las fuentes — rama `chore/datalayer-tunel-config`
+  - `.env.example` fija `AIRFLOW_BASE_URL=http://10.13.201.115:8080` (directo, sin túnel) y
+    documenta `PG_HOST`/`PG_PORT` apuntando al puerto reenviado por el túnel de T5.1.1; README
+    explica cuál fuente necesita túnel y cuál no.
+  - CT: `python -m sieej_datalayer` intenta conectar a los endpoints correctos (verificable
+    aunque aún falten credenciales de aplicación). **Verificado para Airflow**:
+    `consultar_airflow()` llega al servidor real (falla por versión de API y por autenticación,
+    no por conectividad — ver el hallazgo de Airflow 3 en T5.1.3). El lado de Postgres queda documentado pero no
+    verificable hasta que T5.1.1 desbloquee su túnel.
   - Dependencias: T5.1.1 (el lado de Airflow ya se puede cablear; el de Postgres queda pendiente
     del desbloqueo del túnel).
 - [ ] **T5.1.3** Ejecutar el cruce real y regenerar `data/*.json` — rama `feature/datalayer-cruce-vivo`

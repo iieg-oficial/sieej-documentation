@@ -47,21 +47,25 @@ Ambos son **servicios externos existentes**: no se levantan en este Compose. El 
 el de Airflow deben ser de **solo lectura**; además toda conexión a PostgreSQL se abre con
 `default_transaction_read_only=on`.
 
-### Acceso vía túnel SSH (fuera de la red interna del IIEG)
+### Acceso a las fuentes vivas
 
-Ninguno de los dos puertos de arriba es alcanzable directo por IP desde fuera de la red del
-IIEG — solo el puerto SSH de cada host lo es. Con VPN activa y los hosts `iieg-db-etl` /
-`iieg-airflow` definidos en `~/.ssh/config`, abre el túnel antes de correr `sieej_datalayer` o
-`docker compose up` con fuentes vivas:
+Cada fuente se alcanza distinto:
+
+- **Airflow**: la API responde directo por IP dentro de la red del IIEG, sin túnel. Deja
+  `AIRFLOW_BASE_URL=http://10.13.201.115:8080` en `.env`. Es Airflow 3.1.1, que expone
+  `/api/v2` (verificado el 2026-08-26 contra `/api/v2/version`).
+- **PostgreSQL**: el puerto `5432` de `iieg-db-etl` no responde directo, así que se reenvía a
+  `localhost` por SSH. Con VPN activa y el host `iieg-db-etl` definido en `~/.ssh/config`, abre
+  el túnel antes de correr `sieej_datalayer` o `docker compose up` con fuentes vivas:
 
 ```bash
 ./scripts/tunel-produccion.sh   # ver scripts/README.md para detalles y estado conocido
 ```
 
-Con el túnel activo, `.env` apunta a `localhost` + los puertos reenviados (ver
-`.env.example`). **Estado al 2026-08-18**: el túnel a Airflow funciona; el túnel a Postgres es
-rechazado por el `sshd` de `iieg-db-etl` (política `AllowTcpForwarding`/`PermitOpen` del
-servidor) — pendiente de que un administrador de ese host lo habilite.
+Con el túnel activo, `PG_HOST`/`PG_PORT` apuntan a `localhost` + el puerto reenviado (ver
+`.env.example`). **Estado al 2026-08-18**: el túnel a Postgres es rechazado por el `sshd` de
+`iieg-db-etl` (política `AllowTcpForwarding`/`PermitOpen` del servidor) — pendiente de que un
+administrador de ese host lo habilite.
 
 ## Desarrollo local
 

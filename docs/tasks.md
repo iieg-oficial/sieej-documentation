@@ -178,23 +178,24 @@
 
 ## Fase 5 — Inventario vivo contra producción (agente: datos-backend)
 
-> VPN y acceso SSH a `iieg-db-etl` / `iieg-airflow` disponibles desde 2026-08-18. Postgres
-> (`5432`) y la API de Airflow (`8080`) no son alcanzables directo por IP — solo el puerto SSH
-> lo es — así que el acceso pasa por **túneles SSH** reenviados a `localhost`, reutilizando los
-> hosts ya definidos en `~/.ssh/config`.
+> Cada fuente se alcanza distinto (verificado el 2026-08-26): la **API de Airflow responde
+> directo por IP** en `http://10.13.201.115:8080` y se consulta por HTTP sin intermediarios;
+> **Postgres (`iieg-db-etl:5432`) no**, y su acceso pasa por un **túnel SSH** reenviado a
+> `localhost`, reutilizando el host de `~/.ssh/config`.
 
-- [ ] **T5.1.1** Túneles SSH hacia Postgres y Airflow — rama `feature/datalayer-tunel-ssh`
-  - Script que abre los reenvíos locales hacia `postgis_db` (`iieg-db-etl:5432`) y la API de
-    Airflow (`iieg-airflow:8080`), documentado en el README. Detecta y reporta con claridad
-    si el servidor rechaza el reenvío, en vez de colgarse en silencio.
-  - **Hallazgo (2026-08-18):** el túnel a Airflow funciona (tráfico HTTP real confirmado). El
-    túnel a Postgres es rechazado por el `sshd` de `iieg-db-etl`
+- [ ] **T5.1.1** Acceso a las fuentes vivas: Airflow directo, Postgres por túnel — rama `feature/datalayer-tunel-ssh`
+  - Airflow **no pasa por SSH**: su API responde directo en `http://10.13.201.115:8080`
+    (verificado el 2026-08-26 contra `/api/v2/version` → Airflow 3.1.1).
+  - Script que abre el reenvío local hacia `postgis_db` (`iieg-db-etl:5432`), documentado en
+    `scripts/README.md`. Detecta y reporta con claridad si el servidor rechaza el reenvío, en
+    vez de colgarse en silencio.
+  - **Bloqueo (2026-08-18):** el túnel a Postgres es rechazado por el `sshd` de `iieg-db-etl`
     (`administratively prohibited` — política `AllowTcpForwarding`/`PermitOpen` del servidor).
     Requiere que un administrador de `iieg-db-etl` habilite el reenvío para esta llave/usuario,
-    o una ruta de acceso alternativa. **Bloquea T5.1.2 y T5.1.3 en su parte de Postgres.**
-  - CT: con el script corriendo, `localhost:<puerto>` responde para ambos túneles. **Cumplido
-    solo para Airflow**; queda abierta hasta resolver el bloqueo de Postgres.
-  - Dependencias: acceso SSH por VPN (ya disponible).
+    o una ruta de acceso alternativa. **Bloquea T5.1.3 en su parte de Postgres.**
+  - CT: Airflow responde por HTTP directo (**cumplido**); con el script corriendo,
+    `localhost:15432` responde para Postgres (**pendiente del desbloqueo**).
+  - Dependencias: red del IIEG para Airflow; acceso SSH por VPN para Postgres.
 - [ ] **T5.1.2** Cableado de `.env`/README hacia los túneles — rama `chore/datalayer-tunel-config`
   - `.env.example` documenta `PG_HOST`/`AIRFLOW_BASE_URL` apuntando a `localhost` + los puertos
     reenviados; README explica que el túnel de T5.1.1 debe estar activo antes de correr

@@ -2,26 +2,29 @@
 
 ## `tunel-produccion.sh`
 
-Abre túneles SSH locales hacia la BD de producción (`iieg-db-etl`) y la API de Airflow
-(`iieg-airflow`), reutilizando los hosts ya definidos en `~/.ssh/config`. Necesario porque los
-puertos de aplicación (Postgres `5432`, API de Airflow `8080`) no son alcanzables directo por
-IP desde fuera de la red del IIEG — solo el puerto SSH de cada host lo es.
+Abre un túnel SSH local hacia la BD de producción (`postgis_db` en `iieg-db-etl`),
+reutilizando el host ya definido en `~/.ssh/config`. Necesario porque el puerto `5432` de ese
+host no es alcanzable directo por IP desde fuera de la red del IIEG.
 
 ```bash
-./scripts/tunel-produccion.sh              # ambos túneles
-./scripts/tunel-produccion.sh --pg-only    # solo Postgres
-./scripts/tunel-produccion.sh --airflow-only
+./scripts/tunel-produccion.sh
 ```
 
-Con el túnel activo, apunta `sieej_datalayer` a `localhost:<puerto>` vía
-`PG_HOST`/`AIRFLOW_BASE_URL` en `.env` (puertos por defecto: `15432` para Postgres, `18080`
-para Airflow; configurables con `PG_TUNNEL_LOCAL_PORT`/`AIRFLOW_TUNNEL_LOCAL_PORT`).
+Con el túnel activo, apunta `sieej_datalayer` a `localhost` vía `PG_HOST`/`PG_PORT` en `.env`
+(puerto local por defecto: `15432`, configurable con `PG_TUNNEL_LOCAL_PORT`).
 
-### Estado conocido (2026-08-18)
+**Airflow no usa este script.** Su API sí responde directo por IP
+(`http://10.13.201.115:8080`), así que `AIRFLOW_BASE_URL` apunta ahí sin intermediarios — ver
+`.env.example`.
 
-- **Airflow**: el túnel funciona — tráfico HTTP real confirmado contra `localhost:18080`.
+### Estado conocido (2026-08-26)
+
+- **Airflow**: alcanzable directo por HTTP, sin túnel. Verificado contra
+  `http://10.13.201.115:8080/api/v2/version` → Airflow **3.1.1**.
 - **Postgres**: el `sshd` de `iieg-db-etl` rechaza el reenvío de puertos
   (`administratively prohibited`) — política `AllowTcpForwarding`/`PermitOpen` del lado del
   servidor. El script detecta este rechazo y falla rápido con un mensaje explícito en vez de
   colgarse. Requiere que un administrador de `iieg-db-etl` habilite el reenvío para la llave/
-  usuario usados, o una ruta de acceso alternativa a Postgres.
+  usuario usados, o una ruta de acceso alternativa.
+- Desde la red donde se probó el 2026-08-26, además, el puerto SSH de `iieg-db-etl`
+  (`49222`) no responde: el túnel no puede siquiera intentarse sin VPN.

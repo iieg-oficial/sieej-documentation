@@ -6,6 +6,13 @@
 > ahora que hay VPN activa. Describe el trabajo de **cada rama creada**, no repite un archivo
 > por rama.
 
+> **Corrección (2026-08-26).** La premisa de esta sesión resultó parcialmente equivocada: la
+> API de Airflow **sí** es alcanzable directo por IP (`http://10.13.201.115:8080` responde 200;
+> `/api/v2/version` reporta Airflow 3.1.1) y **no** debe consultarse por túnel SSH. Solo
+> Postgres necesita túnel. Además, desde la red probada ese día el puerto SSH de ambos hosts no
+> respondía. Lo que sigue abajo describe lo hecho el 2026-08-19; el diseño vigente es el de
+> `scripts/README.md` y `.env.example`.
+
 ## Punto de partida
 
 Al arrancar la sesión, el usuario confirmó que ya tenía **VPN activa** y las credenciales SSH

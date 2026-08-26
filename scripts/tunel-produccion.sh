@@ -1,110 +1,72 @@
 #!/usr/bin/env bash
-# Abre túneles SSH locales hacia la BD de producción y la API de Airflow.
+# Abre un túnel SSH local hacia la BD de producción (postgis_db en iieg-db-etl).
 #
-# Los puertos de aplicación (Postgres 5432, API de Airflow 8080) no son
-# alcanzables directo por IP desde fuera de la red del IIEG; solo el puerto
-# SSH de cada host lo es. Este script reenvía ambos puertos a localhost,
-# reutilizando los hosts ya definidos en ~/.ssh/config (iieg-db-etl,
-# iieg-airflow). Con el túnel activo, sieej_datalayer se apunta a
-# localhost:<puerto> vía PG_HOST/AIRFLOW_BASE_URL (ver .env.example).
+# Solo Postgres necesita túnel. La API de Airflow es alcanzable directo por IP
+# desde la red del IIEG y se consulta por HTTP sin intermediarios: apunta
+# AIRFLOW_BASE_URL a http://10.13.201.115:8080 (ver .env.example). El puerto
+# 5432 de iieg-db-etl, en cambio, no responde directo, así que se reenvía a
+# localhost reutilizando el host iieg-db-etl de ~/.ssh/config.
 #
-# ADVERTENCIA CONOCIDA (2026-08-18): el sshd de iieg-db-etl rechaza el
-# reenvío de puertos ("administratively prohibited") — política de
-# AllowTcpForwarding/PermitOpen del lado del servidor, no un problema de
-# este script ni de la VPN. El túnel a iieg-airflow sí funciona. Hasta que
-# un administrador de iieg-db-etl habilite el reenvío para esta llave/
-# usuario, usar --airflow-only; el intento de túnel a Postgres fallará
-# rápido con un mensaje explícito en vez de colgarse en silencio.
+# ADVERTENCIA CONOCIDA (2026-08-18): el sshd de iieg-db-etl rechaza el reenvío
+# de puertos ("administratively prohibited") — política de AllowTcpForwarding/
+# PermitOpen del lado del servidor, no un problema de este script. Hasta que un
+# administrador de ese host habilite el reenvío para esta llave/usuario, el
+# túnel fallará rápido con un mensaje explícito en vez de colgarse en silencio.
 #
 # Uso:
-#   ./scripts/tunel-produccion.sh            # abre ambos túneles (foreground)
-#   ./scripts/tunel-produccion.sh --pg-only  # solo Postgres
-#   ./scripts/tunel-produccion.sh --airflow-only
+#   ./scripts/tunel-produccion.sh
 set -euo pipefail
 
 PG_LOCAL_PORT="${PG_TUNNEL_LOCAL_PORT:-15432}"
 PG_REMOTE_PORT="${PG_TUNNEL_REMOTE_PORT:-5432}"
-AIRFLOW_LOCAL_PORT="${AIRFLOW_TUNNEL_LOCAL_PORT:-18080}"
-AIRFLOW_REMOTE_PORT="${AIRFLOW_TUNNEL_REMOTE_PORT:-8080}"
 
-modo="${1:-}"
-
-pids=()
-logs=()
+log=""
+pid=""
 cleanup() {
-    for pid in "${pids[@]:-}"; do
-        kill "$pid" 2>/dev/null || true
-    done
-    for log in "${logs[@]:-}"; do
-        rm -f "$log"
-    done
+    [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
+    [[ -n "$log" ]] && rm -f "$log" || true
 }
 trap cleanup EXIT INT TERM
 
-abrir_tunel() {
-    local nombre="$1" host="$2" local_port="$3" remote_port="$4"
-    local log
-    log="$(mktemp)"
-    # El mensaje de estado va a stderr: stdout se reserva para la ruta del
-    # log, que el llamador captura con `pg_log="$(abrir_tunel ...)"`.
-    echo "[tunel] $nombre: localhost:$local_port -> $host:$remote_port" >&2
-    ssh -N -L "${local_port}:localhost:${remote_port}" "$host" >"$log" 2>&1 &
-    pids+=("$!")
-    logs+=("$log")
-    echo "$log"
+log="$(mktemp)"
+echo "[tunel] postgres: localhost:$PG_LOCAL_PORT -> iieg-db-etl:$PG_REMOTE_PORT" >&2
+ssh -N -L "${PG_LOCAL_PORT}:localhost:${PG_REMOTE_PORT}" iieg-db-etl >"$log" 2>&1 &
+pid="$!"
+
+rechazado() {
+    grep -qi "administratively prohibited" "$log" 2>/dev/null
 }
 
-esperar_puerto() {
-    # El listener local acepta la conexión TCP en cuanto ssh arranca, aunque
-    # el servidor remoto rechace el reenvío del canal ("administratively
-    # prohibited") — por eso además se revisa el log de ssh, no solo el
-    # socket local.
-    local nombre="$1" puerto="$2" log="$3"
-    for _ in $(seq 1 20); do
-        if grep -qi "administratively prohibited" "$log" 2>/dev/null; then
-            echo "[tunel] $nombre: el servidor rechazó el reenvío de puertos" >&2
-            echo "[tunel] $nombre: revisa la política AllowTcpForwarding/PermitOpen del sshd remoto" >&2
-            return 1
-        fi
-        if (exec 3<>"/dev/tcp/localhost/${puerto}") 2>/dev/null; then
-            exec 3>&- 3<&-
-            # El listener local acepta el TCP de inmediato; se necesita una
-            # sonda que realmente envíe datos para que ssh intente abrir el
-            # canal remoto y así se dispare (o no) el rechazo del servidor.
-            echo | nc -w2 localhost "$puerto" >/dev/null 2>&1 || true
-            sleep 1
-            if grep -qi "administratively prohibited" "$log" 2>/dev/null; then
-                echo "[tunel] $nombre: el servidor rechazó el reenvío de puertos" >&2
-                echo "[tunel] $nombre: revisa la política AllowTcpForwarding/PermitOpen del sshd remoto" >&2
-                return 1
-            fi
-            echo "[tunel] $nombre listo en localhost:$puerto"
-            return 0
-        fi
-        sleep 0.5
-    done
-    echo "[tunel] $nombre no respondió en localhost:$puerto tras 10s" >&2
-    return 1
+aviso_rechazo() {
+    echo "[tunel] postgres: el servidor rechazó el reenvío de puertos" >&2
+    echo "[tunel] postgres: revisa la política AllowTcpForwarding/PermitOpen del sshd remoto" >&2
 }
 
-algun_fallo=0
+# El listener local acepta la conexión TCP en cuanto ssh arranca, aunque el
+# servidor remoto rechace el reenvío del canal — por eso además se revisa el
+# log de ssh, no solo el socket local.
+for _ in $(seq 1 20); do
+    if rechazado; then
+        aviso_rechazo
+        exit 1
+    fi
+    if (exec 3<>"/dev/tcp/localhost/${PG_LOCAL_PORT}") 2>/dev/null; then
+        exec 3>&- 3<&-
+        # Se necesita una sonda que realmente envíe datos para que ssh intente
+        # abrir el canal remoto y así se dispare (o no) el rechazo del servidor.
+        echo | nc -w2 localhost "$PG_LOCAL_PORT" >/dev/null 2>&1 || true
+        sleep 1
+        if rechazado; then
+            aviso_rechazo
+            exit 1
+        fi
+        echo "[tunel] postgres listo en localhost:$PG_LOCAL_PORT"
+        echo "[tunel] presiona Ctrl+C para cerrarlo."
+        wait
+        exit 0
+    fi
+    sleep 0.5
+done
 
-if [[ "$modo" != "--airflow-only" ]]; then
-    pg_log="$(abrir_tunel "postgres" "iieg-db-etl" "$PG_LOCAL_PORT" "$PG_REMOTE_PORT")"
-fi
-if [[ "$modo" != "--pg-only" ]]; then
-    airflow_log="$(abrir_tunel "airflow" "iieg-airflow" "$AIRFLOW_LOCAL_PORT" "$AIRFLOW_REMOTE_PORT")"
-fi
-
-if [[ "$modo" != "--airflow-only" ]]; then
-    esperar_puerto "postgres" "$PG_LOCAL_PORT" "$pg_log" || algun_fallo=1
-fi
-if [[ "$modo" != "--pg-only" ]]; then
-    esperar_puerto "airflow" "$AIRFLOW_LOCAL_PORT" "$airflow_log" || algun_fallo=1
-fi
-
-if [[ "$algun_fallo" -eq 1 ]]; then
-    echo "[tunel] al menos un túnel no quedó disponible; revisa los mensajes arriba." >&2
-fi
-echo "[tunel] presiona Ctrl+C para cerrar los túneles que sí quedaron activos."
-wait
+echo "[tunel] postgres no respondió en localhost:$PG_LOCAL_PORT tras 10s" >&2
+exit 1

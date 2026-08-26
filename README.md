@@ -47,6 +47,11 @@ Ambos son **servicios externos existentes**: no se levantan en este Compose. El 
 el de Airflow deben ser de **solo lectura**; además toda conexión a PostgreSQL se abre con
 `default_transaction_read_only=on`.
 
+La API de Airflow es la **v2 de Airflow 3**, que autentica con **JWT**: `AIRFLOW_USERNAME` y
+`AIRFLOW_PASSWORD` se cambian por un token en `POST /auth/token` (`AIRFLOW_TOKEN_PATH`) y este
+viaja como `Authorization: Bearer` en cada GET. Si el token ya viene emitido, ponlo en
+`AIRFLOW_TOKEN` y el intercambio se omite.
+
 ## Desarrollo local
 
 ```bash

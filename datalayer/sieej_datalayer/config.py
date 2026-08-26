@@ -12,10 +12,13 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    # Airflow (API REST, usuario de solo lectura)
+    # Airflow (API REST v2, usuario de solo lectura)
     airflow_base_url: str | None = None
     airflow_username: str | None = None
     airflow_password: str | None = None
+    # JWT ya emitido: si viene, se usa tal cual y no se piden usuario/contraseña.
+    airflow_token: str | None = None
+    airflow_token_path: str = "/auth/token"
     airflow_timeout: float = 15.0
     airflow_recent_runs: int = 20
 
@@ -37,7 +40,9 @@ class Settings(BaseSettings):
 
     @property
     def airflow_configurado(self) -> bool:
-        return bool(self.airflow_base_url and self.airflow_username and self.airflow_password)
+        """Hay con qué autenticar: un token ya emitido, o usuario y contraseña."""
+        credenciales = self.airflow_token or (self.airflow_username and self.airflow_password)
+        return bool(self.airflow_base_url and credenciales)
 
     @property
     def pg_configurado(self) -> bool:

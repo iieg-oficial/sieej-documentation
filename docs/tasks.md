@@ -206,3 +206,13 @@
     hay) se ven correctamente.
   - CT: sitio reconstruido reflejando datos vivos; tablero actualizado (T5.1 completa).
   - Dependencias: T5.1.3.
+- [x] **T5.1.5** Migrar el cliente de Airflow a la API v2 con JWT — rama `feature/datalayer-airflow-v3`
+  - El Airflow de producción es 3.1.1 y no acepta HTTP Basic ni `/api/v1`. El cliente ahora
+    cambia usuario/contraseña por un JWT en `POST /auth/token`, lo manda como
+    `Authorization: Bearer`, consulta `/api/v2` y ordena las corridas por `-run_after`
+    (`execution_date` dejó de ser un atributo ordenable en Airflow 3).
+  - Variables nuevas: `AIRFLOW_TOKEN` (JWT ya emitido, opcional) y `AIRFLOW_TOKEN_PATH`.
+  - CT: `pytest datalayer` en verde con casos de intercambio de token, token preexistente,
+    orden de corridas y token inválido. **Cumplido** (35 pruebas). La verificación contra
+    producción ocurre en T5.1.3, cuando lleguen las credenciales.
+  - Dependencias: ninguna (el contrato se verificó contra el `/openapi.json` público).

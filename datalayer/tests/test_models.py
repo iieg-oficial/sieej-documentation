@@ -13,7 +13,7 @@ from sieej_datalayer.models import (
 def test_pipeline_sin_verificar_por_defecto():
     p = Pipeline(nombre="denue")
     assert p.clasificacion is ClasificacionPipeline.SIN_VERIFICAR
-    assert p.dag is None
+    assert p.etapas == []
     assert p.bd_existe is None
 
 

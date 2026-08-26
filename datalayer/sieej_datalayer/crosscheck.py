@@ -20,8 +20,15 @@ from .models import (
     Pipeline,
     Vista,
 )
+from .static_docs import ALIAS_NOMBRE_A_BD
 
 _PREFIJOS_DAG = ("etl_", "dag_", "pipeline_")
+# Sufijos que nombran la etapa, no el pipeline: etl_denue_update es la etapa
+# "update" del pipeline "denue", no un pipeline aparte.
+_SUFIJOS_ETAPA = ("bootstrap", "update", "incremental")
+# Orden con el que se listan las etapas de un pipeline: carga inicial, luego
+# las incrementales, luego las actualizaciones. Lo demás va al final.
+_ORDEN_ETAPA = {etapa: i for i, etapa in enumerate(_SUFIJOS_ETAPA)}
 
 
 def _normalizar_dag_id(dag_id: str) -> str:
@@ -32,22 +39,44 @@ def _normalizar_dag_id(dag_id: str) -> str:
     return nombre
 
 
-def emparejar_dags(nombres: set[str], dags: dict[str, Dag]) -> dict[str, Dag]:
-    """Asigna cada DAG a su pipeline por nombre normalizado (etl_denue -> denue)."""
-    por_nombre: dict[str, Dag] = {}
-    for dag_id, dag in dags.items():
-        normalizado = _normalizar_dag_id(dag_id)
-        if normalizado in nombres:
-            por_nombre[normalizado] = dag
+def partir_dag_id(dag_id: str) -> tuple[str, str | None]:
+    """Separa un dag_id en (pipeline, etapa), ya normalizado y con alias resueltos.
+
+    `etl_denue_update` -> `("denue", "update")`; `etl_conapo` -> `("conapo", None)`.
+    Los alias de nombre (plural/singular entre fuentes) se resuelven aquí para
+    que un DAG empate con su base aunque se llamen distinto.
+    """
+    nombre = _normalizar_dag_id(dag_id)
+    etapa = None
+    for sufijo in _SUFIJOS_ETAPA:
+        if nombre.endswith(f"_{sufijo}"):
+            nombre, etapa = nombre[: -len(sufijo) - 1], sufijo
+            break
+    return ALIAS_NOMBRE_A_BD.get(nombre, nombre), etapa
+
+
+def emparejar_dags(nombres: set[str], dags: dict[str, Dag]) -> dict[str, list[Dag]]:
+    """Agrupa los DAG por pipeline: cada pipeline conserva todas sus etapas.
+
+    `nombres` acota a qué pipelines conocidos se puede emparejar; un dag_id que
+    coincida literalmente con un nombre también empata, sin partir la etapa.
+    """
+    por_nombre: dict[str, list[Dag]] = {}
+    for dag_id, dag in sorted(dags.items()):
+        pipeline, etapa = partir_dag_id(dag_id)
+        if pipeline in nombres:
+            por_nombre.setdefault(pipeline, []).append(dag.model_copy(update={"etapa": etapa}))
         elif dag_id in nombres:
-            por_nombre[dag_id] = dag
+            por_nombre.setdefault(dag_id, []).append(dag)
+    for etapas in por_nombre.values():
+        etapas.sort(key=lambda d: (_ORDEN_ETAPA.get(d.etapa or "", len(_ORDEN_ETAPA)), d.dag_id))
     return por_nombre
 
 
 def _clasificar(p: Pipeline, vivas_ok: bool) -> ClasificacionPipeline:
     if not vivas_ok:
         return ClasificacionPipeline.SIN_VERIFICAR
-    vivo = bool(p.bd_existe) or p.dag is not None
+    vivo = bool(p.bd_existe) or bool(p.etapas)
     if vivo and p.documentacion_html:
         return ClasificacionPipeline.DOCUMENTADO
     if vivo:
@@ -72,7 +101,7 @@ def construir_inventario(
     bases_docs = {bd for bd in vistas_docs if not _es_infra_docs(vistas_docs[bd])}
 
     nombres = set(html_docs) | set(bases_pipeline) | bases_docs
-    dags_por_nombre = emparejar_dags(nombres | {_normalizar_dag_id(d) for d in dags}, dags)
+    dags_por_nombre = emparejar_dags(nombres | {partir_dag_id(d)[0] for d in dags}, dags)
     nombres |= set(dags_por_nombre)
 
     pipelines: dict[str, Pipeline] = {}
@@ -83,7 +112,7 @@ def construir_inventario(
             documentacion_html=html_docs.get(nombre),
             alias_html=_alias_de(nombre, html_docs),
             vistas_documentadas=[v.nombre for v in vistas_docs.get(nombre, [])],
-            dag=dags_por_nombre.get(nombre),
+            etapas=dags_por_nombre.get(nombre, []),
             bd_existe=(nombre in bases_pipeline) if bd_ok == EstadoFuente.OK else None,
             vistas_en_bd=len(base_viva.vistas) if base_viva else None,
         )
@@ -91,7 +120,7 @@ def construir_inventario(
         pipelines[nombre] = p
 
     dags_sin_pipeline = sorted(
-        d for d in dags if _normalizar_dag_id(d) not in pipelines and d not in pipelines
+        d for d in dags if partir_dag_id(d)[0] not in pipelines and d not in pipelines
     )
     cross_check = {
         "pipelines_sin_html": sorted(
@@ -109,7 +138,8 @@ def construir_inventario(
     resumen = {
         "pipelines": len(pipelines),
         "con_html": sum(1 for p in pipelines.values() if p.documentacion_html),
-        "dags_emparejados": len(dags_por_nombre),
+        "dags_emparejados": sum(len(e) for e in dags_por_nombre.values()),
+        "pipelines_con_etapas": len(dags_por_nombre),
         "bases_en_bd": len(bases_pipeline) if bd_ok == EstadoFuente.OK else None,
         "verificado_contra_produccion": vivas_ok,
     }

@@ -56,6 +56,9 @@ class CorridasRecientes(BaseModel):
 
 class Dag(BaseModel):
     dag_id: str
+    # Etapa del pipeline que ejecuta este DAG: bootstrap, update, incremental…
+    # None cuando el DAG no lleva sufijo de etapa (pipeline de una sola pieza).
+    etapa: str | None = None
     pausado: bool | None = None
     ultima_corrida_fecha: datetime | None = None
     ultima_corrida_estado: str | None = None
@@ -79,7 +82,9 @@ class Pipeline(BaseModel):
     documentacion_html: DocumentacionHtml | None = None
     alias_html: str | None = None
     vistas_documentadas: list[str] = Field(default_factory=list)
-    dag: Dag | None = None
+    # Un pipeline suele ejecutarse en varias etapas (bootstrap + update), cada
+    # una con su propio DAG y su propio estado: se guardan todas, no una sola.
+    etapas: list[Dag] = Field(default_factory=list)
     bd_existe: bool | None = None
     vistas_en_bd: int | None = None
     clasificacion: ClasificacionPipeline = ClasificacionPipeline.SIN_VERIFICAR

@@ -11,7 +11,9 @@ from pathlib import Path
 from .models import Columna, DocumentacionHtml, EstadoFuente, Fuente, Vista
 
 # Nombre del HTML -> nombre real de la base de datos del pipeline
-ALIAS_HTML_A_BD = {"censos_economicos": "censo_economico"}
+# Nombres que difieren entre fuentes: la BD usa singular donde la documentación
+# y los DAG de Airflow usan plural. Se aplica tanto a los HTML como a los DAG.
+ALIAS_NOMBRE_A_BD = {"censos_economicos": "censo_economico"}
 
 _RE_TITULO = re.compile(r"<title>(.*?)</title>", re.IGNORECASE | re.DOTALL)
 _RE_COLUMNA = re.compile(
@@ -34,7 +36,7 @@ def escanear_html(docs_dir: Path | None) -> tuple[Fuente, dict[str, Documentacio
             continue
         texto = archivo.read_text(encoding="utf-8", errors="replace")
         m = _RE_TITULO.search(texto)
-        nombre = ALIAS_HTML_A_BD.get(archivo.stem, archivo.stem)
+        nombre = ALIAS_NOMBRE_A_BD.get(archivo.stem, archivo.stem)
         documentos[nombre] = DocumentacionHtml(
             archivo=archivo.name,
             titulo=m.group(1).strip() if m else archivo.stem,

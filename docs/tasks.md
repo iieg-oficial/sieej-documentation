@@ -223,3 +223,18 @@
     orden de corridas y token inválido. **Cumplido** (35 pruebas). La verificación contra
     producción ocurre en T5.1.3, cuando lleguen las credenciales.
   - Dependencias: ninguna (el contrato se verificó contra el `/openapi.json` público).
+- [x] **T5.1.6** Agrupar los DAG por pipeline y guardar sus etapas — rama `feature/datalayer-etapas-pipeline`
+  - El cruce contaba 86 pipelines donde hay 33: `_normalizar_dag_id()` quitaba el prefijo `etl_`
+    pero no el sufijo de etapa, así que `etl_denue_update` nunca empataba con la base `denue` y
+    cada conjunto entraba dos o tres veces. Ninguna entrada tenía DAG y base a la vez, de modo
+    que la landing no habría mostrado estado de ejecución para ningún pipeline documentado.
+  - `partir_dag_id()` separa `(pipeline, etapa)` y resuelve los alias de nombre, que antes solo
+    se aplicaban a los HTML; `emparejar_dags()` agrupa y ordena las etapas (carga inicial,
+    incremental, actualización). `Pipeline.dag` pasa a `Pipeline.etapas: list[Dag]`, y cada
+    etapa conserva su propio estado.
+  - El catálogo del sitio lista las etapas con nombre legible en español, su DAG, si está
+    pausada, el resultado de la última corrida y la razón de éxitos recientes.
+  - CT: `pytest datalayer` en verde (39 pruebas) y contra producción el inventario pasa de 86 a
+    **33 pipelines**, con `dags_emparejados: 53`, `pipelines_con_etapas: 33`,
+    `dags_sin_pipeline: 0` y `pipelines_sin_html` de 64 a **11**. **Cumplido.**
+  - Dependencias: T5.1.5 (el cliente v2 es lo que permite verificarlo en vivo).

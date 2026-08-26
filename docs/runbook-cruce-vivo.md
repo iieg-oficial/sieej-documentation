@@ -14,23 +14,23 @@
    - Airflow: usuario/contraseña de la API REST (`AIRFLOW_USERNAME`/`AIRFLOW_PASSWORD`).
    - PostgreSQL: usuario/contraseña de solo lectura (`PG_USER`/`PG_PASSWORD`); **no reutilizar**
      la cuenta admin existente (la cuenta admin usada para el volcado puntual de `etl-views/`).
-3. **El Airflow de producción es v3**, que expone `/api/v2` — confirmado con un 404 real vía
-   túnel contra `/api/v1/dags`. `datalayer/sieej_datalayer/airflow_client.py` apunta hoy a
-   `/api/v1`; necesita migrarse antes de que `consultar_airflow()` funcione contra producción.
-   Los endpoints v2 relevantes (a verificar contra la documentación de Airflow 3): listar DAGs
-   y corridas recientes por DAG. El esquema de autenticación también puede diferir (Airflow 3
-   usa JWT por defecto en vez de HTTP Basic) — confirmar contra el servidor real antes de
-   escribir el cliente nuevo.
+3. **El Airflow de producción es 3.1.1**, que expone `/api/v2` — confirmado el 2026-08-26
+   contra el servidor real: `/api/v2/version` responde `{"version":"3.1.1"}` y `/api/v1/dags`
+   da 404. `datalayer/sieej_datalayer/airflow_client.py` apunta hoy a `/api/v1` con HTTP Basic;
+   necesita migrarse antes de que `consultar_airflow()` funcione contra producción. También
+   cambia la autenticación: `/api/v2/dags` responde `401 Not authenticated` y el endpoint
+   `POST /auth/token` existe, así que el flujo es **JWT** (`/auth/token` → `Authorization:
+   Bearer`), no HTTP Basic.
 
 ## Pasos una vez desbloqueado
 
 ```bash
-# 1. Abrir los túneles (ambos deben responder)
+# 1. Abrir el túnel de Postgres (Airflow NO usa túnel: responde directo por IP)
 ./scripts/tunel-produccion.sh
 
-# 2. Completar .env con las credenciales reales, apuntando a los túneles
+# 2. Completar .env con las credenciales reales
 cp .env.example .env
-#   AIRFLOW_BASE_URL=http://localhost:18080
+#   AIRFLOW_BASE_URL=http://10.13.201.115:8080   # directo, sin túnel
 #   AIRFLOW_USERNAME=<usuario de solo lectura>
 #   AIRFLOW_PASSWORD=<contraseña>
 #   PG_HOST=localhost

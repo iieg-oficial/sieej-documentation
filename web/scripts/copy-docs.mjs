@@ -92,5 +92,26 @@ const inyectarFuentes = (ruta) => {
 };
 inyectarFuentes(destino);
 
+// Los documentos enlazan su índice como `index.html`, que aquí no se copia
+// (lo reemplaza el catálogo de la landing). Sin reescribir, ese enlace muere:
+// en producción lo salva un 301 de nginx, pero en `astro dev` da 404. Se
+// apunta directo al catálogo, que además evita el salto del redirect, y la
+// etiqueta se ajusta para que nombre el destino real.
+const reescribirIndice = (ruta) => {
+  for (const entrada of readdirSync(ruta)) {
+    const rutaEntrada = join(ruta, entrada);
+    if (statSync(rutaEntrada).isDirectory()) {
+      reescribirIndice(rutaEntrada);
+    } else if (entrada.endsWith(".html")) {
+      const contenido = readFileSync(rutaEntrada, "utf-8");
+      const reescrito = contenido
+        .replaceAll('href="index.html"', 'href="/#catalogo"')
+        .replaceAll("Índice de pipelines", "Catálogo de pipelines");
+      if (reescrito !== contenido) writeFileSync(rutaEntrada, reescrito);
+    }
+  }
+};
+reescribirIndice(destino);
+
 const html = readdirSync(destino).filter((f) => f.endsWith(".html")).length;
 console.log(`[copy-docs] ${html} documentos HTML copiados a ${join("public", "docs")}.`);

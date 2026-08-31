@@ -270,4 +270,9 @@
     `con_html: 22` a **32** y `pipelines_sin_html` de 11 a **1** (`nacimientos_dgis`).
     **Cumplido.**
   - Dependencias: T5.1.5 y T5.1.6 (Airflow vivo y el emparejamiento por pipeline).
-  - Pendiente aguas arriba: falta el README de `nacimientos_dgis` en `ETL-SIEEJ`.
+  - Las tablas y vistas que instala una extensión se excluyen por pertenencia a la extensión
+    (`pg_depend.deptype = 'e'`), no por lista de nombres: PostGIS publica `spatial_ref_sys`,
+    `geometry_columns` y `geography_columns` en `public` y no son del pipeline.
+  - Pendiente aguas arriba: falta el README de `nacimientos_dgis` en `ETL-SIEEJ`, y
+    `defunciones_inegi` y `edafologia` están en el repositorio pero aún no desplegados en
+    producción (no existe su base), así que todavía no se pueden documentar.

@@ -52,12 +52,17 @@ INVENTARIO = RAIZ / "data" / "inventario.json"
 # lee del propio documento (ver `etiquetas_existentes`).
 NOMBRES: dict[str, tuple[str, str]] = {
     "defunciones": ("Defunciones", "Registro de defunciones generales — DGIS"),
+    # Los mismos hechos que `defunciones`, con otra fuente y otro esquema: el
+    # README de ETL-SIEEJ advierte de la confusión, así que el nombre la deshace.
+    "defunciones_inegi": ("Defunciones (INEGI)", "Estadísticas de Defunciones Registradas — EDR"),
+    "edafologia": ("Edafología", "Edafología histórica 1:250 000, Serie III — INEGI"),
     "emec": ("EMEC", "Encuesta Mensual sobre Empresas Comerciales"),
     "emim": ("EMIM", "Encuesta Mensual de la Industria Manufacturera"),
     "ems": ("EMS", "Encuesta Mensual de Servicios"),
     "enec": ("ENEC", "Encuesta Nacional de Empresas Constructoras"),
     "enoe": ("ENOE", "Encuesta Nacional de Ocupación y Empleo"),
     "enoe_microdatos": ("ENOE Microdatos", "ENOE — microdatos completos (SDEM + COE1 + COE2)"),
+    "intensidad_migratoria": ("Intensidad Migratoria", "Índice de Intensidad Migratoria México-EUA"),
     "indice_shf_vivienda": ("Índice SHF Vivienda", "Índice SHF de Precios de la Vivienda en México"),
     "rastros": ("Rastros (ESGRM)", "Sacrificio de Ganado en Rastros Municipales"),
     "scian": ("SCIAN", "Sistema de Clasificación Industrial de América del Norte 2023"),
@@ -256,18 +261,28 @@ def parrafos(texto: str, limite: int | None = None) -> list[str]:
 
 # ── Fuentes vivas: base de datos y Airflow ─────────────────────────────────
 
-SQL_TABLAS = """
+# Lo que instala una extensión —PostGIS publica `spatial_ref_sys`,
+# `geometry_columns` y `geography_columns` en `public`— no es del pipeline. Se
+# excluye por pertenencia a la extensión y no por lista de nombres, para que
+# cualquier extensión futura quede fuera sin tocar el generador.
+SIN_EXTENSIONES = """
+   AND NOT EXISTS (SELECT 1 FROM pg_depend d WHERE d.objid = c.oid AND d.deptype = 'e')
+"""
+
+SQL_TABLAS = f"""
 SELECT c.relname, obj_description(c.oid)
   FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace
  WHERE n.nspname = 'public' AND c.relkind IN ('r', 'p')
    AND c.relname <> 'flyway_schema_history'
+   {SIN_EXTENSIONES}
  ORDER BY c.relname
 """
 
-SQL_VISTAS = """
+SQL_VISTAS = f"""
 SELECT c.relname, c.relkind, obj_description(c.oid)
   FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace
  WHERE n.nspname = 'public' AND c.relkind IN ('v', 'm')
+   {SIN_EXTENSIONES}
  ORDER BY c.relname
 """
 

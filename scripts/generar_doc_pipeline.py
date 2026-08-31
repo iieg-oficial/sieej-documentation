@@ -7,12 +7,22 @@ del propio repositorio, y la base de datos de producción (conteos exactos,
 comentarios de tabla y estructura de columnas de cada vista). La programación
 de los DAG se lee de la API de Airflow.
 
-El estilo no se reescribe: se copia literal del `<head>` y del `<script>` de un
-documento existente, de modo que los nuevos no puedan divergir del formato.
+El estilo no se reescribe: se hereda de `scripts/plantilla/`, extraída una vez
+de un documento publicado y versionada aquí, de modo que los documentos no
+puedan divergir del formato y el generador no dependa de su propia salida.
+
+Las rutas se leen del entorno (ver `.env.example`), no del disco de nadie:
+
+    ETL_REPO_DIR   clon de ETL-SIEEJ con los README y los erd.svg
+    ETL_REPO_REF   rama de referencia que se lee de ese clon (default origin/main)
+    DOCS_HTML_DIR  directorio de los documentos: fuente del índice y destino
+
+Qué pipelines faltan no se escribe a mano: sale de `data/inventario.json`, el
+cruce del datalayer, para que un ETL nuevo no quede invisible al generador.
 
 Uso:
     .venv/bin/python scripts/generar_doc_pipeline.py emec ems           # algunos
-    .venv/bin/python scripts/generar_doc_pipeline.py --todos-faltantes  # los 10
+    .venv/bin/python scripts/generar_doc_pipeline.py --todos-faltantes  # inventario
     .venv/bin/python scripts/generar_doc_pipeline.py --solo-navegacion  # nav
 """
 
@@ -20,20 +30,26 @@ from __future__ import annotations
 
 import argparse
 import html
+import json
 import locale
 import re
 import subprocess
 import sys
 from datetime import date
+from functools import lru_cache
 from pathlib import Path
 
-REPO_ETL = Path.home() / "Documents/IIEG/sieej/ETL-SIEEJ"
-DOCS = Path.home() / "Documents/IIEG/sieej/general-documentation/etls-pipelines-readmes/html-documents"
-REF_GIT = "origin/main"
-REFERENCIA = "denue.html"
+# La plantilla vive en este repositorio, no en el directorio de salida: así el
+# generador no depende de un documento que él mismo pudo haber escrito.
+PLANTILLA = Path(__file__).resolve().parent / "plantilla"
+RAIZ = Path(__file__).resolve().parent.parent
+INVENTARIO = RAIZ / "data" / "inventario.json"
 
 # Nombre corto (barra lateral y título) y nombre del producto (subtítulo del
-# hero). El README no los expone en un campo propio, así que se curan aquí.
+# hero) de los pipelines que todavía no tienen documento. El README no los
+# expone en un campo propio, así que se curan aquí mientras no exista ese campo
+# aguas arriba. Los pipelines ya documentados NO necesitan entrada: su nombre se
+# lee del propio documento (ver `etiquetas_existentes`).
 NOMBRES: dict[str, tuple[str, str]] = {
     "defunciones": ("Defunciones", "Registro de defunciones generales — DGIS"),
     "emec": ("EMEC", "Encuesta Mensual sobre Empresas Comerciales"),
@@ -47,7 +63,88 @@ NOMBRES: dict[str, tuple[str, str]] = {
     "scian": ("SCIAN", "Sistema de Clasificación Industrial de América del Norte 2023"),
 }
 
-FALTANTES = list(NOMBRES)
+
+# ── Configuración: rutas por entorno, nunca incrustadas ────────────────────
+
+
+@lru_cache(maxsize=1)
+def ajustes():
+    """`Settings` del datalayer, que es donde vive la configuración del proyecto."""
+    sys.path.insert(0, str(RAIZ / "datalayer"))
+    from sieej_datalayer.config import Settings
+
+    return Settings()
+
+
+def _ruta(nombre: str, variable: str) -> Path:
+    valor = getattr(ajustes(), nombre)
+    if valor is None:
+        raise SystemExit(
+            f"falta {variable}: defínela en .env (ver .env.example) o en el entorno"
+        )
+    # Relativa a la raíz del repositorio, no al directorio de trabajo: en el
+    # servidor esto corre desde un cron, no desde donde vive el .env.
+    ruta = Path(valor).expanduser()
+    if not ruta.is_absolute():
+        ruta = (RAIZ / ruta).resolve()
+    if not ruta.is_dir():
+        raise SystemExit(f"{variable}={ruta} no es un directorio existente")
+    return ruta
+
+
+def repo_etl() -> Path:
+    """Clon de ETL-SIEEJ del que se leen README y diagramas."""
+    return _ruta("etl_repo_dir", "ETL_REPO_DIR")
+
+
+def docs_dir() -> Path:
+    """Directorio de los documentos HTML: fuente del índice y destino de la salida."""
+    return _ruta("docs_html_dir", "DOCS_HTML_DIR")
+
+
+def ref_git() -> str:
+    return ajustes().etl_repo_ref
+
+
+def nombres(pipeline: str, indice: list[tuple[str, str]] | None = None) -> tuple[str, str]:
+    """Nombre corto y nombre de producto, con degradación explícita.
+
+    Un pipeline nuevo que nadie curó no debe reventar la generación: cae a un
+    nombre derivado de la clave y lo avisa, para que se note y se corrija.
+    """
+    if pipeline in NOMBRES:
+        return NOMBRES[pipeline]
+    derivado = pipeline.replace("_", " ").title()
+    print(
+        f"  aviso: '{pipeline}' no tiene nombre curado en NOMBRES; se usa "
+        f"'{derivado}'. Agrégalo al diccionario si el nombre importa.",
+        file=sys.stderr,
+    )
+    return derivado, derivado
+
+
+# ── Qué pipelines faltan: se calcula, no se escribe a mano ────────────────
+
+
+def pipelines_faltantes() -> list[str]:
+    """Pipelines del inventario que todavía no tienen documento HTML.
+
+    El inventario lo produce el cruce del datalayer (`data/inventario.json`).
+    Se calcula en vez de mantenerse a mano para que un ETL nuevo no quede
+    invisible al generador.
+    """
+    if not INVENTARIO.exists():
+        raise SystemExit(
+            f"no existe {INVENTARIO}: corre el cruce del datalayer antes de usar "
+            "--todos-faltantes, o nombra los pipelines explícitamente"
+        )
+    inventario = json.loads(INVENTARIO.read_text(encoding="utf-8"))
+    documentados = {p.stem for p in docs_dir().glob("*.html")}
+    return sorted(
+        nombre
+        for nombre, datos in inventario.get("pipelines", {}).items()
+        if nombre not in documentados and not datos.get("documentacion_html")
+    )
 
 
 # ── Lectura de las fuentes ─────────────────────────────────────────────────
@@ -56,12 +153,28 @@ FALTANTES = list(NOMBRES)
 def desde_git(ruta: str) -> str | None:
     """Contenido de un archivo en la rama de referencia de ETL-SIEEJ."""
     r = subprocess.run(
-        ["git", "show", f"{REF_GIT}:{ruta}"],
-        cwd=REPO_ETL,
+        ["git", "show", f"{ref_git()}:{ruta}"],
+        cwd=repo_etl(),
         capture_output=True,
         text=True,
     )
     return r.stdout if r.returncode == 0 else None
+
+
+@lru_cache(maxsize=1)
+def commit_referencia() -> str:
+    """SHA corto de la rama de referencia, para que la salida sea rastreable.
+
+    El script nunca hace `fetch`: lee lo que el clon local tenga. Registrar el
+    commit deja constancia de qué versión del README se documentó.
+    """
+    r = subprocess.run(
+        ["git", "rev-parse", "--short", ref_git()],
+        cwd=repo_etl(),
+        capture_output=True,
+        text=True,
+    )
+    return r.stdout.strip() if r.returncode == 0 else "desconocido"
 
 
 def secciones_readme(md: str) -> dict[str, str]:
@@ -190,10 +303,7 @@ def datos_bd(base: str) -> dict:
     """Tablas, vistas y columnas reales de la base de producción del pipeline."""
     import psycopg
 
-    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "datalayer"))
-    from sieej_datalayer.config import Settings
-
-    s = Settings()
+    s = ajustes()
     salida: dict = {"tablas": [], "vistas": [], "consultado": date.today()}
     with psycopg.connect(**s.pg_conninfo(base)) as conn, conn.cursor() as cur:
         cur.execute(SQL_TABLAS)
@@ -219,12 +329,11 @@ def datos_bd(base: str) -> dict:
 
 def datos_airflow(pipeline: str) -> list[dict]:
     """DAGs del pipeline con su descripción y su programación, desde Airflow."""
-    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "datalayer"))
+    ajustes()  # deja el datalayer en sys.path
     from sieej_datalayer.airflow_client import AirflowClient
-    from sieej_datalayer.config import Settings
     from sieej_datalayer.crosscheck import partir_dag_id
 
-    s = Settings()
+    s = ajustes()
     if not s.airflow_configurado:
         return []
     with AirflowClient(s) as c:
@@ -249,11 +358,16 @@ def datos_airflow(pipeline: str) -> list[dict]:
 
 
 def plantilla() -> tuple[str, str]:
-    """Devuelve (cabecera hasta <body>, script final) del documento modelo."""
-    s = (DOCS / REFERENCIA).read_text(encoding="utf-8")
-    cabecera = s[: s.index("<body>")]
-    script = s[s.index("<script>") :]
-    return cabecera, script
+    """Devuelve (cabecera hasta <body>, script final) de la plantilla del repo.
+
+    Se extrajo una vez de un documento publicado y se versiona aquí: el formato
+    sigue siendo uno solo para todos, pero su fuente de verdad es el repositorio
+    y no un archivo del directorio de salida.
+    """
+    return (
+        (PLANTILLA / "cabecera.html").read_text(encoding="utf-8"),
+        (PLANTILLA / "script.html").read_text(encoding="utf-8"),
+    )
 
 
 def svg_incrustable(pipeline: str) -> str | None:
@@ -329,7 +443,7 @@ def seccion_descripcion(sec: dict) -> str:
 
 def seccion_fuente(pipeline: str, sec: dict) -> str:
     items: list[tuple[str, str]] = []
-    corto, producto = NOMBRES[pipeline]
+    _corto, producto = nombres(pipeline)
     items.append(("Dataset (producto)", html.escape(producto)))
     for car, valor in filas_tabla(sec.get("Características de los datos", "")):
         items.append((html.escape(car), enriquecer(valor)))
@@ -499,23 +613,45 @@ def seccion_der(svg: str | None) -> str:
 
 
 def etiquetas_existentes() -> dict[str, str]:
-    """Nombre corto de cada pipeline, tal como ya aparece en la barra lateral."""
-    s = (DOCS / REFERENCIA).read_text(encoding="utf-8")
-    pares = re.findall(r'<a class="sn-item[^"]*" href="([^"]+)\.html">([^<]+)</a>', s)
-    return {clave: html.unescape(texto) for clave, texto in pares}
+    """Etiqueta de barra lateral de cada pipeline, como ya está curada.
+
+    No son el `<h1>` del documento: la columna es angosta y varias se abreviaron
+    a mano («Estab. de Salud», «Pobreza Multidim.»). Se leen de la navegación ya
+    publicada —que todos los documentos incrustan igual, así que sirve
+    cualquiera y no hace falta señalar uno de referencia— y se completan con el
+    `<h1>` de los documentos que esa navegación todavía no liste.
+    """
+    curadas: dict[str, str] = {}
+    titulos: dict[str, str] = {}
+    for archivo in sorted(docs_dir().glob("*.html")):
+        if archivo.stem == "index":
+            continue
+        contenido = archivo.read_text(encoding="utf-8")
+        if not curadas:
+            curadas = {
+                clave: html.unescape(texto)
+                for clave, texto in re.findall(
+                    r'<a class="sn-item[^"]*" href="([^"]+)\.html">([^<]+)</a>', contenido
+                )
+            }
+        m = re.search(r"<h1>(.*?)</h1>", contenido, re.S)
+        if m:
+            titulos[archivo.stem] = html.unescape(m.group(1).strip())
+    return {**titulos, **curadas}
 
 
-def indice_pipelines() -> list[tuple[str, str]]:
-    """Todos los pipelines con documento, en el orden alfabético ya usado."""
+def indice_pipelines(pendientes: list[str] | None = None) -> list[tuple[str, str]]:
+    """Pipelines que tendrán documento, en el orden alfabético ya usado.
+
+    La navegación enlaza archivos hermanos, así que se arma con los documentos
+    que existen en el directorio más los que esta corrida está por escribir; un
+    pipeline del inventario sin documento produciría un enlace roto.
+    """
     etiquetas = etiquetas_existentes()
-    etiquetas.update({k: v[0] for k, v in NOMBRES.items()})
-    claves = sorted(
-        p.stem for p in DOCS.glob("*.html") if p.stem != "index"
-    ) or sorted(etiquetas)
-    for k in NOMBRES:
-        if k not in claves:
-            claves.append(k)
-    return [(k, etiquetas.get(k, k.replace("_", " ").title())) for k in sorted(set(claves))]
+    claves = set(etiquetas) | set(pendientes or [])
+    for clave in claves - set(etiquetas):
+        etiquetas[clave] = nombres(clave)[0]
+    return [(k, etiquetas[k]) for k in sorted(claves)]
 
 
 def sidenav(actual: str, indice: list[tuple[str, str]]) -> str:
@@ -554,7 +690,7 @@ def actualizar_navegacion(indice: list[tuple[str, str]]) -> list[str]:
     """
     tocados = []
     for clave, _ in indice:
-        archivo = DOCS / f"{clave}.html"
+        archivo = docs_dir() / f"{clave}.html"
         if not archivo.exists():
             continue
         s = archivo.read_text(encoding="utf-8")
@@ -570,7 +706,7 @@ def actualizar_navegacion(indice: list[tuple[str, str]]) -> list[str]:
 
 
 def hero(pipeline: str, sec: dict, indice: list[tuple[str, str]]) -> str:
-    corto, producto = NOMBRES[pipeline]
+    corto, producto = nombres(pipeline)
     caracteristicas = dict(
         (f[0], f[1]) for f in filas_tabla(sec.get("Características de los datos", "")) if len(f) >= 2
     )
@@ -604,12 +740,12 @@ def hero(pipeline: str, sec: dict, indice: list[tuple[str, str]]) -> str:
 def generar(pipeline: str, indice: list[tuple[str, str]]) -> Path:
     md = desde_git(f"core/pipelines/{pipeline}/README.md")
     if md is None:
-        raise SystemExit(f"{pipeline}: sin README en {REF_GIT} de ETL-SIEEJ")
+        raise SystemExit(f"{pipeline}: sin README en {ref_git()} de ETL-SIEEJ")
     sec = secciones_readme(md)
     bd = datos_bd(pipeline)
     dags = datos_airflow(pipeline)
     cabecera, script = plantilla()
-    corto, _ = NOMBRES[pipeline]
+    corto, _ = nombres(pipeline)
     cabecera = re.sub(
         r"<title>.*?</title>",
         f"<title>{html.escape(corto)} — Documentación de pipeline ETL-SIEEJ</title>",
@@ -630,7 +766,8 @@ def generar(pipeline: str, indice: list[tuple[str, str]]) -> Path:
     pie = (
         "  <footer>\n    Documentación generada a partir del README homologado, las "
         "migraciones SQL y la base de datos de producción · ETL-SIEEJ · IIEG · "
-        f"{bd['consultado'].strftime('%-d de %B de %Y')}\n  </footer>"
+        f"{bd['consultado'].strftime('%-d de %B de %Y')} · "
+        f"README en {html.escape(ref_git())} {commit_referencia()}\n  </footer>"
     )
     doc = (
         cabecera
@@ -644,7 +781,7 @@ def generar(pipeline: str, indice: list[tuple[str, str]]) -> Path:
         + "\n</div>\n"
         + script
     )
-    destino = DOCS / f"{pipeline}.html"
+    destino = docs_dir() / f"{pipeline}.html"
     destino.write_text(doc, encoding="utf-8")
     return destino
 
@@ -658,19 +795,31 @@ def main() -> int:
             continue
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("pipelines", nargs="*", help="pipelines a generar")
-    ap.add_argument("--todos-faltantes", action="store_true", help=f"genera: {', '.join(FALTANTES)}")
+    ap.add_argument(
+        "--todos-faltantes",
+        action="store_true",
+        help="genera los pipelines del inventario que aún no tienen documento",
+    )
     ap.add_argument("--solo-navegacion", action="store_true", help="solo reescribe la navegación")
     args = ap.parse_args()
 
-    indice = indice_pipelines()
     if args.solo_navegacion:
-        tocados = actualizar_navegacion(indice)
+        tocados = actualizar_navegacion(indice_pipelines())
         print(f"navegación actualizada en {len(tocados)} documentos")
         return 0
 
-    objetivo = FALTANTES if args.todos_faltantes else args.pipelines
+    if args.todos_faltantes:
+        objetivo = pipelines_faltantes()
+        if not objetivo:
+            print("no hay pipelines sin documento en el inventario")
+            return 0
+        print(f"faltantes según el inventario: {', '.join(objetivo)}")
+    else:
+        objetivo = args.pipelines
     if not objetivo:
         ap.error("indica pipelines o usa --todos-faltantes")
+
+    indice = indice_pipelines(objetivo)
     for p in objetivo:
         destino = generar(p, indice)
         print(f"  {p}: {destino.name} ({destino.stat().st_size / 1024:.0f} KB)")

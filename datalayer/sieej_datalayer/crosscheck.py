@@ -26,8 +26,9 @@ _PREFIJOS_DAG = ("etl_", "dag_", "pipeline_")
 # Sufijos que nombran la etapa, no el pipeline: etl_denue_update es la etapa
 # "update" del pipeline "denue", no un pipeline aparte.
 _SUFIJOS_ETAPA = ("bootstrap", "update", "incremental")
-# Orden con el que se listan las etapas de un pipeline: carga inicial, luego
-# las incrementales, luego las actualizaciones. Lo demás va al final.
+# Orden con el que se listan las etapas de un pipeline: carga inicial, luego la
+# actualización, luego la carga incremental. Es el orden de la tupla de arriba.
+# Lo demás va al final.
 _ORDEN_ETAPA = {etapa: i for i, etapa in enumerate(_SUFIJOS_ETAPA)}
 
 

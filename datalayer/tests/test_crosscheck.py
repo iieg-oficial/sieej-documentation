@@ -167,3 +167,31 @@ def test_resumen_cuenta_dags_y_pipelines_por_separado():
 def test_dag_sin_sufijo_de_etapa_no_inventa_etapa():
     inv = construir_inventario(_fuentes(), HTML, VISTAS_DOCS, DAGS, BASES, AHORA)
     assert [e.etapa for e in inv.pipelines["denue"].etapas] == [None]
+
+
+def test_los_dags_en_convencion_no_se_reportan():
+    inv = construir_inventario(_fuentes(), {}, {}, DAGS_POR_ETAPA, BASES_POR_ETAPA, AHORA)
+    assert inv.cross_check["dags_fuera_de_convencion"] == []
+    assert inv.resumen["dags_fuera_de_convencion"] == 0
+
+
+def test_un_dag_sin_sufijo_pero_de_pipeline_conocido_tampoco_se_reporta():
+    # `etl_denue` no trae etapa, pero `denue` sí es un pipeline conocido: es el
+    # caso legítimo de un pipeline de una sola etapa sin nombrar.
+    inv = construir_inventario(_fuentes(), HTML, VISTAS_DOCS, DAGS, BASES, AHORA)
+    assert "etl_denue" not in inv.cross_check["dags_fuera_de_convencion"]
+
+
+def test_un_dag_fuera_de_convencion_se_reporta_aunque_el_cruce_no_lo_corrija():
+    # `_backfill` no está en la convención de ETL-SIEEJ. El cruce no adivina qué
+    # quiso decir: sigue creando el pipeline `denue_backfill` —y `denue` sigue
+    # sin esa etapa—, pero deja de hacerlo en silencio. Corregirlo es aguas
+    # arriba, renombrando el DAG o ampliando la convención.
+    dags = dict(DAGS_POR_ETAPA)
+    dags["etl_denue_backfill"] = Dag(dag_id="etl_denue_backfill", pausado=False)
+    inv = construir_inventario(_fuentes(), {}, {}, dags, BASES_POR_ETAPA, AHORA)
+    assert inv.cross_check["dags_fuera_de_convencion"] == ["etl_denue_backfill"]
+    assert inv.resumen["dags_fuera_de_convencion"] == 1
+    # El efecto que el aviso delata, tal cual ocurre:
+    assert "denue_backfill" in inv.pipelines
+    assert [e.etapa for e in inv.pipelines["denue"].etapas] == ["bootstrap", "update"]

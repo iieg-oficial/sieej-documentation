@@ -56,6 +56,29 @@ def partir_dag_id(dag_id: str) -> tuple[str, str | None]:
     return ALIAS_NOMBRE_A_BD.get(nombre, nombre), etapa
 
 
+def _dags_fuera_de_convencion(dags: dict[str, Dag], conocidos: set[str]) -> list[str]:
+    """DAG cuyo nombre no sigue la convención de ETL-SIEEJ y no empata con nada.
+
+    La convención está escrita aguas arriba: `etl_{flujo}_bootstrap` y
+    `etl_{flujo}_update` en `.github/skills/dag-airflow/SKILL.md`, más la
+    variante `incremental` en `docs/architecture.md`. Un dag_id que no termine
+    en ninguno de los tres no se puede partir en (pipeline, etapa), y como el
+    emparejamiento acepta nombres derivados de los DAG, terminaría creando un
+    pipeline inventado —`etl_denue_backfill` daría un pipeline `denue_backfill`,
+    con DAG pero sin base ni ficha, mientras `denue` pierde esa etapa—.
+
+    No basta con exigir sufijo: `etl_conapo` es legítimo si `conapo` ya es un
+    pipeline conocido. Se reporta solo lo que además no empata con nada.
+    """
+    return sorted(
+        dag_id
+        for dag_id in dags
+        if partir_dag_id(dag_id)[1] is None
+        and partir_dag_id(dag_id)[0] not in conocidos
+        and dag_id not in conocidos
+    )
+
+
 def emparejar_dags(nombres: set[str], dags: dict[str, Dag]) -> dict[str, list[Dag]]:
     """Agrupa los DAG por pipeline: cada pipeline conserva todas sus etapas.
 
@@ -102,6 +125,11 @@ def construir_inventario(
     bases_docs = {bd for bd in vistas_docs if not _es_infra_docs(vistas_docs[bd])}
 
     nombres = set(html_docs) | set(bases_pipeline) | bases_docs
+    # Se cuelan los nombres derivados de los DAG para que un pipeline que solo
+    # existe en Airflow —recién desplegado, sin base ni ficha— también aparezca.
+    # El precio es que un dag_id fuera de convención se vuelve un pipeline
+    # inventado en silencio; `dags_fuera_de_convencion` es lo que lo delata.
+    fuera_de_convencion = _dags_fuera_de_convencion(dags, nombres)
     dags_por_nombre = emparejar_dags(nombres | {partir_dag_id(d)[0] for d in dags}, dags)
     nombres |= set(dags_por_nombre)
 
@@ -134,6 +162,7 @@ def construir_inventario(
             and p.clasificacion is ClasificacionPipeline.POSIBLE_DESACTUALIZADO
         ),
         "dags_sin_pipeline": dags_sin_pipeline,
+        "dags_fuera_de_convencion": fuera_de_convencion,
         "alias_nombres": {p.alias_html: n for n, p in pipelines.items() if p.alias_html},
     }
     resumen = {
@@ -141,6 +170,7 @@ def construir_inventario(
         "con_html": sum(1 for p in pipelines.values() if p.documentacion_html),
         "dags_emparejados": sum(len(e) for e in dags_por_nombre.values()),
         "pipelines_con_etapas": len(dags_por_nombre),
+        "dags_fuera_de_convencion": len(fuera_de_convencion),
         "bases_en_bd": len(bases_pipeline) if bd_ok == EstadoFuente.OK else None,
         "verificado_contra_produccion": vivas_ok,
     }

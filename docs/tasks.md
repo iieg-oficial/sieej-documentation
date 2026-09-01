@@ -230,11 +230,17 @@
     que la landing no habría mostrado estado de ejecución para ningún pipeline documentado.
   - `partir_dag_id()` separa `(pipeline, etapa)` y resuelve los alias de nombre, que antes solo
     se aplicaban a los HTML; `emparejar_dags()` agrupa y ordena las etapas (carga inicial,
-    incremental, actualización). `Pipeline.dag` pasa a `Pipeline.etapas: list[Dag]`, y cada
-    etapa conserva su propio estado.
+    actualización, carga incremental). `Pipeline.dag` pasa a `Pipeline.etapas: list[Dag]`, y
+    cada etapa conserva su propio estado.
   - El catálogo del sitio lista las etapas con nombre legible en español, su DAG, si está
     pausada, el resultado de la última corrida y la razón de éxitos recientes.
-  - CT: `pytest datalayer` en verde (39 pruebas) y contra producción el inventario pasa de 86 a
+  - El cruce avisa de los `dag_id` fuera de la convención escrita en ETL-SIEEJ
+    (`etl_{flujo}_bootstrap` y `_update` en `.github/skills/dag-airflow/SKILL.md`, más la
+    variante `incremental` en `docs/architecture.md`): `dags_fuera_de_convencion`, en el
+    resumen y en el cruce. Hoy vale 0 en los 56 DAG. No corrige nada —un `_backfill` seguiría
+    creando un pipeline inventado y su pipeline real seguiría perdiendo esa etapa—, pero deja
+    de hacerlo en silencio; corregirlo es aguas arriba.
+  - CT: `pytest datalayer` en verde (42 pruebas) y contra producción el inventario pasa de 86 a
     **33 pipelines**, con `dags_emparejados: 53`, `pipelines_con_etapas: 33`,
     `dags_sin_pipeline: 0` y `pipelines_sin_html` de 64 a **11**. **Cumplido.**
   - Dependencias: T5.1.5 (el cliente v2 es lo que permite verificarlo en vivo).

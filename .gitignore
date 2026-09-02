@@ -45,3 +45,5 @@ build/
 !.claude/rules/
 .claude/rules/*
 !.claude/rules/commits.md
+!.claude/rules/credenciales.md
+!.claude/rules/contexto-sesion.md

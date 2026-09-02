@@ -1,6 +1,6 @@
 # Contexto de sesión — Visor ampliado de los diagramas (2026-08-17)
 
-> Complementa a `docs/session-context/contexto-sesion-2026-08.md` (contexto general del
+> Complementa a `docs/session-context/contexto-sesion-2026-08-landing-sieej.md` (contexto general del
 > proyecto hasta el 2026-08-17). Este archivo cubre solo lo trabajado en esta sesión: el botón
 > para ver en grande los dos diagramas de la sección «El SIEEJ» y el zoom dentro de esa vista.
 > Describe el trabajo de **cada rama creada**, no repite un archivo por rama.

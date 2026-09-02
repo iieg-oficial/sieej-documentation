@@ -212,6 +212,13 @@
     `Authorization: Bearer`, consulta `/api/v2` y ordena las corridas por `-run_after`
     (`execution_date` dejó de ser un atributo ordenable en Airflow 3).
   - Variables nuevas: `AIRFLOW_TOKEN` (JWT ya emitido, opcional) y `AIRFLOW_TOKEN_PATH`.
+  - `ultima_corrida_fecha` es la de finalización y nada más. Mientras la corrida sigue viva no
+    hay `end_date`, y `run_after` es cuándo empezó: presentarla como «última corrida» sería una
+    fecha que miente. El campo queda vacío y el estado es el que informa que está en ejecución.
+  - Medición contra producción (56 DAG, 151 corridas): 5 corridas con `logical_date` nulo —las
+    tres bootstrap manuales—, lo que confirma por qué se ordena por `-run_after`; en 0 DAG el
+    orden por uno difiere del orden por el otro; 0 corridas con `end_date` nulo, así que el
+    caso «en ejecución» hoy no se está dando.
   - CT: `pytest datalayer` en verde con casos de intercambio de token, token preexistente,
     orden de corridas y token inválido. **Cumplido** (35 pruebas). La verificación contra
     producción ocurre en T5.1.3, cuando lleguen las credenciales.

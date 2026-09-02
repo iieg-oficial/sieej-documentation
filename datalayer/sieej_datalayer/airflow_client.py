@@ -102,9 +102,11 @@ class AirflowClient:
         return Dag(
             dag_id=dag["dag_id"],
             pausado=dag.get("is_paused"),
-            ultima_corrida_fecha=_parse_fecha(
-                (ultima or {}).get("end_date") or (ultima or {}).get("run_after")
-            ),
+            # Solo la fecha de finalización: mientras la corrida sigue viva no hay
+            # `end_date`, y `run_after` es cuándo empezó, no cuándo terminó.
+            # Presentarla como «última corrida» sería una fecha que miente; en su
+            # lugar el campo queda vacío y el estado dice que está en ejecución.
+            ultima_corrida_fecha=_parse_fecha((ultima or {}).get("end_date")),
             ultima_corrida_estado=(ultima or {}).get("state"),
             corridas_recientes=corridas,
         )

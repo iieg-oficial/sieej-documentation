@@ -111,7 +111,7 @@ def test_corridas_se_piden_ordenadas_por_run_after():
         assert req.url.params["order_by"] == "-run_after"
 
 
-def test_ultima_corrida_cae_a_run_after_si_no_hay_end_date():
+def test_una_corrida_viva_no_reporta_fecha_sino_su_estado():
     def handler(request: httpx.Request) -> httpx.Response:
         if request.url.path == "/auth/token":
             return httpx.Response(201, json={"access_token": TOKEN})
@@ -124,9 +124,10 @@ def test_ultima_corrida_cae_a_run_after_si_no_hay_end_date():
 
     _, dags = consultar_airflow(_settings(), transport=httpx.MockTransport(handler))
     corrida = dags["etl_sin_fin"]
+    # Sigue corriendo: no hay `end_date`, y `run_after` es cuándo empezó. Antes
+    # se presentaba como fecha de la última corrida, que es una fecha que miente.
     assert corrida.ultima_corrida_estado == "running"
-    assert corrida.ultima_corrida_fecha is not None
-    assert corrida.ultima_corrida_fecha.year == 2026
+    assert corrida.ultima_corrida_fecha is None
 
 
 def test_token_sin_access_token_reporta_caida():

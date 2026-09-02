@@ -6,6 +6,32 @@ import inventario from "../../../data/inventario.json";
 
 const SUFIJO_TITULO = /\s*[—-]\s*Documentaci[oó]n.*$/i;
 
+// Un pipeline se ejecuta por etapas (carga inicial, actualización…), cada una
+// con su propio DAG en Airflow y su propio estado.
+type Etapa = {
+  dag_id: string;
+  etapa: string | null;
+  pausado: boolean | null;
+  ultima_corrida_estado: string | null;
+  corridas_recientes: { total: number; exitos: number; fallos: number } | null;
+};
+
+const ETAPAS: Record<string, string> = {
+  bootstrap: "Carga inicial",
+  update: "Actualización",
+  incremental: "Carga incremental",
+};
+
+// Estados de corrida de Airflow, en español. `running` y `queued` son corridas
+// vivas: no tienen fecha de finalización, así que la etiqueta es lo único que
+// puede decir en qué van.
+const ESTADOS: Record<string, string> = {
+  success: "correcta",
+  failed: "con error",
+  running: "en ejecución",
+  queued: "en cola",
+};
+
 const ETIQUETAS: Record<string, { texto: string; clase: string }> = {
   documentado: { texto: "En producción · documentado", clase: "insignia--ok" },
   documentacion_pendiente: { texto: "Documentación pendiente", clase: "insignia--pendiente" },
@@ -18,6 +44,7 @@ const ETIQUETAS: Record<string, { texto: string; clase: string }> = {
 
 const pipelines = Object.values(inventario.pipelines).map((p) => ({
   ...p,
+  etapas: (p as { etapas?: Etapa[] }).etapas ?? [],
   titulo: p.documentacion_html
     ? p.documentacion_html.titulo.replace(SUFIJO_TITULO, "")
     : p.nombre.replaceAll("_", " "),
@@ -65,11 +92,22 @@ const generado = new Date(inventario.generado).toLocaleDateString("es-MX", {
                 <span> · {p.vistas_en_bd} vista(s) en BD</span>
               )}
             </p>
-            {p.dag && (
-              <p class="tarjeta-pipeline__meta">
-                DAG <code>{p.dag.dag_id}</code>
-                {p.dag.ultima_corrida_estado && <span> · última corrida: {p.dag.ultima_corrida_estado}</span>}
-              </p>
+            {p.etapas.length > 0 && (
+              <ul class="tarjeta-pipeline__etapas">
+                {p.etapas.map((e) => (
+                  <li>
+                    <span class="etapa__nombre">{e.etapa ? ETAPAS[e.etapa] ?? e.etapa : "Etapa única"}</span>
+                    <code>{e.dag_id}</code>
+                    {e.pausado && <span class="etapa__pausada"> · pausado</span>}
+                    {e.ultima_corrida_estado && (
+                      <span> · última corrida: {ESTADOS[e.ultima_corrida_estado] ?? e.ultima_corrida_estado}</span>
+                    )}
+                    {e.corridas_recientes && e.corridas_recientes.total > 0 && (
+                      <span> · {e.corridas_recientes.exitos} de {e.corridas_recientes.total} recientes con éxito</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
             )}
             <p class="tarjeta-pipeline__acciones">
               {p.documentacion_html ? (
@@ -132,6 +170,29 @@ const generado = new Date(inventario.generado).toLocaleDateString("es-MX", {
     margin: 0;
     color: var(--silenciado);
     font-size: 0.88rem;
+  }
+
+  .tarjeta-pipeline__etapas {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.2rem;
+    color: var(--silenciado);
+    font-size: 0.88rem;
+  }
+
+  .etapa__nombre {
+    font-weight: 600;
+    color: var(--texto);
+  }
+
+  .etapa__nombre::after {
+    content: " ·";
+  }
+
+  .etapa__pausada {
+    font-style: italic;
   }
 
   .tarjeta-pipeline__acciones {

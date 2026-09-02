@@ -1,7 +1,9 @@
 # Tablero de tareas — Landing de documentación del SIEEJ
 
 > Regla: **una tarea = una rama = una PR** (ver [CONTRIBUTING.md](../CONTRIBUTING.md)).
-> Estado: `[ ]` pendiente · `[x]` completada. Cada tarea lista su rama, agente asignado,
+> Estado: `[ ]` pendiente · `[x]` completada · `[~]` descartada (la premisa que la motivaba
+> resultó falsa; se conserva para que el historial se entienda). Cada tarea lista su
+> rama, agente asignado,
 > dependencias y criterio de terminado (CT).
 
 ## Fase 0 — Flujo de desarrollo (agente: git-flujo)
@@ -183,18 +185,24 @@
 > lo es — así que el acceso pasa por **túneles SSH** reenviados a `localhost`, reutilizando los
 > hosts ya definidos en `~/.ssh/config`.
 
-- [ ] **T5.1.1** Túneles SSH hacia Postgres y Airflow — rama `feature/datalayer-tunel-ssh`
-  - Script que abre los reenvíos locales hacia `postgis_db` (`iieg-db-etl:5432`) y la API de
-    Airflow (`iieg-airflow:8080`), documentado en el README.
-  - CT: con el script corriendo, `localhost:<puerto>` responde para ambos túneles.
-  - Dependencias: acceso SSH por VPN (ya disponible).
-- [ ] **T5.1.2** Cableado de `.env`/README hacia los túneles — rama `chore/datalayer-tunel-config`
-  - `.env.example` documenta `PG_HOST`/`AIRFLOW_BASE_URL` apuntando a `localhost` + los puertos
-    reenviados; README explica que el túnel de T5.1.1 debe estar activo antes de correr
-    `sieej_datalayer` o `docker compose up` con fuentes vivas.
-  - CT: con el túnel activo, `python -m sieej_datalayer` intenta conectar a los endpoints
-    correctos (verificable aunque aún falten credenciales de aplicación).
-  - Dependencias: T5.1.1.
+- [~] **T5.1.1** Túneles SSH hacia Postgres y Airflow — **descartada** (issue #32 cerrado
+  como *not planned*, PR #36 cerrada, rama borrada)
+  - Su premisa era que los puertos de aplicación no eran alcanzables directo y que solo
+    respondía SSH. Verificado el 2026-09-02 resultó lo contrario: Postgres responde en
+    `10.13.203.158:5432` y Airflow en `10.13.201.115:8080` con la VPN activa, mientras los tres
+    puertos SSH probados (`:22` en ambos hosts y `:49222`) no responden.
+  - No hay túnel que construir. `scripts/tunel-produccion.sh` y su README se borraron con la
+    rama.
+- [x] **T5.1.2** Cableado de `.env`/README hacia las fuentes vivas — cumplida por otra vía
+  (issue #33 cerrado como *completed*, PR #37 cerrada, rama borrada)
+  - El objetivo —que `.env.example` y el README digan cómo llegar a las fuentes vivas— se
+    logró apuntando a las IP reales, no a `localhost` con puertos reenviados, porque el túnel
+    de T5.1.1 resultó innecesario.
+  - El cableado entró por T5.1.5 (`AIRFLOW_BASE_URL`, `AIRFLOW_TOKEN`, `AIRFLOW_TOKEN_PATH`) y
+    T5.2 (`DOCS_HTML_DIR`, `ETL_REPO_DIR`, `ETL_REPO_REF`).
+  - CT superado: `python -m sieej_datalayer` no solo intenta conectar; corre completo contra
+    producción con las cuatro fuentes en `ok`. **Cumplido.**
+  - Dependencias: ninguna (T5.1.1 dejó de ser una).
 - [x] **T5.1.3** Ejecutar el cruce real y regenerar `data/*.json` — rama `feature/datalayer-cruce-vivo`
   - Los tres JSON se regeneraron contra producción con las cuatro fuentes en `ok`,
     `verificado_contra_produccion: true` y `datos_obsoletos: false`: 35 pipelines, 56 DAGs
@@ -210,11 +218,23 @@
     resultantes. **Cumplido.**
   - Dependencias: T5.1.5 y T5.1.6 (el cliente v2 y el emparejamiento por etapas). El túnel de
     T5.1.1/T5.1.2 resultó innecesario: acceso directo por IP con la VPN activa.
-- [ ] **T5.1.4** Verificación end-to-end del cruce en el sitio — rama `chore/verificacion-cruce-vivo`
-  - Reconstruir el stack con los datos vivos; confirmar que catálogo, numeralia y vistas ya no
-    muestran el aviso "sin verificar contra producción" y que las discrepancias reales (si las
-    hay) se ven correctamente.
+- [x] **T5.1.4** Verificación end-to-end del cruce en el sitio — rama `chore/verificacion-cruce-vivo`
+  - Sitio reconstruido con los `data/*.json` vivos de T5.1.3. Los dos avisos de degradación
+    quedaron ausentes: «aún no se ha verificado contra Airflow y la base de datos» y «una
+    fuente viva no respondió en la última reconstrucción». Cero tarjetas `sin_verificar`.
+  - La numeralia publicada coincide con las fuentes: 56 DAGs, 33 bases, 141 vistas, 48
+    materializadas, 27,832,747 registros y 32 documentos.
+  - Las discrepancias del cruce se reflejan en el sitio: `pipelines_sin_html` lista tres
+    (`defunciones_inegi`, `edafologia`, `nacimientos_dgis`) y el catálogo muestra exactamente
+    tres «Sin documento técnico publicado». `dags_sin_pipeline` y `html_sin_pipeline_vivo`
+    en cero.
+  - 35 páginas de estructura de vistas generadas; todos los enlaces del catálogo a `/docs/` y
+    `/vistas/` responden 200.
+  - Se borran los dos runbooks (`runbook-cruce-vivo.md` y `runbook-verificacion-cruce-vivo.md`):
+    describían procedimientos bloqueados que ya se ejecutaron, y sus pasos invocaban
+    `scripts/tunel-produccion.sh`, que dejó de existir al cerrarse T5.1.1 por innecesaria.
   - CT: sitio reconstruido reflejando datos vivos; tablero actualizado (T5.1 completa).
+    **Cumplido.**
   - Dependencias: T5.1.3.
 - [x] **T5.1.5** Migrar el cliente de Airflow a la API v2 con JWT — rama `feature/datalayer-airflow-v3`
   - El Airflow de producción es 3.1.1 y no acepta HTTP Basic ni `/api/v1`. El cliente ahora

@@ -22,6 +22,16 @@ const ETAPAS: Record<string, string> = {
   incremental: "Carga incremental",
 };
 
+// Estados de corrida de Airflow, en español. `running` y `queued` son corridas
+// vivas: no tienen fecha de finalización, así que la etiqueta es lo único que
+// puede decir en qué van.
+const ESTADOS: Record<string, string> = {
+  success: "correcta",
+  failed: "con error",
+  running: "en ejecución",
+  queued: "en cola",
+};
+
 const ETIQUETAS: Record<string, { texto: string; clase: string }> = {
   documentado: { texto: "En producción · documentado", clase: "insignia--ok" },
   documentacion_pendiente: { texto: "Documentación pendiente", clase: "insignia--pendiente" },
@@ -89,7 +99,9 @@ const generado = new Date(inventario.generado).toLocaleDateString("es-MX", {
                     <span class="etapa__nombre">{e.etapa ? ETAPAS[e.etapa] ?? e.etapa : "Etapa única"}</span>
                     <code>{e.dag_id}</code>
                     {e.pausado && <span class="etapa__pausada"> · pausado</span>}
-                    {e.ultima_corrida_estado && <span> · última corrida: {e.ultima_corrida_estado}</span>}
+                    {e.ultima_corrida_estado && (
+                      <span> · última corrida: {ESTADOS[e.ultima_corrida_estado] ?? e.ultima_corrida_estado}</span>
+                    )}
                     {e.corridas_recientes && e.corridas_recientes.total > 0 && (
                       <span> · {e.corridas_recientes.exitos} de {e.corridas_recientes.total} recientes con éxito</span>
                     )}

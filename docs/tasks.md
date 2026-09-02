@@ -234,6 +234,9 @@
     cada etapa conserva su propio estado.
   - El catálogo del sitio lista las etapas con nombre legible en español, su DAG, si está
     pausada, el resultado de la última corrida y la razón de éxitos recientes.
+  - El estado de la corrida se muestra en español: «correcta», «con error», «en ejecución» y
+    «en cola». Los dos últimos son corridas vivas, sin fecha de finalización, y la etiqueta es
+    lo único que puede decir en qué van (ver T5.1.5).
   - El cruce avisa de los `dag_id` fuera de la convención escrita en ETL-SIEEJ
     (`etl_{flujo}_bootstrap` y `_update` en `.github/skills/dag-airflow/SKILL.md`, más la
     variante `incremental` en `docs/architecture.md`): `dags_fuera_de_convencion`, en el

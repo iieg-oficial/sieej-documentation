@@ -1,6 +1,6 @@
 # Contexto de sesión — Inventario vivo (SSH/VPN) hasta 2026-08-19
 
-> Complementa a `docs/session-context/contexto-sesion-2026-08.md` (contexto general del
+> Complementa a `docs/session-context/contexto-sesion-2026-08-landing-sieej.md` (contexto general del
 > proyecto hasta el 2026-08-17). Este archivo cubre solo lo trabajado en esta sesión: el
 > primer intento real de conectar `sieej_datalayer` contra Airflow y PostgreSQL de producción
 > ahora que hay VPN activa. Describe el trabajo de **cada rama creada**, no repite un archivo

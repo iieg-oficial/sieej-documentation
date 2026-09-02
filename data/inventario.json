@@ -1,39 +1,46 @@
 {
-  "generado": "2026-08-12T06:46:01.722058Z",
+  "generado": "2026-09-02T18:33:11.707370Z",
   "datos_obsoletos": false,
   "fuentes": {
     "airflow": {
-      "estado": "sin_configurar",
-      "detalle": "Faltan AIRFLOW_BASE_URL/AIRFLOW_USERNAME/AIRFLOW_PASSWORD",
-      "consultado_en": null
+      "estado": "ok",
+      "detalle": "56 DAGs",
+      "consultado_en": "2026-09-02T18:33:18.397356Z"
     },
     "bd": {
-      "estado": "sin_configurar",
-      "detalle": "Faltan PG_HOST/PG_USER/PG_PASSWORD",
-      "consultado_en": null
+      "estado": "ok",
+      "detalle": "35 bases de datos",
+      "consultado_en": "2026-09-02T18:36:30.350210Z"
     },
     "docs_html": {
       "estado": "ok",
-      "detalle": "22 documentos HTML",
-      "consultado_en": "2026-08-12T06:46:01.724510Z"
+      "detalle": "32 documentos HTML",
+      "consultado_en": "2026-09-02T18:33:11.714134Z"
     },
     "views_md": {
       "estado": "ok",
       "detalle": "53 vistas en 20 bases",
-      "consultado_en": "2026-08-12T06:46:01.776457Z"
+      "consultado_en": "2026-09-02T18:33:11.750102Z"
     }
   },
   "resumen": {
-    "pipelines": 22,
-    "con_html": 22,
-    "dags_emparejados": 0,
-    "bases_en_bd": null,
-    "verificado_contra_produccion": false
+    "pipelines": 35,
+    "con_html": 32,
+    "dags_emparejados": 56,
+    "pipelines_con_etapas": 35,
+    "dags_fuera_de_convencion": 0,
+    "bases_en_bd": 33,
+    "verificado_contra_produccion": true
   },
   "cross_check": {
-    "pipelines_sin_html": [],
+    "pipelines_sin_html": [
+      "defunciones_inegi",
+      "edafologia",
+      "nacimientos_dgis"
+    ],
     "html_sin_pipeline_vivo": [],
     "dags_sin_pipeline": [],
+    "dags_fuera_de_convencion": [],
     "alias_nombres": {
       "censos_economicos": "censo_economico"
     }
@@ -49,10 +56,35 @@
       "vistas_documentadas": [
         "view_agricola_jalisco"
       ],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_agropecuario_siap_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-05-19T18:59:38.117836Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 1,
+            "exitos": 1,
+            "fallos": 0
+          }
+        },
+        {
+          "dag_id": "etl_agropecuario_siap_update",
+          "etapa": "update",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-08-13T22:13:35.592366Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 3,
+            "exitos": 3,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 1,
+      "clasificacion": "documentado"
     },
     "asg_imss": {
       "nombre": "asg_imss",
@@ -64,10 +96,35 @@
       "vistas_documentadas": [
         "v_asg_imss"
       ],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_asg_imss_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-07-22T17:03:48.974526Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 14,
+            "exitos": 10,
+            "fallos": 4
+          }
+        },
+        {
+          "dag_id": "etl_asg_imss_update",
+          "etapa": "update",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-08-14T21:42:30.041567Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 5,
+            "exitos": 4,
+            "fallos": 1
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 1,
+      "clasificacion": "documentado"
     },
     "censo_economico": {
       "nombre": "censo_economico",
@@ -84,10 +141,23 @@
         "vw_economico_nacional_2019",
         "vw_economico_nacional_2024"
       ],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_censos_economicos_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-05-18T17:41:24.126360Z",
+          "ultima_corrida_estado": "failed",
+          "corridas_recientes": {
+            "total": 4,
+            "exitos": 2,
+            "fallos": 2
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 6,
+      "clasificacion": "documentado"
     },
     "censo_poblacion": {
       "nombre": "censo_poblacion",
@@ -101,10 +171,23 @@
         "view_inegi_2015",
         "view_inegi_2020"
       ],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_censo_poblacion_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-05-08T17:17:44.777517Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 8,
+            "exitos": 3,
+            "fallos": 5
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 3,
+      "clasificacion": "documentado"
     },
     "centros_educativos": {
       "nombre": "centros_educativos",
@@ -116,10 +199,23 @@
       "vistas_documentadas": [
         "v_centros_educativos"
       ],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_centros_educativos_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-05-06T23:36:23.028236Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 5,
+            "exitos": 1,
+            "fallos": 4
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 1,
+      "clasificacion": "documentado"
     },
     "conapo": {
       "nombre": "conapo",
@@ -129,10 +225,23 @@
       },
       "alias_html": null,
       "vistas_documentadas": [],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_conapo_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-06-04T17:46:19.585370Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 1,
+            "exitos": 1,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 3,
+      "clasificacion": "documentado"
     },
     "datamexico": {
       "nombre": "datamexico",
@@ -144,10 +253,96 @@
       "vistas_documentadas": [
         "v_flujo_comercio"
       ],
-      "dag": null,
-      "bd_existe": null,
+      "etapas": [
+        {
+          "dag_id": "etl_datamexico_update",
+          "etapa": "update",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-07-01T08:01:36.403071Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 3,
+            "exitos": 3,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 1,
+      "clasificacion": "documentado"
+    },
+    "defunciones": {
+      "nombre": "defunciones",
+      "documentacion_html": {
+        "archivo": "defunciones.html",
+        "titulo": "Defunciones — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [],
+      "etapas": [
+        {
+          "dag_id": "etl_defunciones_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-07-14T21:51:11.146727Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 7,
+            "exitos": 2,
+            "fallos": 5
+          }
+        },
+        {
+          "dag_id": "etl_defunciones_update",
+          "etapa": "update",
+          "pausado": true,
+          "ultima_corrida_fecha": null,
+          "ultima_corrida_estado": null,
+          "corridas_recientes": {
+            "total": 0,
+            "exitos": 0,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 5,
+      "clasificacion": "documentado"
+    },
+    "defunciones_inegi": {
+      "nombre": "defunciones_inegi",
+      "documentacion_html": null,
+      "alias_html": null,
+      "vistas_documentadas": [],
+      "etapas": [
+        {
+          "dag_id": "etl_defunciones_inegi_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": true,
+          "ultima_corrida_fecha": null,
+          "ultima_corrida_estado": null,
+          "corridas_recientes": {
+            "total": 0,
+            "exitos": 0,
+            "fallos": 0
+          }
+        },
+        {
+          "dag_id": "etl_defunciones_inegi_update",
+          "etapa": "update",
+          "pausado": true,
+          "ultima_corrida_fecha": null,
+          "ultima_corrida_estado": null,
+          "corridas_recientes": {
+            "total": 0,
+            "exitos": 0,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": false,
       "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "clasificacion": "documentacion_pendiente"
     },
     "delitos_fuero_comun": {
       "nombre": "delitos_fuero_comun",
@@ -175,10 +370,35 @@
         "v_tentativa_homicidio_doloso",
         "v_trata_personas"
       ],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_delitos_fuero_comun_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-07-28T20:07:32.697941Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 17,
+            "exitos": 5,
+            "fallos": 12
+          }
+        },
+        {
+          "dag_id": "etl_delitos_fuero_comun_update",
+          "etapa": "update",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-09-01T12:21:43.112152Z",
+          "ultima_corrida_estado": "failed",
+          "corridas_recientes": {
+            "total": 4,
+            "exitos": 2,
+            "fallos": 2
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 36,
+      "clasificacion": "documentado"
     },
     "denue": {
       "nombre": "denue",
@@ -191,10 +411,58 @@
         "v_establecimientos",
         "v_establecimientos_jalisco"
       ],
-      "dag": null,
-      "bd_existe": null,
+      "etapas": [
+        {
+          "dag_id": "etl_denue_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-06-04T17:17:49.017439Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 14,
+            "exitos": 2,
+            "fallos": 12
+          }
+        },
+        {
+          "dag_id": "etl_denue_update",
+          "etapa": "update",
+          "pausado": true,
+          "ultima_corrida_fecha": null,
+          "ultima_corrida_estado": null,
+          "corridas_recientes": {
+            "total": 0,
+            "exitos": 0,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 2,
+      "clasificacion": "documentado"
+    },
+    "edafologia": {
+      "nombre": "edafologia",
+      "documentacion_html": null,
+      "alias_html": null,
+      "vistas_documentadas": [],
+      "etapas": [
+        {
+          "dag_id": "etl_edafologia_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": true,
+          "ultima_corrida_fecha": null,
+          "ultima_corrida_estado": null,
+          "corridas_recientes": {
+            "total": 0,
+            "exitos": 0,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": false,
       "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "clasificacion": "documentacion_pendiente"
     },
     "efipem": {
       "nombre": "efipem",
@@ -206,10 +474,251 @@
       "vistas_documentadas": [
         "v_efipem"
       ],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_efipem_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-05-07T20:57:09.459372Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 1,
+            "exitos": 1,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 1,
+      "clasificacion": "documentado"
+    },
+    "emec": {
+      "nombre": "emec",
+      "documentacion_html": {
+        "archivo": "emec.html",
+        "titulo": "EMEC — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [],
+      "etapas": [
+        {
+          "dag_id": "etl_emec_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-08-24T17:55:26.852744Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 1,
+            "exitos": 1,
+            "fallos": 0
+          }
+        },
+        {
+          "dag_id": "etl_emec_update",
+          "etapa": "update",
+          "pausado": true,
+          "ultima_corrida_fecha": null,
+          "ultima_corrida_estado": null,
+          "corridas_recientes": {
+            "total": 0,
+            "exitos": 0,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 2,
+      "clasificacion": "documentado"
+    },
+    "emim": {
+      "nombre": "emim",
+      "documentacion_html": {
+        "archivo": "emim.html",
+        "titulo": "EMIM — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [],
+      "etapas": [
+        {
+          "dag_id": "etl_emim_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-08-24T17:57:11.222984Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 1,
+            "exitos": 1,
+            "fallos": 0
+          }
+        },
+        {
+          "dag_id": "etl_emim_update",
+          "etapa": "update",
+          "pausado": true,
+          "ultima_corrida_fecha": null,
+          "ultima_corrida_estado": null,
+          "corridas_recientes": {
+            "total": 0,
+            "exitos": 0,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 2,
+      "clasificacion": "documentado"
+    },
+    "ems": {
+      "nombre": "ems",
+      "documentacion_html": {
+        "archivo": "ems.html",
+        "titulo": "EMS — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [],
+      "etapas": [
+        {
+          "dag_id": "etl_ems_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-08-24T17:57:51.819608Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 1,
+            "exitos": 1,
+            "fallos": 0
+          }
+        },
+        {
+          "dag_id": "etl_ems_update",
+          "etapa": "update",
+          "pausado": true,
+          "ultima_corrida_fecha": null,
+          "ultima_corrida_estado": null,
+          "corridas_recientes": {
+            "total": 0,
+            "exitos": 0,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 2,
+      "clasificacion": "documentado"
+    },
+    "enec": {
+      "nombre": "enec",
+      "documentacion_html": {
+        "archivo": "enec.html",
+        "titulo": "ENEC — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [],
+      "etapas": [
+        {
+          "dag_id": "etl_enec_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-08-24T17:58:33.166478Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 1,
+            "exitos": 1,
+            "fallos": 0
+          }
+        },
+        {
+          "dag_id": "etl_enec_update",
+          "etapa": "update",
+          "pausado": true,
+          "ultima_corrida_fecha": null,
+          "ultima_corrida_estado": null,
+          "corridas_recientes": {
+            "total": 0,
+            "exitos": 0,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 3,
+      "clasificacion": "documentado"
+    },
+    "enoe": {
+      "nombre": "enoe",
+      "documentacion_html": {
+        "archivo": "enoe.html",
+        "titulo": "ENOE — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [],
+      "etapas": [
+        {
+          "dag_id": "etl_enoe_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-07-14T01:57:54.076943Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 1,
+            "exitos": 1,
+            "fallos": 0
+          }
+        },
+        {
+          "dag_id": "etl_enoe_update",
+          "etapa": "update",
+          "pausado": true,
+          "ultima_corrida_fecha": null,
+          "ultima_corrida_estado": null,
+          "corridas_recientes": {
+            "total": 0,
+            "exitos": 0,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 2,
+      "clasificacion": "documentado"
+    },
+    "enoe_microdatos": {
+      "nombre": "enoe_microdatos",
+      "documentacion_html": {
+        "archivo": "enoe_microdatos.html",
+        "titulo": "ENOE Microdatos — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [],
+      "etapas": [
+        {
+          "dag_id": "etl_enoe_microdatos_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-07-16T17:08:10.652456Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 3,
+            "exitos": 1,
+            "fallos": 2
+          }
+        },
+        {
+          "dag_id": "etl_enoe_microdatos_incremental",
+          "etapa": "incremental",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-09-01T19:06:45.301544Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 2,
+            "exitos": 2,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 3,
+      "clasificacion": "documentado"
     },
     "escuelas": {
       "nombre": "escuelas",
@@ -219,10 +728,23 @@
       },
       "alias_html": null,
       "vistas_documentadas": [],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_escuelas_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-06-05T18:16:35.099405Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 1,
+            "exitos": 1,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 2,
+      "clasificacion": "documentado"
     },
     "establecimientos_de_salud": {
       "nombre": "establecimientos_de_salud",
@@ -236,10 +758,35 @@
         "v_establecimientos_activos_jalisco",
         "v_establecimientos_jalisco"
       ],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_establecimientos_de_salud_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-05-07T10:14:24.287341Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 4,
+            "exitos": 2,
+            "fallos": 2
+          }
+        },
+        {
+          "dag_id": "etl_establecimientos_de_salud_update",
+          "etapa": "update",
+          "pausado": true,
+          "ultima_corrida_fecha": null,
+          "ultima_corrida_estado": null,
+          "corridas_recientes": {
+            "total": 0,
+            "exitos": 0,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 3,
+      "clasificacion": "documentado"
     },
     "etef": {
       "nombre": "etef",
@@ -251,10 +798,35 @@
       "vistas_documentadas": [
         "v_etef"
       ],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_etef_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-05-07T20:57:39.652518Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 1,
+            "exitos": 1,
+            "fallos": 0
+          }
+        },
+        {
+          "dag_id": "etl_etef_update",
+          "etapa": "update",
+          "pausado": true,
+          "ultima_corrida_fecha": null,
+          "ultima_corrida_estado": null,
+          "corridas_recientes": {
+            "total": 0,
+            "exitos": 0,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 1,
+      "clasificacion": "documentado"
     },
     "fiscalia": {
       "nombre": "fiscalia",
@@ -266,10 +838,35 @@
       "vistas_documentadas": [
         "delitos_vw"
       ],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_fiscalia_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-05-04T04:56:34.648241Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 1,
+            "exitos": 1,
+            "fallos": 0
+          }
+        },
+        {
+          "dag_id": "etl_fiscalia_update",
+          "etapa": "update",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-09-01T06:01:52.289244Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 14,
+            "exitos": 11,
+            "fallos": 3
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 19,
+      "clasificacion": "documentado"
     },
     "ilmm": {
       "nombre": "ilmm",
@@ -279,10 +876,61 @@
       },
       "alias_html": null,
       "vistas_documentadas": [],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_ilmm_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-07-16T17:24:13.054835Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 4,
+            "exitos": 2,
+            "fallos": 2
+          }
+        },
+        {
+          "dag_id": "etl_ilmm_update",
+          "etapa": "update",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-07-16T17:27:49.594692Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 5,
+            "exitos": 1,
+            "fallos": 4
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 3,
+      "clasificacion": "documentado"
+    },
+    "indice_shf_vivienda": {
+      "nombre": "indice_shf_vivienda",
+      "documentacion_html": {
+        "archivo": "indice_shf_vivienda.html",
+        "titulo": "Índice SHF Vivienda — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [],
+      "etapas": [
+        {
+          "dag_id": "etl_indice_shf_vivienda_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-08-24T19:23:06.736724Z",
+          "ultima_corrida_estado": "failed",
+          "corridas_recientes": {
+            "total": 3,
+            "exitos": 0,
+            "fallos": 3
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 4,
+      "clasificacion": "documentado"
     },
     "inpc": {
       "nombre": "inpc",
@@ -296,10 +944,35 @@
         "v_inpc_entidades",
         "v_inpc_nacional"
       ],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_inpc_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-05-04T04:50:59.670469Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 1,
+            "exitos": 1,
+            "fallos": 0
+          }
+        },
+        {
+          "dag_id": "etl_inpc_update",
+          "etapa": "update",
+          "pausado": true,
+          "ultima_corrida_fecha": null,
+          "ultima_corrida_estado": null,
+          "corridas_recientes": {
+            "total": 0,
+            "exitos": 0,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 3,
+      "clasificacion": "documentado"
     },
     "intensidad_migratoria": {
       "nombre": "intensidad_migratoria",
@@ -312,10 +985,23 @@
         "view_iim_entidades",
         "view_iim_municipios_jalisco"
       ],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_intensidad_migratoria_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-08-28T22:45:19.925634Z",
+          "ultima_corrida_estado": "failed",
+          "corridas_recientes": {
+            "total": 3,
+            "exitos": 1,
+            "fallos": 2
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 6,
+      "clasificacion": "documentado"
     },
     "marginacion": {
       "nombre": "marginacion",
@@ -329,10 +1015,58 @@
         "view_marginacion_localidades",
         "view_marginacion_municipal"
       ],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_marginacion_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-05-04T04:47:56.525297Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 1,
+            "exitos": 1,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 3,
+      "clasificacion": "documentado"
+    },
+    "nacimientos_dgis": {
+      "nombre": "nacimientos_dgis",
+      "documentacion_html": null,
+      "alias_html": null,
+      "vistas_documentadas": [],
+      "etapas": [
+        {
+          "dag_id": "etl_nacimientos_dgis_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": true,
+          "ultima_corrida_fecha": null,
+          "ultima_corrida_estado": null,
+          "corridas_recientes": {
+            "total": 0,
+            "exitos": 0,
+            "fallos": 0
+          }
+        },
+        {
+          "dag_id": "etl_nacimientos_dgis_update",
+          "etapa": "update",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-07-13T22:41:36.451101Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 4,
+            "exitos": 1,
+            "fallos": 3
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 8,
+      "clasificacion": "documentacion_pendiente"
     },
     "participacion_ciudadana": {
       "nombre": "participacion_ciudadana",
@@ -342,10 +1076,23 @@
       },
       "alias_html": null,
       "vistas_documentadas": [],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_participacion_ciudadana_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-05-22T22:20:45.328662Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 2,
+            "exitos": 1,
+            "fallos": 1
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 1,
+      "clasificacion": "documentado"
     },
     "pobreza_multidimensional": {
       "nombre": "pobreza_multidimensional",
@@ -357,10 +1104,23 @@
       "vistas_documentadas": [
         "vw_pobreza_multidimencional"
       ],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_pobreza_multidimensional_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-05-07T20:59:54.175232Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 1,
+            "exitos": 1,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 1,
+      "clasificacion": "documentado"
     },
     "produccion_ganadera": {
       "nombre": "produccion_ganadera",
@@ -372,10 +1132,73 @@
       "vistas_documentadas": [
         "view_ganadera_jalisco"
       ],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_produccion_ganadera_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-05-19T19:20:19.204290Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 1,
+            "exitos": 1,
+            "fallos": 0
+          }
+        },
+        {
+          "dag_id": "etl_produccion_ganadera_update",
+          "etapa": "update",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-08-13T22:15:05.708661Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 3,
+            "exitos": 3,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 1,
+      "clasificacion": "documentado"
+    },
+    "rastros": {
+      "nombre": "rastros",
+      "documentacion_html": {
+        "archivo": "rastros.html",
+        "titulo": "Rastros (ESGRM) — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [],
+      "etapas": [
+        {
+          "dag_id": "etl_rastros_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-08-24T19:10:15.417844Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 2,
+            "exitos": 1,
+            "fallos": 1
+          }
+        },
+        {
+          "dag_id": "etl_rastros_update",
+          "etapa": "update",
+          "pausado": true,
+          "ultima_corrida_fecha": null,
+          "ultima_corrida_estado": null,
+          "corridas_recientes": {
+            "total": 0,
+            "exitos": 0,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 2,
+      "clasificacion": "documentado"
     },
     "repd": {
       "nombre": "repd",
@@ -387,10 +1210,61 @@
       "vistas_documentadas": [
         "stg_repd_case_current_vw"
       ],
-      "dag": null,
-      "bd_existe": null,
-      "vistas_en_bd": null,
-      "clasificacion": "sin_verificar"
+      "etapas": [
+        {
+          "dag_id": "etl_repd_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-07-14T16:07:07.056837Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 2,
+            "exitos": 2,
+            "fallos": 0
+          }
+        },
+        {
+          "dag_id": "etl_repd_update",
+          "etapa": "update",
+          "pausado": true,
+          "ultima_corrida_fecha": null,
+          "ultima_corrida_estado": null,
+          "corridas_recientes": {
+            "total": 0,
+            "exitos": 0,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 9,
+      "clasificacion": "documentado"
+    },
+    "scian": {
+      "nombre": "scian",
+      "documentacion_html": {
+        "archivo": "scian.html",
+        "titulo": "SCIAN — Documentación de pipeline ETL-SIEEJ"
+      },
+      "alias_html": null,
+      "vistas_documentadas": [],
+      "etapas": [
+        {
+          "dag_id": "etl_scian_bootstrap",
+          "etapa": "bootstrap",
+          "pausado": false,
+          "ultima_corrida_fecha": "2026-08-24T19:11:00.552903Z",
+          "ultima_corrida_estado": "success",
+          "corridas_recientes": {
+            "total": 1,
+            "exitos": 1,
+            "fallos": 0
+          }
+        }
+      ],
+      "bd_existe": true,
+      "vistas_en_bd": 1,
+      "clasificacion": "documentado"
     }
   }
 }

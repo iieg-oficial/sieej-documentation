@@ -17,12 +17,21 @@ def test_fuentes_sin_configurar_por_defecto():
 def test_airflow_configurado_requiere_credenciales_completas():
     s = _settings(airflow_base_url="http://airflow:8080")
     assert not s.airflow_configurado
+    s = _settings(airflow_base_url="http://airflow:8080", airflow_username="viewer")
+    assert not s.airflow_configurado
     s = _settings(
         airflow_base_url="http://airflow:8080",
         airflow_username="viewer",
         airflow_password="x",
     )
     assert s.airflow_configurado
+
+
+def test_airflow_configurado_acepta_solo_token():
+    # Un JWT ya emitido basta: no se necesitan usuario ni contraseña.
+    s = _settings(airflow_base_url="http://airflow:8080", airflow_token="jwt")
+    assert s.airflow_configurado
+    assert s.airflow_token_path == "/auth/token"
 
 
 def test_pg_conninfo_es_solo_lectura():

@@ -247,3 +247,32 @@
     **33 pipelines**, con `dags_emparejados: 53`, `pipelines_con_etapas: 33`,
     `dags_sin_pipeline: 0` y `pipelines_sin_html` de 64 a **11**. **Cumplido.**
   - Dependencias: T5.1.5 (el cliente v2 es lo que permite verificarlo en vivo).
+- [x] **T5.2** Documentación HTML de los pipelines que no la tenían — rama `docs/html-pipelines-faltantes`
+  - De los 11 pipelines sin ficha, 10 sí tienen README en `origin/main` de `ETL-SIEEJ`; el único
+    que no lo tiene es `nacimientos_dgis`, que por eso queda fuera.
+  - `scripts/generar_doc_pipeline.py` genera cada documento homologado a los existentes:
+    hereda literalmente el `<head>`, los estilos y el script de zoom de `scripts/plantilla/`
+    —extraída una vez de un documento publicado y versionada aquí—, y se alimenta de las mismas
+    tres fuentes que declara su pie —el README, el `assets/erd.svg` del pipeline y la base de
+    producción (conteos exactos, comentarios de tabla y columnas de cada vista)— más la API de
+    Airflow para la programación de los DAG.
+  - El script no incrusta rutas de ningún disco: `ETL_REPO_DIR`, `ETL_REPO_REF` y
+    `DOCS_HTML_DIR` se leen del entorno (`.env.example`), esta última es la misma que ya
+    consume `web/scripts/copy-docs.mjs`. El pie registra el commit de `ETL_REPO_REF` que se
+    documentó, porque el script lee el clon local y nunca hace `fetch`.
+  - Qué pipelines faltan se calcula de `data/inventario.json` en vez de mantenerse a mano, para
+    que un ETL nuevo no quede invisible al generador; el que no tenga nombre curado en
+    `NOMBRES` cae a uno derivado de su clave y lo avisa, en vez de reventar.
+  - Cada documento incrusta la barra lateral con todos los pipelines y los enlaces
+    anterior/siguiente, así que el script reescribe esa navegación en los 32 documentos. Solo
+    toca esos dos bloques: el contenido curado de los 22 previos no se regenera.
+  - CT: 32 documentos con navegación consistente y sin enlaces rotos; el inventario pasa de
+    `con_html: 22` a **32** y `pipelines_sin_html` de 11 a **1** (`nacimientos_dgis`).
+    **Cumplido.**
+  - Dependencias: T5.1.5 y T5.1.6 (Airflow vivo y el emparejamiento por pipeline).
+  - Las tablas y vistas que instala una extensión se excluyen por pertenencia a la extensión
+    (`pg_depend.deptype = 'e'`), no por lista de nombres: PostGIS publica `spatial_ref_sys`,
+    `geometry_columns` y `geography_columns` en `public` y no son del pipeline.
+  - Pendiente aguas arriba: falta el README de `nacimientos_dgis` en `ETL-SIEEJ`, y
+    `defunciones_inegi` y `edafologia` están en el repositorio pero aún no desplegados en
+    producción (no existe su base), así que todavía no se pueden documentar.

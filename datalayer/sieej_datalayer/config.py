@@ -34,6 +34,10 @@ class Settings(BaseSettings):
     # Documentación estática (generada fuera de este repositorio)
     docs_html_dir: Path | None = None
     views_md_dir: Path | None = None
+    # Clon de ETL-SIEEJ: de ahí salen los README y los erd.svg de cada pipeline.
+    etl_repo_dir: Path | None = None
+    # Rama de referencia que se lee de ese clon (nunca el árbol de trabajo).
+    etl_repo_ref: str = "origin/main"
 
     # Salida
     data_dir: Path = Path("data")

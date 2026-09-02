@@ -1,0 +1,101 @@
+<script>
+(function(){
+  var svg=document.querySelector('.erd svg');
+  var erd=document.querySelector('.erd');
+  if(!svg||!erd)return;
+  var vb=svg.getAttribute('viewBox').split(' ').map(Number);
+  var orig={x:vb[0],y:vb[1],w:vb[2],h:vb[3]};
+  var cur={x:orig.x,y:orig.y,w:orig.w,h:orig.h};
+
+  function applyVB(){
+    svg.setAttribute('viewBox',cur.x+' '+cur.y+' '+cur.w+' '+cur.h);
+  }
+  function clamp(){
+    var minW=orig.w*0.04, maxW=orig.w*5;
+    var minH=orig.h*0.04, maxH=orig.h*5;
+    cur.w=Math.max(minW,Math.min(maxW,cur.w));
+    cur.h=Math.max(minH,Math.min(maxH,cur.h));
+  }
+  function doZoom(f,cx,cy){
+    if(cx===undefined){cx=cur.x+cur.w/2;cy=cur.y+cur.h/2;}
+    cur.x=cx-(cx-cur.x)*f;
+    cur.y=cy-(cy-cur.y)*f;
+    cur.w*=f;cur.h*=f;
+    clamp();applyVB();
+  }
+
+  window.erdZoomIn =function(){doZoom(1/1.35);};
+  window.erdZoomOut=function(){doZoom(1.35);};
+  window.erdReset  =function(){cur={x:orig.x,y:orig.y,w:orig.w,h:orig.h};applyVB();};
+
+  /* wheel zoom toward cursor */
+  erd.addEventListener('wheel',function(e){
+    e.preventDefault();
+    var r=erd.getBoundingClientRect();
+    var sx=cur.x+(e.clientX-r.left)/r.width*cur.w;
+    var sy=cur.y+(e.clientY-r.top)/r.height*cur.h;
+    doZoom(e.deltaY>0?1.15:1/1.15,sx,sy);
+  },{passive:false});
+
+  /* drag to pan */
+  var drag=false,lx=0,ly=0;
+  erd.addEventListener('mousedown',function(e){
+    if(e.button!==0||e.target.closest('.erd-ctrl'))return;
+    drag=true;lx=e.clientX;ly=e.clientY;
+    erd.classList.add('dragging');e.preventDefault();
+  });
+  window.addEventListener('mousemove',function(e){
+    if(!drag)return;
+    var r=erd.getBoundingClientRect();
+    cur.x-=(e.clientX-lx)/r.width*cur.w;
+    cur.y-=(e.clientY-ly)/r.height*cur.h;
+    lx=e.clientX;ly=e.clientY;applyVB();
+  });
+  window.addEventListener('mouseup',function(){
+    drag=false;erd.classList.remove('dragging');
+  });
+
+  /* double-click to reset */
+  erd.addEventListener('dblclick',function(e){
+    if(!e.target.closest('.erd-ctrl'))erdReset();
+  });
+
+  /* touch: single-finger pan, two-finger pinch zoom */
+  var pt=null,tlx=0,tly=0;
+  erd.addEventListener('touchstart',function(e){
+    if(e.touches.length===2){
+      pt=Math.hypot(
+        e.touches[0].clientX-e.touches[1].clientX,
+        e.touches[0].clientY-e.touches[1].clientY
+      );
+    }else{
+      pt=null;
+      tlx=e.touches[0].clientX;
+      tly=e.touches[0].clientY;
+    }
+    e.preventDefault();
+  },{passive:false});
+  erd.addEventListener('touchmove',function(e){
+    if(e.touches.length===2){
+      var d=Math.hypot(
+        e.touches[0].clientX-e.touches[1].clientX,
+        e.touches[0].clientY-e.touches[1].clientY
+      );
+      if(pt)doZoom(pt/d);
+      pt=d;
+    }else if(e.touches.length===1&&!pt){
+      var r=erd.getBoundingClientRect();
+      cur.x-=(e.touches[0].clientX-tlx)/r.width*cur.w;
+      cur.y-=(e.touches[0].clientY-tly)/r.height*cur.h;
+      tlx=e.touches[0].clientX;
+      tly=e.touches[0].clientY;
+      applyVB();
+    }
+    e.preventDefault();
+  },{passive:false});
+  erd.addEventListener('touchend',function(){pt=null;});
+})();
+</script>
+</div></div>
+</body>
+</html>

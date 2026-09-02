@@ -195,11 +195,21 @@
   - CT: con el túnel activo, `python -m sieej_datalayer` intenta conectar a los endpoints
     correctos (verificable aunque aún falten credenciales de aplicación).
   - Dependencias: T5.1.1.
-- [ ] **T5.1.3** Ejecutar el cruce real y regenerar `data/*.json` — rama `feature/datalayer-cruce-vivo`
-  - Correr `sieej_datalayer` con credenciales de solo lectura reales de Airflow y PostgreSQL;
-    verificar clasificación de pipelines, discrepancias y `verificado_contra_produccion: true`.
-  - CT: los 3 JSON se regeneran desde fuentes vivas sin degradar; commit de los JSON resultantes.
-  - Dependencias: T5.1.2 + credenciales de solo lectura de Airflow y PostgreSQL (pendientes).
+- [x] **T5.1.3** Ejecutar el cruce real y regenerar `data/*.json` — rama `feature/datalayer-cruce-vivo`
+  - Los tres JSON se regeneraron contra producción con las cuatro fuentes en `ok`,
+    `verificado_contra_produccion: true` y `datos_obsoletos: false`: 35 pipelines, 56 DAGs
+    (40 activos, 16 pausados), 33 bases, 141 vistas, 48 materializadas y 27,832,747 registros.
+  - Traen ya el esquema `etapas` de T5.1.6 —el campo `dag` no existe— y el
+    `dags_fuera_de_convencion` del aviso de nomenclatura, en 0.
+  - `pipelines_sin_html: 3` (`defunciones_inegi`, `edafologia`, `nacimientos_dgis`),
+    `dags_sin_pipeline: 0`, `html_sin_pipeline_vivo: 0`.
+  - Se corrió **desde esta rama ya rebasada** sobre el `main` que trae #42/#44/#45/#46, no
+    arrastrando JSON generados en otro estado del árbol: un dato producido en un árbol
+    intermedio no es reproducible.
+  - CT: los 3 JSON se regeneran desde fuentes vivas sin degradar; commit de los JSON
+    resultantes. **Cumplido.**
+  - Dependencias: T5.1.5 y T5.1.6 (el cliente v2 y el emparejamiento por etapas). El túnel de
+    T5.1.1/T5.1.2 resultó innecesario: acceso directo por IP con la VPN activa.
 - [ ] **T5.1.4** Verificación end-to-end del cruce en el sitio — rama `chore/verificacion-cruce-vivo`
   - Reconstruir el stack con los datos vivos; confirmar que catálogo, numeralia y vistas ya no
     muestran el aviso "sin verificar contra producción" y que las discrepancias reales (si las

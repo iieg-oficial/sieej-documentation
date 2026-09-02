@@ -7,8 +7,8 @@
 >
 > **Deja sin efecto la premisa central de `contexto-sesion-2026-08-19-tunel-ssh.md`**: ni
 > Airflow ni PostgreSQL necesitan túnel SSH. Ambos responden directo por IP con la VPN activa.
-> Ese archivo **no está en `main`**: vive solo en las ramas borrador #36–#39, así que la
-> referencia no resuelve hasta que alguna de ellas se mergee o se cierre.
+> Ese archivo llega a `main` con esta misma PR (#38). #36 y #37 se cerraron por obsoletas y
+> sus ramas se borraron; #39 lo trae también.
 
 ## Punto de partida
 

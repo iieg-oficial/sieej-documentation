@@ -1,42 +1,58 @@
 {
-  "generado": "2026-08-12T06:46:01.722058Z",
+  "generado": "2026-09-02T18:33:11.707370Z",
   "datos_obsoletos": false,
   "fuentes": {
     "airflow": {
-      "estado": "sin_configurar",
-      "detalle": "Faltan AIRFLOW_BASE_URL/AIRFLOW_USERNAME/AIRFLOW_PASSWORD",
-      "consultado_en": null
+      "estado": "ok",
+      "detalle": "56 DAGs",
+      "consultado_en": "2026-09-02T18:33:18.397356Z"
     },
     "bd": {
-      "estado": "sin_configurar",
-      "detalle": "Faltan PG_HOST/PG_USER/PG_PASSWORD",
-      "consultado_en": null
+      "estado": "ok",
+      "detalle": "35 bases de datos",
+      "consultado_en": "2026-09-02T18:36:30.350210Z"
     },
     "docs_html": {
       "estado": "ok",
-      "detalle": "22 documentos HTML",
-      "consultado_en": "2026-08-12T06:46:01.724510Z"
+      "detalle": "32 documentos HTML",
+      "consultado_en": "2026-09-02T18:33:11.714134Z"
     },
     "views_md": {
       "estado": "ok",
       "detalle": "53 vistas en 20 bases",
-      "consultado_en": "2026-08-12T06:46:01.776457Z"
+      "consultado_en": "2026-09-02T18:33:11.750102Z"
     }
   },
-  "airflow": {},
-  "bd": {},
+  "airflow": {
+    "dags_total": 56,
+    "dags_activos": 40,
+    "dags_pausados": 16,
+    "corridas_recientes_exitos": 81,
+    "corridas_recientes_fallos": 70,
+    "ultima_ejecucion": "2026-09-01T19:06:45.301544+00:00"
+  },
+  "bd": {
+    "bases_pipeline": 33,
+    "bases_infraestructura": 2,
+    "vistas_total": 141,
+    "matviews_total": 48,
+    "registros_totales": 27832747
+  },
   "documentacion": {
-    "html_pipelines": 22,
+    "html_pipelines": 32,
     "bases_documentadas": 18,
     "vistas_documentadas": 49
   },
   "cross_check": {
-    "consistente": true,
+    "consistente": false,
     "cifras": {
-      "pipelines_documentados": 22,
-      "dags_activos": null,
-      "bases_con_vistas": null
+      "pipelines_documentados": 32,
+      "dags_activos": 40,
+      "bases_con_vistas": 33
     },
-    "discrepancias": []
+    "discrepancias": [
+      "Las cifras de documentación, Airflow y BD no coinciden: pipelines_documentados=32, dags_activos=40, bases_con_vistas=33",
+      "pipelines_sin_html: defunciones_inegi, edafologia, nacimientos_dgis"
+    ]
   }
 }

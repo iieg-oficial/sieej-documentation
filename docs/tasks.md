@@ -276,3 +276,17 @@
   - Pendiente aguas arriba: falta el README de `nacimientos_dgis` en `ETL-SIEEJ`, y
     `defunciones_inegi` y `edafologia` están en el repositorio pero aún no desplegados en
     producción (no existe su base), así que todavía no se pueden documentar.
+- [x] **T5.3** Arreglar el enlace al índice dentro de los documentos — rama `fix/docs-enlace-indice`
+  - Los documentos enlazan su índice como `index.html`, que `copy-docs.mjs` no copia a propósito
+    porque el catálogo de la landing lo reemplaza. En producción el enlace sobrevive por un 301
+    de nginx, pero en `astro dev` da 404: el sitio truena al volver desde un pipeline.
+  - `copy-docs.mjs` reescribe ese enlace a `/#catalogo` en las copias servidas, y ajusta la
+    etiqueta a «Catálogo de pipelines» para que nombre el destino real. Los documentos fuente
+    quedan intactos, así que siguen sirviendo como paquete autónomo.
+  - `copy-docs.mjs` tampoco copia los PDF. El directorio origen guarda
+    `ETL-SIEEJ-Documentacion-Pipelines.pdf` (~9 MB), que ningún documento ni página del sitio
+    enlaza y que pesaba el doble que todo el resto de lo publicado: `dist` pasó de 14 MB a
+    **4.6 MB**. El archivo queda intacto en el origen; solo deja de servirse.
+  - CT: cero enlaces a `index.html` en los 32 documentos servidos; el enlace resuelve en el
+    servidor de desarrollo y ya no depende del redirect en producción. **Cumplido.**
+  - Dependencias: ninguna.

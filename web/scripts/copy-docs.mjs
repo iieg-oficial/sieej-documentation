@@ -44,11 +44,17 @@ if (!existsSync(origenAbs)) {
 rmSync(destino, { recursive: true, force: true });
 mkdirSync(destino, { recursive: true });
 
-// Sin archivos/directorios ocultos (p. ej. .claude/) y sin el index.html:
-// el catálogo de la landing reemplaza al índice de pipelines.
+// Qué NO se copia: archivos y directorios ocultos (p. ej. .claude/); el
+// index.html, porque el catálogo de la landing reemplaza al índice de
+// pipelines; y los PDF, porque el directorio origen guarda un compendio de
+// ~9 MB que ningún documento ni página enlaza y que por sí solo pesaba más
+// que todo el resto del sitio publicado.
+const excluido = (nombre) =>
+  nombre.startsWith(".") || nombre === "index.html" || nombre.toLowerCase().endsWith(".pdf");
+
 cpSync(origenAbs, destino, {
   recursive: true,
-  filter: (src) => !basename(src).startsWith(".") && basename(src) !== "index.html",
+  filter: (src) => !excluido(basename(src)),
 });
 
 // Permisos legibles para el servidor web, sin importar los modos del origen.
@@ -91,6 +97,27 @@ const inyectarFuentes = (ruta) => {
   }
 };
 inyectarFuentes(destino);
+
+// Los documentos enlazan su índice como `index.html`, que aquí no se copia
+// (lo reemplaza el catálogo de la landing). Sin reescribir, ese enlace muere:
+// en producción lo salva un 301 de nginx, pero en `astro dev` da 404. Se
+// apunta directo al catálogo, que además evita el salto del redirect, y la
+// etiqueta se ajusta para que nombre el destino real.
+const reescribirIndice = (ruta) => {
+  for (const entrada of readdirSync(ruta)) {
+    const rutaEntrada = join(ruta, entrada);
+    if (statSync(rutaEntrada).isDirectory()) {
+      reescribirIndice(rutaEntrada);
+    } else if (entrada.endsWith(".html")) {
+      const contenido = readFileSync(rutaEntrada, "utf-8");
+      const reescrito = contenido
+        .replaceAll('href="index.html"', 'href="/#catalogo"')
+        .replaceAll("Índice de pipelines", "Catálogo de pipelines");
+      if (reescrito !== contenido) writeFileSync(rutaEntrada, reescrito);
+    }
+  }
+};
+reescribirIndice(destino);
 
 const html = readdirSync(destino).filter((f) => f.endsWith(".html")).length;
 console.log(`[copy-docs] ${html} documentos HTML copiados a ${join("public", "docs")}.`);

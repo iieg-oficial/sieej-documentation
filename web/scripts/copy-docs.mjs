@@ -44,11 +44,17 @@ if (!existsSync(origenAbs)) {
 rmSync(destino, { recursive: true, force: true });
 mkdirSync(destino, { recursive: true });
 
-// Sin archivos/directorios ocultos (p. ej. .claude/) y sin el index.html:
-// el catálogo de la landing reemplaza al índice de pipelines.
+// Qué NO se copia: archivos y directorios ocultos (p. ej. .claude/); el
+// index.html, porque el catálogo de la landing reemplaza al índice de
+// pipelines; y los PDF, porque el directorio origen guarda un compendio de
+// ~9 MB que ningún documento ni página enlaza y que por sí solo pesaba más
+// que todo el resto del sitio publicado.
+const excluido = (nombre) =>
+  nombre.startsWith(".") || nombre === "index.html" || nombre.toLowerCase().endsWith(".pdf");
+
 cpSync(origenAbs, destino, {
   recursive: true,
-  filter: (src) => !basename(src).startsWith(".") && basename(src) !== "index.html",
+  filter: (src) => !excluido(basename(src)),
 });
 
 // Permisos legibles para el servidor web, sin importar los modos del origen.

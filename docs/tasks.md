@@ -283,6 +283,10 @@
   - `copy-docs.mjs` reescribe ese enlace a `/#catalogo` en las copias servidas, y ajusta la
     etiqueta a «Catálogo de pipelines» para que nombre el destino real. Los documentos fuente
     quedan intactos, así que siguen sirviendo como paquete autónomo.
+  - `copy-docs.mjs` tampoco copia los PDF. El directorio origen guarda
+    `ETL-SIEEJ-Documentacion-Pipelines.pdf` (~9 MB), que ningún documento ni página del sitio
+    enlaza y que pesaba el doble que todo el resto de lo publicado: `dist` pasó de 14 MB a
+    **4.6 MB**. El archivo queda intacto en el origen; solo deja de servirse.
   - CT: cero enlaces a `index.html` en los 32 documentos servidos; el enlace resuelve en el
     servidor de desarrollo y ya no depende del redirect en producción. **Cumplido.**
   - Dependencias: ninguna.

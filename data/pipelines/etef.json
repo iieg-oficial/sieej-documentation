@@ -1,0 +1,390 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "etef",
+  "clasificacion": "documentado",
+  "documento": {
+    "nombre": "etef",
+    "carpeta": "etef",
+    "titulo": "ETEF",
+    "producto": "Estadísticas de la Industria de Exportación",
+    "descripcion": [
+      "Pipeline ETL de las Estadísticas de la Industria de Exportación (ETEF) del INEGI. Descarga datos trimestrales de exportaciones de la industria maquiladora y manufacturera de exportación por entidad federativa, implementando SCD Tipo 2 para rastrear cambios históricos en las cifras."
+    ],
+    "avisos": [],
+    "caracteristicas": [
+      {
+        "etiqueta": "Última fecha disponible",
+        "valor": "`2025-Q1`"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Trimestral"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Nacional, Estatal"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "Sí"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "Automático"
+      }
+    ],
+    "fuente_general": "https://www.inegi.org.mx/programas/exporta_ef/",
+    "descargas": [
+      {
+        "variable": "ETEF_SOURCE_URL",
+        "url": "https://www.inegi.org.mx/contenidos/programas/exporta_ef/datosabiertos/conjunto_de_datos_eef_trimestral_csv.zip"
+      }
+    ],
+    "variables": [
+      {
+        "etiqueta": "ETEF_SOURCE_URL",
+        "valor": "URL del ZIP con el CSV trimestral del ETEF"
+      },
+      {
+        "etiqueta": "ETEF_LOAD_BATCH_SIZE",
+        "valor": "Tamaño de lote para inserción masiva"
+      }
+    ],
+    "descripcion_tablas": {},
+    "alcance_vistas": {},
+    "commit": null
+  },
+  "base": {
+    "nombre": "etef",
+    "es_infraestructura": false,
+    "vistas": [
+      {
+        "esquema": "public",
+        "nombre": "v_etef",
+        "tipo": "VIEW",
+        "descripcion": "Vista de integración del pipeline etef. Expone la versión activa de cada registro con nombres de entidad federativa.",
+        "registros": 66528,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "trimestre",
+            "tipo": "character varying(3)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "mes",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "prod_est",
+            "tipo": "character varying(150)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "cobertura",
+            "tipo": "character varying(50)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "cve_ent",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "nom_ent",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "codigo_scian_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "codigo_scian",
+            "tipo": "character varying(10)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "subsector",
+            "tipo": "character varying(255)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "val_usd",
+            "tipo": "numeric(15,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 13,
+            "nombre": "estatus_cifra",
+            "tipo": "character varying(20)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 14,
+            "nombre": "estatus",
+            "tipo": "character varying(30)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 15,
+            "nombre": "row_hash",
+            "tipo": "character varying(64)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 16,
+            "nombre": "valid_from",
+            "tipo": "timestamp with time zone",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 17,
+            "nombre": "valid_to",
+            "tipo": "timestamp with time zone",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 18,
+            "nombre": "is_current",
+            "tipo": "boolean",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 19,
+            "nombre": "created_at",
+            "tipo": "timestamp with time zone",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      }
+    ],
+    "tablas": [
+      {
+        "nombre": "stg_etef_cat_codigo_scian",
+        "descripcion": null,
+        "filas": 27,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "codigo",
+            "tipo": "character varying(10)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "character varying(255)",
+            "pk": false,
+            "nullable": true
+          }
+        ]
+      },
+      {
+        "nombre": "stg_etef_datos",
+        "descripcion": null,
+        "filas": 66528,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "anio",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "trimestre",
+            "tipo": "character varying(3)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "mes",
+            "tipo": "character varying(5)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "prod_est",
+            "tipo": "character varying(150)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cobertura",
+            "tipo": "character varying(50)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cve_ent",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "codigo_scian_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "val_usd",
+            "tipo": "numeric(15,2)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "estatus_cifra",
+            "tipo": "character varying(20)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "estatus",
+            "tipo": "character varying(30)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "row_hash",
+            "tipo": "character varying(64)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "valid_from",
+            "tipo": "timestamp with time zone",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "valid_to",
+            "tipo": "timestamp with time zone",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "is_current",
+            "tipo": "boolean",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "created_at",
+            "tipo": "timestamp with time zone",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      }
+    ],
+    "relaciones": [
+      {
+        "tabla": "stg_etef_datos",
+        "columnas": [
+          "codigo_scian_id"
+        ],
+        "ref_tabla": "stg_etef_cat_codigo_scian",
+        "ref_columnas": [
+          "id"
+        ]
+      }
+    ]
+  },
+  "etapas": []
+}

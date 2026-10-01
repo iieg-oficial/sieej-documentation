@@ -1,0 +1,568 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "indice_shf_vivienda",
+  "clasificacion": "documentado",
+  "documento": {
+    "nombre": "indice_shf_vivienda",
+    "carpeta": "indice_shf_vivienda",
+    "titulo": "Índice SHF Vivienda",
+    "producto": "Índice SHF de Precios de la Vivienda en México",
+    "descripcion": [
+      "Pipeline ETL del **Índice SHF de Precios de la Vivienda en México**, que publica la Sociedad Hipotecaria Federal con periodicidad **trimestral desde el primer trimestre de 2005**. Mide la evolución de los precios de la vivienda con garantía hipotecaria y se publica en 121 series: 15 sin desglose geográfico (nacional, por condición, por tipo de vivienda, por segmento y 8 zonas metropolitanas), 32 por entidad federativa y una selección de municipios (74 en la edición del 2T 2026).",
+      "La fuente reparte la geografía en tres columnas mutuamente excluyentes (`Global`, `Estado`, `Municipio`): cuando una trae valor, las otras van vacías. El pipeline la parte en una tabla por nivel, y así ninguna columna queda con nulos estructurales."
+    ],
+    "avisos": [
+      "**El valor es un ÍNDICE con año base 2017 = 100, no un precio.** No representa pesos ni metros cuadrados: el promedio de los cuatro trimestres de 2017 es exactamente 100.00 en las 121 series."
+    ],
+    "caracteristicas": [
+      {
+        "etiqueta": "Primer periodo disponible",
+        "valor": "`2005-T1`"
+      },
+      {
+        "etiqueta": "Última fecha disponible",
+        "valor": "`2026-T2`"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Trimestral"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Nacional, zona metropolitana, estatal y municipal"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "No"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "Manual (DAG `etl_indice_shf_vivienda_bootstrap`, `schedule=None`)"
+      },
+      {
+        "etiqueta": "Estrategia de carga",
+        "valor": "`upsert_records`"
+      }
+    ],
+    "fuente_general": "https://www.gob.mx/shf/archivo/documentos → \"Índice SHF de Precios de la Vivienda en México\"",
+    "descargas": [
+      {
+        "variable": "SHF_URL",
+        "url": "https://www.gob.mx/cms/uploads/attachment/file/1097035/Indice_SHF_datos_abiertos_2_trim_2026.xlsx"
+      }
+    ],
+    "variables": [
+      {
+        "etiqueta": "SHF_URL",
+        "valor": "URL directa del XLSX. Cambia en cada publicación trimestral"
+      },
+      {
+        "etiqueta": "DOWNLOAD_TIMEOUT",
+        "valor": "Timeout de descarga en segundos"
+      },
+      {
+        "etiqueta": "CHUNK_SIZE",
+        "valor": "Tamaño de lote para el upsert"
+      }
+    ],
+    "descripcion_tablas": {
+      "stg_indice_shf_vivienda_municipal": "Ni `entidad_id` ni `municipio_id` declaran llave foránea: apuntan a tablas foráneas (`postgres_fdw`), que no admiten referencias declaradas. La integridad se garantiza en la carga, que aborta si un nombre no resuelve su clave."
+    },
+    "alcance_vistas": {
+      "vw_indice_shf_vivienda_global": "Series sin desglose geográfico, con nombre y tipo resueltos",
+      "vw_indice_shf_vivienda_estatal": "Serie por entidad, con el nombre oficial del INEGI",
+      "vw_indice_shf_vivienda_municipal": "Serie por municipio, con nombres de municipio y entidad",
+      "vw_indice_shf_vivienda_jalisco": "Corte de Jalisco: sus 4 municipios, la entidad y la serie `ZM Guadalajara`, apilados con una columna `nivel`"
+    },
+    "commit": null
+  },
+  "base": {
+    "nombre": "indice_shf_vivienda",
+    "es_infraestructura": false,
+    "vistas": [
+      {
+        "esquema": "public",
+        "nombre": "vw_indice_shf_vivienda_estatal",
+        "tipo": "VIEW",
+        "descripcion": "Índice SHF de precios de la vivienda por entidad federativa, con el nombre oficial del INEGI resuelto. Año base 2017 = 100.",
+        "registros": 2752,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "entidad_id",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (1 a 32) del INEGI.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "nom_ent",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre oficial de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Primer día del trimestre de referencia.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año de referencia de la medición.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "trimestre",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Trimestre de referencia de la medición (1 a 4).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "indice",
+            "tipo": "numeric(8,2)",
+            "nullable": true,
+            "descripcion": "Valor del índice, con año base 2017 = 100.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": true,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_indice_shf_vivienda_global",
+        "tipo": "VIEW",
+        "descripcion": "Índice SHF de precios de la vivienda de las series sin desglose geográfico, con el nombre y el tipo de serie resueltos. Año base 2017 = 100.",
+        "registros": 1290,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "serie",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre de la serie tal como lo publica SHF.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "tipo",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Concepto que agrupa a la serie: nacional, condicion, tipo_vivienda, segmento o zona_metropolitana.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Primer día del trimestre de referencia.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año de referencia de la medición.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "trimestre",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Trimestre de referencia de la medición (1 a 4).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "indice",
+            "tipo": "numeric(8,2)",
+            "nullable": true,
+            "descripcion": "Valor del índice, con año base 2017 = 100.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": true,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_indice_shf_vivienda_jalisco",
+        "tipo": "VIEW",
+        "descripcion": "Corte de Jalisco: los municipios que SHF publica del estado (Guadalajara, Zapopan, San Pedro Tlaquepaque y Tlajomulco de Zúñiga), la entidad y la serie de la Zona Metropolitana de Guadalajara, apiladas en una sola serie de tiempo comparable. Año base 2017 = 100.",
+        "registros": 516,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "nivel",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nivel de desagregación de la fila: municipal, estatal o global.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "serie",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio, de la entidad o de la serie global, según el nivel.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "municipio_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Clave geoestadística del municipio. Nula en los niveles estatal y global, que no desagregan a municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Primer día del trimestre de referencia.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año de referencia de la medición.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "trimestre",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Trimestre de referencia de la medición (1 a 4).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "indice",
+            "tipo": "numeric(8,2)",
+            "nullable": true,
+            "descripcion": "Valor del índice, con año base 2017 = 100.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": true,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_indice_shf_vivienda_municipal",
+        "tipo": "VIEW",
+        "descripcion": "Índice SHF de precios de la vivienda de los municipios que publica SHF, con los nombres oficiales del INEGI resueltos. Año base 2017 = 100.",
+        "registros": 6364,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "municipio_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Clave geoestadística del municipio (cve_ent * 1000 + cve_mun).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "nomgeo",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre oficial del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "entidad_id",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa a la que pertenece el municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nom_ent",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre oficial de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Primer día del trimestre de referencia.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año de referencia de la medición.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "trimestre",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Trimestre de referencia de la medición (1 a 4).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "indice",
+            "tipo": "numeric(8,2)",
+            "nullable": true,
+            "descripcion": "Valor del índice, con año base 2017 = 100.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": true,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      }
+    ],
+    "tablas": [
+      {
+        "nombre": "cat_serie_global",
+        "descripcion": "Las 15 series sin desglose geográfico que SHF agrupa bajo la columna \"Global\" del archivo de datos abiertos.",
+        "filas": 15,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "nombre",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "tipo",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "stg_indice_shf_vivienda_estatal",
+        "descripcion": "Índice SHF de precios de la vivienda desglosado por entidad federativa. Año base 2017 = 100: el promedio de los cuatro trimestres de 2017 es exactamente 100 en las 121 series.",
+        "filas": 2752,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "entidad_id",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "anio",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "trimestre",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "indice",
+            "tipo": "numeric(8,2)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "stg_indice_shf_vivienda_global",
+        "descripcion": "Índice SHF de precios de la vivienda para las series sin desglose geográfico: nacional, por condición (nueva/usada), por tipo de vivienda, por segmento y por zona metropolitana. Año base 2017 = 100: el promedio de los cuatro trimestres de 2017 es exactamente 100 en las 121 series.",
+        "filas": 1290,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "serie_global_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "anio",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "trimestre",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "indice",
+            "tipo": "numeric(8,2)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "stg_indice_shf_vivienda_municipal",
+        "descripcion": "Índice SHF de precios de la vivienda desglosado por municipio. SHF publica una selección de municipios (74 en la edición del 2T 2026), no los 2,469 del país. Año base 2017 = 100: el promedio de los cuatro trimestres de 2017 es exactamente 100 en las 121 series.",
+        "filas": 6364,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "municipio_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "entidad_id",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "anio",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "trimestre",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "indice",
+            "tipo": "numeric(8,2)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      }
+    ],
+    "relaciones": [
+      {
+        "tabla": "stg_indice_shf_vivienda_global",
+        "columnas": [
+          "serie_global_id"
+        ],
+        "ref_tabla": "cat_serie_global",
+        "ref_columnas": [
+          "id"
+        ]
+      }
+    ]
+  },
+  "etapas": []
+}

@@ -4,8 +4,6 @@ import inventario from "../../../data/inventario.json";
 // El catálogo se deriva por completo del inventario generado por
 // sieej_datalayer: nada de listas de pipelines escritas a mano.
 
-const SUFIJO_TITULO = /\s*[—-]\s*Documentaci[oó]n.*$/i;
-
 // Un pipeline se ejecuta por etapas (carga inicial, actualización…), cada una
 // con su propio DAG en Airflow y su propio estado.
 type Etapa = {
@@ -45,9 +43,7 @@ const ETIQUETAS: Record<string, { texto: string; clase: string }> = {
 const pipelines = Object.values(inventario.pipelines).map((p) => ({
   ...p,
   etapas: (p as { etapas?: Etapa[] }).etapas ?? [],
-  titulo: p.documentacion_html
-    ? p.documentacion_html.titulo.replace(SUFIJO_TITULO, "")
-    : p.nombre.replaceAll("_", " "),
+  titulo: p.documento ? p.documento.titulo : p.nombre.replaceAll("_", " "),
   etiqueta: ETIQUETAS[p.clasificacion] ?? ETIQUETAS.sin_verificar,
 }));
 
@@ -110,8 +106,8 @@ const generado = new Date(inventario.generado).toLocaleDateString("es-MX", {
               </ul>
             )}
             <p class="tarjeta-pipeline__acciones">
-              {p.documentacion_html ? (
-                <a class="pildora" href={`/docs/${p.documentacion_html.archivo}`}>
+              {p.documento ? (
+                <a class="pildora" href={`/pipelines/${p.nombre}/`}>
                   Documentación
                   <span class="visualmente-oculto"> de {p.titulo}</span>
                 </a>
@@ -119,7 +115,7 @@ const generado = new Date(inventario.generado).toLocaleDateString("es-MX", {
                 <span class="pildora pildora--inactiva">Sin documento</span>
               )}
               {p.vistas_documentadas.length > 0 || typeof p.vistas_en_bd === "number" ? (
-                <a class="pildora" href={`/vistas/${p.nombre}/`}>
+                <a class="pildora" href={`/pipelines/${p.nombre}/#vistas`}>
                   Vistas
                   <span class="visualmente-oculto"> de {p.titulo}</span>
                 </a>

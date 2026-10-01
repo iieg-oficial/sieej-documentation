@@ -1,0 +1,470 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "emec",
+  "clasificacion": "documentado",
+  "documento": {
+    "nombre": "emec",
+    "carpeta": "emec",
+    "titulo": "EMEC",
+    "producto": "Encuesta Mensual sobre Empresas Comerciales",
+    "descripcion": [
+      "Pipeline ETL de la **Encuesta Mensual sobre Empresas Comerciales (EMEC), Serie 2018** del INEGI. Reporta, con periodicidad **mensual desde enero de 2008**, los indicadores de coyuntura de los sectores de comercio al por mayor y al por menor por entidad federativa.",
+      "La EMEC es **Información de Interés Nacional** por decreto desde mayo de 2016."
+    ],
+    "avisos": [
+      "**Todas las variables son ÍNDICES con base 2018 = 100, no valores absolutos.** No representan pesos, personas ni unidades: son números índice y solo tienen sentido comparados contra la base o entre periodos."
+    ],
+    "caracteristicas": [
+      {
+        "etiqueta": "Primer periodo disponible",
+        "valor": "`2008-01`"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Mensual"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Estatal (32 entidades)"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "Sí"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "Automático (`@monthly`)"
+      },
+      {
+        "etiqueta": "Estrategia de carga",
+        "valor": "`upsert_records`"
+      }
+    ],
+    "fuente_general": "https://www.inegi.org.mx/programas/emec/2018/#datos_abiertos",
+    "descargas": [
+      {
+        "variable": "EMEC_URL",
+        "url": "https://www.inegi.org.mx/contenidos/programas/emec/2018/datosabiertos/conjunto_de_datos_emec_mensual_entidad_federativa_csv.zip"
+      }
+    ],
+    "variables": [
+      {
+        "etiqueta": "EMEC_URL",
+        "valor": "URL del ZIP del conjunto"
+      },
+      {
+        "etiqueta": "EMEC_CSV",
+        "valor": "Plantilla del miembro con los datos; el `{}` se sustituye por el año"
+      },
+      {
+        "etiqueta": "EMEC_CATALOG_CSV",
+        "valor": "Ruta del catálogo SCIAN dentro del ZIP"
+      },
+      {
+        "etiqueta": "DOWNLOAD_TIMEOUT",
+        "valor": "Timeout de descarga en segundos"
+      },
+      {
+        "etiqueta": "CHUNK_SIZE",
+        "valor": "Tamaño de lote para el upsert"
+      }
+    ],
+    "descripcion_tablas": {
+      "stg_emec": "Los textos completos del diccionario del INEGI viven en los `COMMENT ON COLUMN` de `V3__tables_emec.sql`.",
+      "Catálogos": "`cat_estatus` se **siembra** con los tres valores del diccionario en orden fijo (`mappings.py::ESTATUS_SEED`) aunque la edición actual solo publique dos: así los ids no se recorren el día que aparezca `Cifras revisadas` y las filas ya cargadas no terminan apuntando a otro estatus. Un valor imprevisto se agrega igual.",
+      "cat_estatus": "`Cifras definitivas`, `Cifras revisadas`, `Cifras preliminares`",
+      "cat_actividad": "Las 56 actividades del clasificador SCIAN 2013 que cubre el programa"
+    },
+    "alcance_vistas": {
+      "vw_emec": "Las 32 entidades federativas, para comparativos nacionales",
+      "vw_emec_jalisco": "Solo Jalisco (`entidad_id = 14`), sin la columna de entidad por ser constante"
+    },
+    "commit": null
+  },
+  "base": {
+    "nombre": "emec",
+    "es_infraestructura": false,
+    "vistas": [
+      {
+        "esquema": "public",
+        "nombre": "vw_emec",
+        "tipo": "VIEW",
+        "descripcion": "Vista desnormalizada de la Encuesta Mensual sobre Empresas Comerciales (EMEC) del INEGI, Serie 2018, para las 32 entidades federativas, con periodicidad mensual desde enero de 2008. Todas las variables son índices con base 2018 = 100.",
+        "registros": 14208,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Primer día del mes de referencia de la información.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "entidad_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (1 a 32) según el Catálogo Único de Claves de Áreas Geoestadísticas del INEGI.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa a la que corresponden las cifras.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "codigo_actividad",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Código que identifica las diversas actividades económicas bajo estudio. El valor que se presenta es un código dentro del clasificador SCIAN 2013.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "actividad_descripcion",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre de la actividad económica según el clasificador SCIAN 2013 (ej. Comercio al por mayor, Comercio al por menor).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "per_ocu_tot",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Personal ocupado total - Índice (Índice Base 2018 = 100): total de personal dependiente y no dependiente de la razón social que trabajó para la empresa comercial cubriendo como mínimo una tercera parte de la jornada laboral. Excluye pensionados y jubilados.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "remuneraciones_tot",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Remuneraciones totales - Índice (Índice Base 2018 = 100): todos los pagos y aportaciones en dinero y especie, antes de cualquier deducción, para retribuir el trabajo del personal dependiente de la razón social.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "remuneraciones_media",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Remuneración media - Índice (Índice Base 2018 = 100): resultado de dividir las remuneraciones totales entre el total de personal remunerado dependiente de la razón social.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "ind_ingresos_bienes_serv",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Ingresos totales por suministro de bienes y servicios - Índice (Índice Base 2018 = 100): monto obtenido por la empresa por sus actividades de producción, comercialización o prestación de servicios en el mes de referencia. Excluye ingresos financieros, subsidios y cuotas.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "ind_compras_reventa",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Mercancías compradas para su reventa sin transformación - Índice (Índice Base 2018 = 100): valor de las mercancías que compró la empresa comercial para venderlas en las mismas condiciones en que las adquirió. Excluye las mercancías recibidas en consignación.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "estatus_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Identificador del estatus de los datos en cat_estatus.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "estatus",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Estatus de los datos: Cifras definitivas, Cifras revisadas o Cifras preliminares.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 13,
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha en que el pipeline cargó o actualizó el registro en esta base.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": true,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_emec_jalisco",
+        "tipo": "VIEW",
+        "descripcion": "Misma información que vw_emec, acotada a Jalisco (clave de entidad 14). La entidad se omite de las columnas porque es constante.",
+        "registros": 444,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Primer día del mes de referencia de la información.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "codigo_actividad",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Código que identifica las diversas actividades económicas bajo estudio. El valor que se presenta es un código dentro del clasificador SCIAN 2013.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "actividad_descripcion",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre de la actividad económica según el clasificador SCIAN 2013 (ej. Comercio al por mayor, Comercio al por menor).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "per_ocu_tot",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Personal ocupado total - Índice (Índice Base 2018 = 100): total de personal dependiente y no dependiente de la razón social que trabajó para la empresa comercial cubriendo como mínimo una tercera parte de la jornada laboral. Excluye pensionados y jubilados.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "remuneraciones_tot",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Remuneraciones totales - Índice (Índice Base 2018 = 100): todos los pagos y aportaciones en dinero y especie, antes de cualquier deducción, para retribuir el trabajo del personal dependiente de la razón social.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "remuneraciones_media",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Remuneración media - Índice (Índice Base 2018 = 100): resultado de dividir las remuneraciones totales entre el total de personal remunerado dependiente de la razón social.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "ind_ingresos_bienes_serv",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Ingresos totales por suministro de bienes y servicios - Índice (Índice Base 2018 = 100): monto obtenido por la empresa por sus actividades de producción, comercialización o prestación de servicios en el mes de referencia. Excluye ingresos financieros, subsidios y cuotas.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "ind_compras_reventa",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Mercancías compradas para su reventa sin transformación - Índice (Índice Base 2018 = 100): valor de las mercancías que compró la empresa comercial para venderlas en las mismas condiciones en que las adquirió. Excluye las mercancías recibidas en consignación.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "estatus_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Identificador del estatus de los datos en cat_estatus.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "estatus",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Estatus de los datos: Cifras definitivas, Cifras revisadas o Cifras preliminares.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha en que el pipeline cargó o actualizó el registro en esta base.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": true,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      }
+    ],
+    "tablas": [
+      {
+        "nombre": "cat_actividad",
+        "descripcion": "Catálogo de las actividades económicas bajo estudio en la EMEC (sector, subsector, rama o clase del comercio al por mayor y al por menor), publicado por el INEGI en catalogos/tc_actividad.csv. Contiene todas las actividades del programa; el conjunto por entidad federativa solo desglosa los sectores 43 y 46.",
+        "filas": 56,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "codigo_actividad",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_estatus",
+        "descripcion": "Catálogo del estatus de los datos publicados en la EMEC. Según el diccionario de datos del INEGI el estatus puede ser: Cifras Definitivas, Cifras Revisadas o Cifras Preliminares. Un periodo se publica primero como preliminar y el INEGI lo reemplaza por cifras revisadas o definitivas en ediciones posteriores.",
+        "filas": 3,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "estatus",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "stg_emec",
+        "descripcion": "Encuesta Mensual sobre Empresas Comerciales (EMEC) del INEGI, Serie 2018, información mensual desde enero de 2008. Proporciona información estadística económica de coyuntura sobre las unidades económicas de los sectores de comercio al por mayor y al por menor. Todas las variables son ÍNDICES con base 2018 = 100, no valores absolutos. Grano: un registro por periodo, entidad federativa y actividad económica.",
+        "filas": 14208,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "entidad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "codigo_actividad",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "per_ocu_tot",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "remuneraciones_tot",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "remuneraciones_media",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "ind_ingresos_bienes_serv",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "ind_compras_reventa",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "estatus_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      }
+    ],
+    "relaciones": [
+      {
+        "tabla": "stg_emec",
+        "columnas": [
+          "codigo_actividad"
+        ],
+        "ref_tabla": "cat_actividad",
+        "ref_columnas": [
+          "codigo_actividad"
+        ]
+      },
+      {
+        "tabla": "stg_emec",
+        "columnas": [
+          "estatus_id"
+        ],
+        "ref_tabla": "cat_estatus",
+        "ref_columnas": [
+          "id"
+        ]
+      }
+    ]
+  },
+  "etapas": []
+}

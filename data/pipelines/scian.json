@@ -1,0 +1,74 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "scian",
+  "clasificacion": "posible_desactualizado",
+  "documento": {
+    "nombre": "scian",
+    "carpeta": "scian",
+    "titulo": "SCIAN",
+    "producto": "Sistema de Clasificación Industrial de América del Norte 2023",
+    "descripcion": [
+      "Estructura completa del Sistema de Clasificación Industrial de América del Norte (SCIAN) México 2023, publicado por el INEGI. Es el clasificador oficial de actividades económicas del país y la base con la que se codifican fuentes como el DENUE, los Censos Económicos y la ENOE.",
+      "El pipeline carga los cinco niveles jerárquicos del clasificador —sector, subsector, rama, subrama y clase de actividad— con sus 2,115 categorías en total, únicamente en su versión en español."
+    ],
+    "avisos": [],
+    "caracteristicas": [
+      {
+        "etiqueta": "Última fecha disponible",
+        "valor": "`2023`"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Quinquenal (2007, 2013, 2018, 2023)"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Nacional (clasificador, sin desagregación geográfica)"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "No"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "N/A — se vuelve a correr el bootstrap cuando el INEGI publica una nueva versión"
+      }
+    ],
+    "fuente_general": "https://www.inegi.org.mx/app/scian/",
+    "descargas": [
+      {
+        "variable": "SCIAN_ESTRUCTURA_URL",
+        "url": "https://www.inegi.org.mx/contenidos/app/scian/estructura2023.xlsx"
+      }
+    ],
+    "variables": [
+      {
+        "etiqueta": "SCIAN_ESTRUCTURA_URL",
+        "valor": "URL del archivo `estructura2023.xlsx` publicado por el INEGI"
+      }
+    ],
+    "descripcion_tablas": {},
+    "alcance_vistas": {},
+    "commit": null
+  },
+  "base": null,
+  "etapas": []
+}

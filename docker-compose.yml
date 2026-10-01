@@ -15,14 +15,12 @@ services:
         required: false
     environment:
       DATA_DIR: /app/data
-      DOCS_HTML_DIR: /fuentes/html-documents
-      VIEWS_MD_DIR: /fuentes/views-md
+      ETL_REPO_DIR: /app/etl
     volumes:
       - sitio:/sitio
       - datos:/app/data
-      # Rutas en el host con la documentación generada fuera de este repo
-      - ${DOCS_HTML_DIR_HOST:-./docs}:/fuentes/html-documents:ro
-      - ${VIEWS_MD_DIR_HOST:-./docs}:/fuentes/views-md:ro
+      # Clon superficial de ETL-SIEEJ: persiste para que cada ciclo solo haga fetch
+      - etl:/app/etl
     healthcheck:
       test: ["CMD", "test", "-f", "/sitio/index.html"]
       interval: 15s
@@ -68,3 +66,4 @@ services:
 volumes:
   sitio:
   datos:
+  etl:

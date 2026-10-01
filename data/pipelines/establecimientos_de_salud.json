@@ -1,0 +1,81 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "establecimientos_de_salud",
+  "clasificacion": "posible_desactualizado",
+  "documento": {
+    "nombre": "establecimientos_de_salud",
+    "carpeta": "establecimientos_de_salud",
+    "titulo": "Establecimientos de Salud (CLUES)",
+    "producto": "Catálogo de Establecimientos de Salud (CLUES)",
+    "descripcion": [
+      "Pipeline ETL del Catálogo de Establecimientos de Salud (CLUES) de la Secretaría de Salud. Descarga mensualmente el inventario de establecimientos de salud en México, incluyendo tipo de servicio, institución, tipología, geolocalización y estatus, con historial desde mayo de 2017."
+    ],
+    "avisos": [],
+    "caracteristicas": [
+      {
+        "etiqueta": "Última fecha disponible",
+        "valor": "`2025-04`"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Mensual"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Nacional, Estatal, Municipal, Localidad"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "Sí"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "Automático"
+      }
+    ],
+    "fuente_general": "https://www.gob.mx/salud/documentos/clues-sistema-unico-de-informacion-de-infraestructura-de-la-salud",
+    "descargas": [
+      {
+        "variable": "ESTABLECIMIENTOS_URL",
+        "url": "https://gobi.salud.gob.mx/historico_clues/ESTABLECIMIENTO_SALUD_{year}{month}.xlsx?v=1.1"
+      }
+    ],
+    "variables": [
+      {
+        "etiqueta": "ESTABLECIMIENTOS_URL",
+        "valor": "URL con parámetros `{year}` y `{month}` para el XLSX mensual"
+      },
+      {
+        "etiqueta": "BOOTSTRAP_START_YEAR",
+        "valor": "Año inicial del bootstrap (ej. `2017`)"
+      },
+      {
+        "etiqueta": "BOOTSTRAP_START_MONTH",
+        "valor": "Mes inicial del bootstrap (ej. `5`)"
+      }
+    ],
+    "descripcion_tablas": {},
+    "alcance_vistas": {},
+    "commit": null
+  },
+  "base": null,
+  "etapas": []
+}

@@ -1,0 +1,469 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "emim",
+  "clasificacion": "documentado",
+  "documento": {
+    "nombre": "emim",
+    "carpeta": "emim",
+    "titulo": "EMIM",
+    "producto": "Encuesta Mensual de la Industria Manufacturera",
+    "descripcion": [
+      "Pipeline ETL de la **Encuesta Mensual de la Industria Manufacturera (EMIM), Serie 2018** del INEGI. Reporta, con periodicidad **mensual desde enero de 2018**, personal ocupado, horas trabajadas, remuneraciones, valor de producción y valor de ventas de los establecimientos manufactureros, por entidad federativa y subsector."
+    ],
+    "avisos": [
+      "**A diferencia de `emec` y `ems`, este conjunto publica VALORES ABSOLUTOS, no índices base 2018 = 100.** No confundir al comparar entre los tres pipelines."
+    ],
+    "caracteristicas": [
+      {
+        "etiqueta": "Primer periodo disponible",
+        "valor": "`2018-01`"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Mensual"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Estatal (32 entidades) × sector y subsector"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "Sí"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "Automático (`@monthly`)"
+      },
+      {
+        "etiqueta": "Estrategia de carga",
+        "valor": "`upsert_records`"
+      }
+    ],
+    "fuente_general": "https://www.inegi.org.mx/programas/emim/2018/#datos_abiertos",
+    "descargas": [
+      {
+        "variable": "EMIM_URL",
+        "url": "https://www.inegi.org.mx/contenidos/programas/emim/2018/datosabiertos/conjunto_de_datos_emim_variables_entidad_csv.zip"
+      }
+    ],
+    "variables": [
+      {
+        "etiqueta": "EMIM_URL",
+        "valor": "URL del ZIP del conjunto"
+      },
+      {
+        "etiqueta": "EMIM_CSV",
+        "valor": "Plantilla del miembro con los datos; el `{}` se sustituye por el año de edición"
+      },
+      {
+        "etiqueta": "EMIM_CATALOG_CSV",
+        "valor": "Ruta del catálogo SCIAN dentro del ZIP"
+      },
+      {
+        "etiqueta": "DOWNLOAD_TIMEOUT",
+        "valor": "Timeout de descarga en segundos"
+      },
+      {
+        "etiqueta": "CHUNK_SIZE",
+        "valor": "Tamaño de lote para el upsert"
+      }
+    ],
+    "descripcion_tablas": {
+      "stg_emim": "Los textos completos del diccionario del INEGI viven en los `COMMENT ON COLUMN` de `V3__tables_emim.sql`.",
+      "Catálogos": "`cat_actividad` se carga completo desde el catálogo del ZIP. Los datos por entidad solo desglosan **22 códigos**: el sector `31-33` y sus 21 subsectores (`311`–`339`).",
+      "cat_estatus": "`Cifras definitivas`, `Cifras revisadas`, `Cifras preliminares`",
+      "cat_actividad": "Los 314 niveles del SCIAN 2018 manufacturero (sector, subsector, rama y clase)"
+    },
+    "alcance_vistas": {
+      "vw_emim": "Las 32 entidades federativas, para comparativos nacionales",
+      "vw_emim_jalisco": "Solo Jalisco (`entidad_id = 14`), sin la columna de entidad por ser constante"
+    },
+    "commit": null
+  },
+  "base": {
+    "nombre": "emim",
+    "es_infraestructura": false,
+    "vistas": [
+      {
+        "esquema": "public",
+        "nombre": "vw_emim",
+        "tipo": "VIEW",
+        "descripcion": "Vista desnormalizada de la Encuesta Mensual de la Industria Manufacturera (EMIM) del INEGI, Serie 2018, para las 32 entidades federativas, con periodicidad mensual desde enero de 2018. Publica valores absolutos, no índices.",
+        "registros": 0,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Primer día del mes de referencia de la información.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "entidad_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (1 a 32) según el Catálogo Único de Claves de Áreas Geoestadísticas del INEGI.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa a la que corresponden las cifras.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "codigo_actividad",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Código de la actividad manufacturera en el clasificador SCIAN 2018. El sector se publica como el rango \"31-33\".",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "actividad_descripcion",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre de la actividad manufacturera según el clasificador SCIAN 2018 (ej. Industria alimentaria).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "per_ocu_tot",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Personal ocupado total, en NÚMERO DE PERSONAS: personal dependiente más no dependiente de la razón social. Considera hombres y mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "horas_trabajadas",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Horas normales y extraordinarias efectivamente trabajadas por el personal ocupado total, en MILES DE HORAS.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "remuneraciones",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Remuneraciones pagadas al personal dependiente de la razón social, en MILES DE PESOS CORRIENTES: todos los pagos y aportaciones, en dinero y especie, antes de cualquier deducción.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "valor_produccion",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Total de valor de producción de los productos elaborados por el establecimiento con materias primas propias, en MILES DE PESOS CORRIENTES.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "valor_ventas",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Total de valor de ventas, en MILES DE PESOS CORRIENTES: ingreso por la venta de los productos elaborados por el establecimiento con materias primas propias.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "estatus_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Identificador del estatus de los datos en cat_estatus.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "estatus",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Estatus de los datos: Cifras definitivas, Cifras revisadas o Cifras preliminares.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 13,
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha en que el pipeline cargó o actualizó el registro en esta base.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": true,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_emim_jalisco",
+        "tipo": "VIEW",
+        "descripcion": "Misma información que vw_emim, acotada a Jalisco (clave de entidad 14). La entidad se omite de las columnas porque es constante.",
+        "registros": 1632,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Primer día del mes de referencia de la información.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "codigo_actividad",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Código de la actividad manufacturera en el clasificador SCIAN 2018. El sector se publica como el rango \"31-33\".",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "actividad_descripcion",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre de la actividad manufacturera según el clasificador SCIAN 2018 (ej. Industria alimentaria).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "per_ocu_tot",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Personal ocupado total, en NÚMERO DE PERSONAS: personal dependiente más no dependiente de la razón social. Considera hombres y mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "horas_trabajadas",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Horas normales y extraordinarias efectivamente trabajadas por el personal ocupado total, en MILES DE HORAS.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "remuneraciones",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Remuneraciones pagadas al personal dependiente de la razón social, en MILES DE PESOS CORRIENTES: todos los pagos y aportaciones, en dinero y especie, antes de cualquier deducción.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "valor_produccion",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Total de valor de producción de los productos elaborados por el establecimiento con materias primas propias, en MILES DE PESOS CORRIENTES.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "valor_ventas",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Total de valor de ventas, en MILES DE PESOS CORRIENTES: ingreso por la venta de los productos elaborados por el establecimiento con materias primas propias.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "estatus_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Identificador del estatus de los datos en cat_estatus.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "estatus",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Estatus de los datos: Cifras definitivas, Cifras revisadas o Cifras preliminares.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha en que el pipeline cargó o actualizó el registro en esta base.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": true,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      }
+    ],
+    "tablas": [
+      {
+        "nombre": "cat_actividad",
+        "descripcion": "Catálogo de las actividades manufactureras del clasificador SCIAN 2018 que publica el INEGI en catalogos/tc_actividad.csv. Contiene los 314 niveles del clasificador (sector, subsector, rama y clase); el conjunto por entidad federativa solo desglosa el sector 31-33 y sus 21 subsectores.",
+        "filas": 314,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "codigo_actividad",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_estatus",
+        "descripcion": "Catálogo del estatus de los datos publicados en la EMIM. Según el diccionario de datos del INEGI el estatus puede ser: Cifras preliminares, Cifras revisadas, Cifras definitivas, y cifras ajustadas y/o corregidas. Un periodo se publica primero como preliminar y el INEGI lo reemplaza en ediciones posteriores.",
+        "filas": 3,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "estatus",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "stg_emim",
+        "descripcion": "Encuesta Mensual de la Industria Manufacturera (EMIM) del INEGI, Serie 2018, información mensual desde enero de 2018. La unidad de observación es el establecimiento manufacturero. A DIFERENCIA de EMEC y EMS, este conjunto publica VALORES ABSOLUTOS y no índices base 2018 = 100. Grano: un registro por periodo, entidad federativa y actividad manufacturera (el sector 31-33 y sus 21 subsectores).",
+        "filas": 35190,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "entidad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "codigo_actividad",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "per_ocu_tot",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "horas_trabajadas",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "remuneraciones",
+            "tipo": "bigint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "valor_produccion",
+            "tipo": "bigint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "valor_ventas",
+            "tipo": "bigint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "estatus_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      }
+    ],
+    "relaciones": [
+      {
+        "tabla": "stg_emim",
+        "columnas": [
+          "codigo_actividad"
+        ],
+        "ref_tabla": "cat_actividad",
+        "ref_columnas": [
+          "codigo_actividad"
+        ]
+      },
+      {
+        "tabla": "stg_emim",
+        "columnas": [
+          "estatus_id"
+        ],
+        "ref_tabla": "cat_estatus",
+        "ref_columnas": [
+          "id"
+        ]
+      }
+    ]
+  },
+  "etapas": []
+}

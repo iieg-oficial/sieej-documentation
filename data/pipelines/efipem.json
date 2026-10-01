@@ -1,0 +1,1439 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "efipem",
+  "clasificacion": "documentado",
+  "documento": {
+    "nombre": "efipem",
+    "carpeta": "efipem",
+    "titulo": "EFIPEM",
+    "producto": "Estadísticas de Finanzas Públicas Estatales y Municipales",
+    "descripcion": [
+      "Pipeline ETL de las Estadísticas de Finanzas Públicas Estatales y Municipales (EFIPEM) del INEGI. Contiene datos anuales de ingresos, egresos y deuda de los municipios de Jalisco (`cve_ent = 14`), clasificados por tema, clasificador y concepto presupuestario, y expone 11 vistas materializadas para consumo GIS."
+    ],
+    "avisos": [],
+    "caracteristicas": [
+      {
+        "etiqueta": "Última fecha disponible",
+        "valor": "`2024`"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Anual"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Municipal"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "No"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "No aplica (dataset anual)"
+      }
+    ],
+    "fuente_general": "https://www.inegi.org.mx/programas/finanzas/",
+    "descargas": [
+      {
+        "variable": "EFIPEM_SOURCE_URL",
+        "url": "https://www.inegi.org.mx/contenidos/programas/finanzas/datosabiertos/conjunto_de_datos_efipem_municipal_csv.zip"
+      }
+    ],
+    "variables": [
+      {
+        "etiqueta": "DB_USER` / `DB_PASSWORD` / `DB_HOST` / `DB_PORT` / `DB_NAME",
+        "valor": "Conexión a la base del pipeline"
+      },
+      {
+        "etiqueta": "EFIPEM_SOURCE_URL",
+        "valor": "URL del ZIP con los CSVs anuales del EFIPEM municipal"
+      },
+      {
+        "etiqueta": "EFIPEM_LOAD_BATCH_SIZE",
+        "valor": "Tamaño de lote para inserción masiva"
+      },
+      {
+        "etiqueta": "LOG_LEVEL",
+        "valor": "Nivel de log"
+      }
+    ],
+    "descripcion_tablas": {},
+    "alcance_vistas": {},
+    "commit": null
+  },
+  "base": {
+    "nombre": "efipem",
+    "es_infraestructura": false,
+    "vistas": [
+      {
+        "esquema": "public",
+        "nombre": "egresos_deuda_publica",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Pago de deuda publica (capital + intereses) en pesos corrientes. Grid completo municipio x anio 1990-2024.",
+        "registros": 4375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de la fila",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico IIEG, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico INEGI, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre del municipio",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha del periodo anual (YYYY-01-01)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave del municipio (EEMMM, 5 digitos)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "valor",
+            "tipo": "numeric(24,2)",
+            "nullable": true,
+            "descripcion": "Deuda publica en pesos corrientes (NULL si no hay dato reportado ese anio)",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "egresos_totales",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Egresos municipales totales en pesos corrientes (fuente: EFIPEM INEGI). Grid completo municipio x anio 1990-2024.",
+        "registros": 4375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de la fila",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico IIEG, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico INEGI, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre del municipio",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha del periodo anual (YYYY-01-01)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave del municipio (EEMMM, 5 digitos)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "valor",
+            "tipo": "numeric(24,2)",
+            "nullable": true,
+            "descripcion": "Egresos totales en pesos corrientes (NULL si no hay dato reportado ese anio)",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "geography_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 0,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geography_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "geometry_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 24,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "character varying(256)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geometry_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "character varying(30)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "ingresos_financiamiento",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Ingresos por financiamiento / deuda publica (pesos corrientes). Grid completo municipio x anio 1990-2024.",
+        "registros": 4375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de la fila",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico IIEG, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico INEGI, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre del municipio",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha del periodo anual (YYYY-01-01)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave del municipio (EEMMM, 5 digitos)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "valor",
+            "tipo": "numeric(24,2)",
+            "nullable": true,
+            "descripcion": "Financiamiento / deuda publica en pesos corrientes (NULL si no hay dato reportado ese anio)",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "ingresos_participaciones",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Monto de participaciones federales recibidas por municipio (pesos corrientes). Grid completo municipio x anio 1990-2024.",
+        "registros": 4375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de la fila",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico IIEG, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico INEGI, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre del municipio",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha del periodo anual (YYYY-01-01)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave del municipio (EEMMM, 5 digitos)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "valor",
+            "tipo": "numeric(24,2)",
+            "nullable": true,
+            "descripcion": "Participaciones federales en pesos corrientes (NULL si no hay dato reportado ese anio)",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "ingresos_totales",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Ingresos municipales totales en pesos corrientes (fuente: EFIPEM INEGI). Grid completo municipio x anio 1990-2024.",
+        "registros": 4375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de la fila",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico IIEG, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico INEGI, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre del municipio",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha del periodo anual (YYYY-01-01)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave del municipio (EEMMM, 5 digitos)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "valor",
+            "tipo": "numeric(24,2)",
+            "nullable": true,
+            "descripcion": "Ingresos totales en pesos corrientes (NULL si no hay dato reportado ese anio)",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "ingresos_totales_reales_per_capita_precios_2023",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Ingresos reales per capita deflactados a precios de 2023 (valor real / poblacion CONAPO). Grid completo municipio x anio 1990-2024.",
+        "registros": 4375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de la fila",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico IIEG, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico INEGI, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre del municipio",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha del periodo anual (YYYY-01-01)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "ingresos_totales_reales",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Ingresos totales en pesos reales de 2023 (deflactado por INPC)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "ingresos_totales",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Ingresos totales en pesos corrientes (nominal)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "ingresos_reales_per_capita",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Ingresos reales per capita en pesos de 2023 (ingresos reales / poblacion CONAPO)",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "ingresos_totales_reales_precios_2023",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Ingresos municipales totales deflactados a precios constantes de 2023 (INPC base 2023=100). Grid completo municipio x anio 1990-2024.",
+        "registros": 4375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de la fila",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico IIEG, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico INEGI, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre del municipio",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha del periodo anual (YYYY-01-01)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave del municipio (EEMMM, 5 digitos)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "valor",
+            "tipo": "numeric(24,2)",
+            "nullable": true,
+            "descripcion": "Ingresos totales en pesos reales de 2023 (deflactado por INPC, NULL si no hay dato)",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "porcentaje_egresos_deuda_publica",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Porcentaje de pago de deuda publica sobre egresos totales. Grid completo municipio x anio 1990-2024.",
+        "registros": 4375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de la fila",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico IIEG, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico INEGI, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre del municipio",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha del periodo anual (YYYY-01-01)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "egresos_totales",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Egresos totales en pesos corrientes",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "egresos_para_pago_deuda_publica",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Deuda publica en pesos corrientes",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "porcentaje_egresos_por_pago_deuda_publica",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Porcentaje de deuda publica sobre egresos totales (0-100)",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "porcentaje_ingresos_financiamiento",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Porcentaje de financiamiento sobre ingresos totales. Grid completo municipio x anio 1990-2024.",
+        "registros": 4375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de la fila",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico IIEG, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico INEGI, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre del municipio",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha del periodo anual (YYYY-01-01)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "ingresos_totales",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Ingresos totales en pesos corrientes",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "ingresos_por_financiamiento",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Financiamiento en pesos corrientes",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "porcentaje_de_ingresos_por_financiamiento",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Porcentaje de financiamiento sobre ingresos totales (0-100)",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "porcentaje_ingresos_participaciones",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Porcentaje de participaciones federales sobre ingresos totales. Grid completo municipio x anio 1990-2024.",
+        "registros": 4375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de la fila",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico IIEG, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico INEGI, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre del municipio",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha del periodo anual (YYYY-01-01)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "ingresos_totales",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Ingresos totales en pesos corrientes",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "ingresos_por_participaciones",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Participaciones federales en pesos corrientes",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "porcentaje_de_ingresos_por_participaciones",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Porcentaje de participaciones sobre ingresos totales (0-100)",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "porcentaje_ingresos_propios",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Porcentaje de ingresos propios (Impuestos + Derechos + Productos + Aprovechamientos + Contribuciones de Mejoras + Cuotas y Aportaciones de Seguridad Social) sobre ingresos totales. Grid completo municipio x anio 1990-2024.",
+        "registros": 4375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de la fila",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico IIEG, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico INEGI, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre del municipio",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha del periodo anual (YYYY-01-01)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "ingresos_totales",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Ingresos totales en pesos corrientes",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "ingresos_propios",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Ingresos propios (Impuestos + Derechos + Productos + Aprovechamientos + Contribuciones de Mejoras + Cuotas y Aportaciones de Seguridad Social) en pesos corrientes",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "porcentaje_ingresos_propios",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Porcentaje de ingresos propios sobre total (0-100)",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_efipem",
+        "tipo": "VIEW",
+        "descripcion": "Vista de integración del pipeline efipem. Expone las finanzas municipales anuales de Jalisco (cve_ent=14) con nombres de catálogos resueltos.",
+        "registros": 492331,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "cvegeo",
+            "tipo": "character(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "cve_ent",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "cve_mun",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "tema",
+            "tipo": "character varying(50)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "clasificador",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "concepto",
+            "tipo": "character varying(255)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "valor",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "estatus",
+            "tipo": "character varying(50)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "created_at",
+            "tipo": "timestamp with time zone",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      }
+    ],
+    "tablas": [
+      {
+        "nombre": "cat_clasificador",
+        "descripcion": null,
+        "filas": 5,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "name",
+            "tipo": "character varying(200)",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_concepto",
+        "descripcion": null,
+        "filas": 499,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "clasificador_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "name",
+            "tipo": "character varying(255)",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_estatus",
+        "descripcion": null,
+        "filas": 2,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "name",
+            "tipo": "character varying(50)",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_tema",
+        "descripcion": null,
+        "filas": 2,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "name",
+            "tipo": "character varying(50)",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "stg_efipem",
+        "descripcion": null,
+        "filas": 492331,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "anio",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "cvegeo",
+            "tipo": "character(5)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "cve_ent",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "cve_mun",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "tema_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "clasificador_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "concepto_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "valor",
+            "tipo": "bigint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "estatus_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "created_at",
+            "tipo": "timestamp with time zone",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      }
+    ],
+    "relaciones": [
+      {
+        "tabla": "cat_concepto",
+        "columnas": [
+          "clasificador_id"
+        ],
+        "ref_tabla": "cat_clasificador",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_efipem",
+        "columnas": [
+          "clasificador_id"
+        ],
+        "ref_tabla": "cat_clasificador",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_efipem",
+        "columnas": [
+          "concepto_id"
+        ],
+        "ref_tabla": "cat_concepto",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_efipem",
+        "columnas": [
+          "estatus_id"
+        ],
+        "ref_tabla": "cat_estatus",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_efipem",
+        "columnas": [
+          "tema_id"
+        ],
+        "ref_tabla": "cat_tema",
+        "ref_columnas": [
+          "id"
+        ]
+      }
+    ]
+  },
+  "etapas": []
+}

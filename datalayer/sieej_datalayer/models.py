@@ -33,6 +33,7 @@ class Vista(BaseModel):
     esquema: str = "public"
     nombre: str
     tipo: str = "VIEW"  # VIEW | MATERIALIZED VIEW
+    descripcion: str | None = None
     registros: int | None = None
     columnas: list[Columna] = Field(default_factory=list)
     en_bd: bool | None = None  # None = BD no consultada
@@ -42,10 +43,35 @@ class Vista(BaseModel):
     archivo_md: str | None = None
 
 
+class ColumnaTabla(BaseModel):
+    nombre: str
+    tipo: str
+    pk: bool = False
+    nullable: bool = True
+
+
+class Tabla(BaseModel):
+    nombre: str
+    descripcion: str | None = None
+    filas: int | None = None
+    columnas: list[ColumnaTabla] = Field(default_factory=list)
+
+
+class Relacion(BaseModel):
+    """Llave foránea declarada en la BD: es la arista del diagrama entidad-relación."""
+
+    tabla: str
+    columnas: list[str]
+    ref_tabla: str
+    ref_columnas: list[str]
+
+
 class BaseDeDatos(BaseModel):
     nombre: str
     es_infraestructura: bool = False
     vistas: list[Vista] = Field(default_factory=list)
+    tablas: list[Tabla] = Field(default_factory=list)
+    relaciones: list[Relacion] = Field(default_factory=list)
 
 
 class CorridasRecientes(BaseModel):
@@ -63,11 +89,42 @@ class Dag(BaseModel):
     ultima_corrida_fecha: datetime | None = None
     ultima_corrida_estado: str | None = None
     corridas_recientes: CorridasRecientes | None = None
+    descripcion: str | None = None
+    programacion: str | None = None
+    detalle_programacion: str | None = None
 
 
-class DocumentacionHtml(BaseModel):
-    archivo: str
+class Par(BaseModel):
+    etiqueta: str
+    valor: str
+
+
+class Descarga(BaseModel):
+    variable: str
+    url: str
+
+
+class DocumentoPipeline(BaseModel):
+    """Lo que el README del pipeline en ETL-SIEEJ dice de él, en markdown en línea."""
+
+    nombre: str
+    carpeta: str
     titulo: str
+    producto: str
+    descripcion: list[str] = Field(default_factory=list)
+    avisos: list[str] = Field(default_factory=list)
+    caracteristicas: list[Par] = Field(default_factory=list)
+    fuente_general: str | None = None
+    descargas: list[Descarga] = Field(default_factory=list)
+    variables: list[Par] = Field(default_factory=list)
+    descripcion_tablas: dict[str, str] = Field(default_factory=dict)
+    alcance_vistas: dict[str, str] = Field(default_factory=dict)
+    commit: str | None = None
+
+
+class DocumentoRef(BaseModel):
+    titulo: str
+    producto: str
 
 
 class ClasificacionPipeline(str, Enum):
@@ -79,8 +136,7 @@ class ClasificacionPipeline(str, Enum):
 
 class Pipeline(BaseModel):
     nombre: str
-    documentacion_html: DocumentacionHtml | None = None
-    alias_html: str | None = None
+    documento: DocumentoRef | None = None
     vistas_documentadas: list[str] = Field(default_factory=list)
     # Un pipeline suele ejecutarse en varias etapas (bootstrap + update), cada
     # una con su propio DAG y su propio estado: se guardan todas, no una sola.
@@ -114,3 +170,16 @@ class EstructuraVistas(BaseModel):
     datos_obsoletos: bool = False
     fuentes: dict[str, Fuente] = Field(default_factory=dict)
     bases: list[BaseDeDatos] = Field(default_factory=list)
+
+
+class PaginaPipeline(BaseModel):
+    """Todo lo que la página `/pipelines/<nombre>/` necesita, en un solo archivo."""
+
+    generado: datetime
+    datos_obsoletos: bool = False
+    fuentes: dict[str, Fuente] = Field(default_factory=dict)
+    nombre: str
+    clasificacion: ClasificacionPipeline = ClasificacionPipeline.SIN_VERIFICAR
+    documento: DocumentoPipeline | None = None
+    base: BaseDeDatos | None = None
+    etapas: list[Dag] = Field(default_factory=list)

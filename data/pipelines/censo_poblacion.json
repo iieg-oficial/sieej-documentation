@@ -1,0 +1,85 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "censo_poblacion",
+  "clasificacion": "posible_desactualizado",
+  "documento": {
+    "nombre": "censo_poblacion",
+    "carpeta": "censo_poblacion",
+    "titulo": "Censo de Población",
+    "producto": "Censo de Población y Vivienda (ITER / Intercensal)",
+    "descripcion": [
+      "Pipeline ETL del Censo de Población y Vivienda del INEGI. Integra los datos de población a nivel localidad para los levantamientos de 2010 (ITER), 2015 (Encuesta Intercensal) y 2020 (ITER), almacenando población total, por sexo y viviendas habitadas por municipio y localidad en Jalisco."
+    ],
+    "avisos": [],
+    "caracteristicas": [
+      {
+        "etiqueta": "Última fecha disponible",
+        "valor": "`2020`"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Decenal"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Estatal, Municipal, Localidad"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "No"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "No aplica"
+      }
+    ],
+    "fuente_general": "https://www.inegi.org.mx/programas/ccpv/",
+    "descargas": [
+      {
+        "variable": "CENSO_URL_2010",
+        "url": "https://www.inegi.org.mx/contenidos/programas/ccpv/2010/datosabiertos/iter_14_2010_csv.zip"
+      },
+      {
+        "variable": "CENSO_URL_2015",
+        "url": "https://www.inegi.org.mx/contenidos/programas/intercensal/2015/tabulados/01_poblacion_jal.xls"
+      }
+    ],
+    "variables": [
+      {
+        "etiqueta": "CENSO_URL_2010",
+        "valor": "URL del ZIP ITER 2010 de Jalisco"
+      },
+      {
+        "etiqueta": "CENSO_URL_2015",
+        "valor": "URL del XLS de la Encuesta Intercensal 2015"
+      },
+      {
+        "etiqueta": "CENSO_URL_2020",
+        "valor": "URL del ZIP ITER 2020 de Jalisco"
+      }
+    ],
+    "descripcion_tablas": {},
+    "alcance_vistas": {},
+    "commit": null
+  },
+  "base": null,
+  "etapas": []
+}

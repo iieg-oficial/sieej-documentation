@@ -109,6 +109,9 @@ class AirflowClient:
             ultima_corrida_fecha=_parse_fecha((ultima or {}).get("end_date")),
             ultima_corrida_estado=(ultima or {}).get("state"),
             corridas_recientes=corridas,
+            descripcion=dag.get("description"),
+            programacion=dag.get("timetable_summary"),
+            detalle_programacion=dag.get("timetable_description"),
         )
 
 

@@ -5,7 +5,7 @@
 FROM node:22-slim
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends python3 python3-venv rsync \
+    && apt-get install -y --no-install-recommends ca-certificates git python3 python3-venv rsync \
     && rm -rf /var/lib/apt/lists/*
 
 COPY datalayer/ /opt/datalayer/
@@ -17,7 +17,7 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 # /app y /sitio pertenecen a `node` (no-root, uid 1000) desde que se crean y
 # cada COPY entra ya con ese dueño: un `chown -R` posterior duplicaría
 # node_modules en una capa nueva y tardaría minutos en cada cambio de web/.
-RUN mkdir -p /app /sitio && chown node:node /app /sitio
+RUN mkdir -p /app/etl /sitio && chown node:node /app /app/etl /sitio
 
 USER node
 WORKDIR /app

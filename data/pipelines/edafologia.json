@@ -1,0 +1,1038 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "edafologia",
+  "clasificacion": "documentado",
+  "documento": {
+    "nombre": "edafologia",
+    "carpeta": "edafologia",
+    "titulo": "Edafología",
+    "producto": "Edafología histórica 1:250 000, Serie III — INEGI",
+    "descripcion": [
+      "Pipeline geográfico de la Edafología histórica 1:250 000, Serie III, publicada por INEGI. Conserva los atributos originales, normaliza el grupo y los calificadores mediante catálogos controlados, recorta el conjunto nacional a la unión de las delimitaciones municipales IIEG e INEGI para Jalisco y almacena geometrías `MultiPolygon` en EPSG:6368.",
+      "El bootstrap también calcula fragmentos municipales para ambas fuentes de límites. El costo de la intersección espacial se materializa en `edafologia_fragmentos_municipales`; el resumen municipal es una vista SQL normal."
+    ],
+    "avisos": [],
+    "caracteristicas": [
+      {
+        "etiqueta": "Última fecha disponible",
+        "valor": "Serie III"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Bajo demanda"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Polígono edafológico y fragmento municipal"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "No"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "Manual / bootstrap"
+      },
+      {
+        "etiqueta": "CRS fuente",
+        "valor": "`ITRF_1992_Lambert_Conformal_Conic`"
+      },
+      {
+        "etiqueta": "CRS canónico",
+        "valor": "`EPSG:6368`"
+      },
+      {
+        "etiqueta": "Cobertura",
+        "valor": "Jalisco"
+      }
+    ],
+    "fuente_general": "https://www.inegi.org.mx/temas/edafologia/",
+    "descargas": [
+      {
+        "variable": "SOURCE_URL",
+        "url": "https://www.inegi.org.mx/contenidos/productos/prod_serv/contenidos/espanol/bvinegi/productos/geografia/tematicas/Edafologia_hist/1_250_000/serie%20III/794551118313_s.zip"
+      }
+    ],
+    "variables": [
+      {
+        "etiqueta": "DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT`, `DB_NAME",
+        "valor": "Conexión a PostgreSQL/PostGIS del pipeline"
+      },
+      {
+        "etiqueta": "SOURCE_URL",
+        "valor": "URL oficial del ZIP de INEGI"
+      },
+      {
+        "etiqueta": "SOURCE_VERSION",
+        "valor": "Identidad de la publicación"
+      },
+      {
+        "etiqueta": "FORCE_DOWNLOAD",
+        "valor": "Reconstruye artefactos de Extract de forma controlada"
+      },
+      {
+        "etiqueta": "DOWNLOAD_RETRIES",
+        "valor": "Número de intentos de descarga"
+      },
+      {
+        "etiqueta": "DOWNLOAD_CONNECT_TIMEOUT`, `DOWNLOAD_READ_TIMEOUT",
+        "valor": "Timeouts HTTP en segundos"
+      },
+      {
+        "etiqueta": "FDW_DB_USER`, `FDW_DB_PASSWORD`, `FDW_DB_HOST`, `FDW_DB_PORT`, `FDW_DB_NAME",
+        "valor": "Placeholders Flyway para la foreign table de `cvegeo`; no se almacenan en archivos versionados"
+      },
+      {
+        "etiqueta": "CANONICAL_SRID",
+        "valor": "SRID canónico, `6368`"
+      },
+      {
+        "etiqueta": "CHUNK_SIZE",
+        "valor": "Tamaño de lote durante Load"
+      }
+    ],
+    "descripcion_tablas": {
+      "vw_edafologia_resumenes_municipales": "Vista de solo lectura agrupada por fuente territorial, municipio, versión, grupo y calificadores. Expone `municipio_id`, el nombre `municipio` (`nomgeo`), la clave EEMMM `cvegeo`, `superficie_m2`, `superficie_ha`, `porcentaje_municipio` y `cantidad_fragmentos`; no almacena geometría ni admite un Load independiente. Resuelve el territorio por FDW con `f.municipio_id = m.cve_mun AND m.cve_ent = 14`."
+    },
+    "alcance_vistas": {},
+    "commit": null
+  },
+  "base": {
+    "nombre": "edafologia",
+    "es_infraestructura": false,
+    "vistas": [
+      {
+        "esquema": "public",
+        "nombre": "geography_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 0,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geography_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "geometry_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 4,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "character varying(256)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geometry_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "character varying(30)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_cuadernillos_edafologia_cobertura_municipal",
+        "tipo": "VIEW",
+        "descripcion": "Insumo para la generacion de cuadernillos municipales: cobertura edafologica total por municipio sobre limites IIEG.",
+        "registros": 125,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "nombre",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "superficie_municipio_ha",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "superficie_tematica_total_ha",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "pct_cobertura_tematica",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_cuadernillos_edafologia_estadistica_detalle",
+        "tipo": "VIEW",
+        "descripcion": "Insumo para la generacion de cuadernillos municipales: superficie y porcentaje por municipio y grupo edafologico sobre limites IIEG.",
+        "registros": 968,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "nombre",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "categoria",
+            "tipo": "character varying(255)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "superficie_ha",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "superficie_municipio_ha",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "porcentaje",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "orden_pct",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "es_dominante",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_cuadernillos_edafologia_estadistica_resumen",
+        "tipo": "VIEW",
+        "descripcion": "Insumo para la generacion de cuadernillos municipales: grupo edafologico dominante y cobertura por municipio.",
+        "registros": 125,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "nombre",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "max_categoria",
+            "tipo": "character varying(255)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "max_categoria_ha",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "max_categoria_pct",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "superficie_municipio_ha",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "superficie_tematica_total_ha",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "pct_cobertura_tematica",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_cuadernillos_edafologia_variables_texto",
+        "tipo": "VIEW",
+        "descripcion": "Insumo para la generacion de cuadernillos municipales: grupos dominante, secundario y resto redactados como texto por municipio.",
+        "registros": 125,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "nombre",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "ed_dominante",
+            "tipo": "character varying(255)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "ed_dominante_pct",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "ed_secundario",
+            "tipo": "character varying(255)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "ed_secundario_pct",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "ed_demas",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "ed_demas_pct",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_edafologia_resumenes_municipales",
+        "tipo": "VIEW",
+        "descripcion": "Vista SQL no materializada que agrega fragmentos y resuelve cvegeo mediante municipio_id = cve_mun y cve_ent = 14.",
+        "registros": 5854,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fuente_limite_municipal_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Fuente territorial del resumen, heredada de los fragmentos municipales.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "municipio_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Clave cve_mun del municipio dentro de Jalisco.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio (nomgeo) resuelto desde cvegeo_municipalities; no se almacena localmente.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "cvegeo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Clave geoestadistica EEMMM expuesta desde cvegeo_municipalities para consulta y trazabilidad.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "version_fuente",
+            "tipo": "character varying(80)",
+            "nullable": true,
+            "descripcion": "Version de la fuente edafologica resumida.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "grupo_edafologico_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Grupo edafologico principal de la categoria resumida.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "calificador_primario_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Calificador en rol primario de la categoria resumida.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "calificador_secundario_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Calificador en rol secundario de la categoria resumida.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "superficie_m2",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Suma de superficie_m2 de los fragmentos del grupo de agregacion.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "superficie_ha",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Suma de superficie_ha de los fragmentos del grupo de agregacion.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "porcentaje_municipio",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Suma de porcentaje_municipio_total de los fragmentos del grupo de agregacion.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "cantidad_fragmentos",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Numero de fragmentos persistentes incluidos en el agregado.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      }
+    ],
+    "tablas": [
+      {
+        "nombre": "calificadores_edafologicos",
+        "descripcion": "Catalogo unificado de calificadores edafologicos usado por los roles calificador primario y calificador secundario. Incluye codigos documentales auditados contra el Diccionario de Datos Edafologicos de INEGI y valores operativos controlados N y N/A.",
+        "filas": 87,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "clave",
+            "tipo": "character varying(20)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "character varying(255)",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "edafologia_fragmentos_municipales",
+        "descripcion": "Tabla persistente de fragmentos municipales producidos por la interseccion real entre edafologias y cada fuente de limite municipal. Conserva todos los fragmentos poligonales con area positiva.",
+        "filas": 10498,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "edafologia_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "municipio_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "fuente_limite_municipal_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "superficie_m2",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "superficie_ha",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "porcentaje_poligono_fuente",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "porcentaje_municipio_total",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "porcentaje_cobertura_edafologica",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "es_fragmento_pequenio",
+            "tipo": "boolean",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "version_fuente",
+            "tipo": "character varying(80)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "geometria",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "edafologias",
+        "descripcion": "Tabla canonica persistente de poligonos edafologicos INEGI Serie III recortados a la cobertura territorial canonica, normalizados a EPSG:6368 y almacenados como MultiPolygon. Conserva atributos originales y trazabilidad de fuente.",
+        "filas": 3765,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "identificador_objeto_fuente",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "grupo_edafologico_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "calificador_primario_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "calificador_secundario_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "longitud_origen",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "superficie_origen",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "version_fuente",
+            "tipo": "character varying(80)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "clave_wrb",
+            "tipo": "character varying(80)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "grupo1_origen",
+            "tipo": "character varying(20)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "califp_g1_origen",
+            "tipo": "character varying(20)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "califs_g1_origen",
+            "tipo": "character varying(20)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "grupo2_origen",
+            "tipo": "character varying(20)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "califp_g2_origen",
+            "tipo": "character varying(20)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "califs_g2_origen",
+            "tipo": "character varying(20)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "grupo3_origen",
+            "tipo": "character varying(20)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "califp_g3_origen",
+            "tipo": "character varying(20)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "clase_textural_origen",
+            "tipo": "character varying(80)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "limite_superior_origen",
+            "tipo": "character varying(80)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "fase_fisica_origen",
+            "tipo": "character varying(80)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "fase_quimica_origen",
+            "tipo": "character varying(80)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "nombre_fuente",
+            "tipo": "character varying(160)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "url_fuente",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "nombre_archivo_fuente",
+            "tipo": "character varying(160)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "sha256_archivo_fuente",
+            "tipo": "character varying(64)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha_descarga_fuente",
+            "tipo": "timestamp with time zone",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "fecha_procesamiento",
+            "tipo": "timestamp with time zone",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "geometria",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "fuentes_limites_municipales",
+        "descripcion": "Catalogo local de fuentes de limites municipales usadas para productos derivados. Diferencia los limites IIEG e INEGI sin declarar que una fuente sea la correcta.",
+        "filas": 2,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "clave",
+            "tipo": "character varying(20)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "nombre_fuente",
+            "tipo": "character varying(120)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "version",
+            "tipo": "character varying(120)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "procedencia",
+            "tipo": "text",
+            "pk": false,
+            "nullable": true
+          }
+        ]
+      },
+      {
+        "nombre": "grupos_edafologicos",
+        "descripcion": "Catalogo versionado de grupos edafologicos principales observados en Grupo1 para Edafologia historica INEGI Serie III. Los codigos y descripciones estan transcritos y auditados en mappings.py; no se generan automaticamente desde el PDF durante la ejecucion.",
+        "filas": 24,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "clave",
+            "tipo": "character varying(20)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "character varying(255)",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      }
+    ],
+    "relaciones": [
+      {
+        "tabla": "edafologia_fragmentos_municipales",
+        "columnas": [
+          "fuente_limite_municipal_id"
+        ],
+        "ref_tabla": "fuentes_limites_municipales",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "edafologia_fragmentos_municipales",
+        "columnas": [
+          "edafologia_id"
+        ],
+        "ref_tabla": "edafologias",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "edafologias",
+        "columnas": [
+          "calificador_primario_id"
+        ],
+        "ref_tabla": "calificadores_edafologicos",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "edafologias",
+        "columnas": [
+          "calificador_secundario_id"
+        ],
+        "ref_tabla": "calificadores_edafologicos",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "edafologias",
+        "columnas": [
+          "grupo_edafologico_id"
+        ],
+        "ref_tabla": "grupos_edafologicos",
+        "ref_columnas": [
+          "id"
+        ]
+      }
+    ]
+  },
+  "etapas": []
+}

@@ -31,13 +31,11 @@ class Settings(BaseSettings):
     pg_connect_timeout: int = 15
     pg_count_timeout_ms: int = 30000
 
-    # Documentación estática (generada fuera de este repositorio)
-    docs_html_dir: Path | None = None
-    views_md_dir: Path | None = None
-    # Clon de ETL-SIEEJ: de ahí salen los README y los erd.svg de cada pipeline.
+    # Clon superficial de ETL-SIEEJ (solo core/pipelines): de ahí salen los README.
     etl_repo_dir: Path | None = None
-    # Rama de referencia que se lee de ese clon (nunca el árbol de trabajo).
-    etl_repo_ref: str = "origin/main"
+    # Sin URL, el clon se lee tal como esté y no se actualiza.
+    etl_repo_url: str | None = None
+    etl_repo_rama: str = "main"
 
     # Salida
     data_dir: Path = Path("data")

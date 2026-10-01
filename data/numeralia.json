@@ -1,26 +1,21 @@
 {
-  "generado": "2026-09-02T18:33:11.707370Z",
+  "generado": "2026-10-01T22:28:45.442028Z",
   "datos_obsoletos": false,
   "fuentes": {
     "airflow": {
-      "estado": "ok",
-      "detalle": "56 DAGs",
-      "consultado_en": "2026-09-02T18:33:18.397356Z"
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
     },
     "bd": {
       "estado": "ok",
-      "detalle": "35 bases de datos",
-      "consultado_en": "2026-09-02T18:36:30.350210Z"
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
     },
-    "docs_html": {
+    "readme": {
       "estado": "ok",
-      "detalle": "32 documentos HTML",
-      "consultado_en": "2026-09-02T18:33:11.714134Z"
-    },
-    "views_md": {
-      "estado": "ok",
-      "detalle": "53 vistas en 20 bases",
-      "consultado_en": "2026-09-02T18:33:11.750102Z"
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
     }
   },
   "airflow": {
@@ -32,27 +27,28 @@
     "ultima_ejecucion": "2026-09-01T19:06:45.301544+00:00"
   },
   "bd": {
-    "bases_pipeline": 33,
-    "bases_infraestructura": 2,
-    "vistas_total": 141,
-    "matviews_total": 48,
-    "registros_totales": 27832747
+    "bases_pipeline": 28,
+    "bases_infraestructura": 1,
+    "vistas_total": 200,
+    "matviews_total": 91,
+    "registros_totales": 12365694
   },
   "documentacion": {
-    "html_pipelines": 32,
-    "bases_documentadas": 18,
-    "vistas_documentadas": 49
+    "pipelines_documentados": 35,
+    "bases_documentadas": 6,
+    "vistas_documentadas": 15
   },
   "cross_check": {
     "consistente": false,
     "cifras": {
-      "pipelines_documentados": 32,
-      "dags_activos": 40,
-      "bases_con_vistas": 33
+      "pipelines_documentados": 35,
+      "dags_activos": null,
+      "bases_con_vistas": 28
     },
     "discrepancias": [
-      "Las cifras de documentación, Airflow y BD no coinciden: pipelines_documentados=32, dags_activos=40, bases_con_vistas=33",
-      "pipelines_sin_html: defunciones_inegi, edafologia, nacimientos_dgis"
+      "Las cifras de documentación, Airflow y BD no coinciden: pipelines_documentados=35, bases_con_vistas=28",
+      "pipelines_sin_documento: iieg",
+      "documento_sin_pipeline_vivo: censo_poblacion, centros_educativos, datamexico, defunciones_inegi, escuelas, establecimientos_de_salud, participacion_ciudadana, scian"
     ]
   }
 }

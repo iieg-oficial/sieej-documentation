@@ -1,0 +1,2194 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "enoe_microdatos",
+  "clasificacion": "documentado",
+  "documento": {
+    "nombre": "enoe_microdatos",
+    "carpeta": "enoe_microdatos",
+    "titulo": "ENOE Microdatos",
+    "producto": "ENOE — microdatos completos (SDEM + COE1 + COE2)",
+    "descripcion": [
+      "Pipeline ETL de los microdatos completos de la Encuesta Nacional de Ocupación y Empleo (ENOE) del INEGI a nivel persona para Jalisco (SDEM + COE1 + COE2). A diferencia del pipeline `enoe` (solo tabla SDEM), este incluye el diseño muestral completo, variables de educación, migración, búsqueda de empleo e informalidad laboral (TIL1), además de las 11 tasas oficiales de ocupación y desocupación del INEGI calculadas en vistas materializadas. Disponible desde el primer trimestre de 2005, con un hueco entre 2020 T2 y 2022 T4 por la pausa COVID-19/ETOE."
+    ],
+    "avisos": [],
+    "caracteristicas": [
+      {
+        "etiqueta": "Última fecha disponible",
+        "valor": "`2026-Q1`"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Trimestral"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Municipal"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "Sí"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "Automático"
+      }
+    ],
+    "fuente_general": "https://www.inegi.org.mx/programas/enoe/15ymas/microdatos/",
+    "descargas": [
+      {
+        "variable": "MICRODATOS_URL",
+        "url": "https://www.inegi.org.mx/contenidos/programas/enoe/15ymas/microdatos/enoe_{anio}_trim{trimestre}_csv.zip"
+      }
+    ],
+    "variables": [
+      {
+        "etiqueta": "MICRODATOS_URL",
+        "valor": "URL principal de descarga, patrón vigente desde 2023 (template `{anio}`, `{trimestre}`)"
+      },
+      {
+        "etiqueta": "MICRODATOS_URL_ENOE_N",
+        "valor": "URL alterna para 2021-2022 (prefijo `enoe_n_`, encuesta no publicada oficialmente por COVID-19)"
+      },
+      {
+        "etiqueta": "MICRODATOS_URL_LEGACY",
+        "valor": "URL alterna para 2005-2020 (sin prefijo)"
+      },
+      {
+        "etiqueta": "BOOTSTRAP_START_YEAR",
+        "valor": "Año de inicio del bootstrap histórico (`2005`)"
+      },
+      {
+        "etiqueta": "BOOTSTRAP_START_TRIMESTRE",
+        "valor": "Trimestre de inicio del bootstrap histórico (`1`)"
+      }
+    ],
+    "descripcion_tablas": {},
+    "alcance_vistas": {},
+    "commit": null
+  },
+  "base": {
+    "nombre": "enoe_microdatos",
+    "es_infraestructura": false,
+    "vistas": [
+      {
+        "esquema": "public",
+        "nombre": "mv_enoe_microdatos",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Vista materializada gold layer de la ENOE microdatos. Combina stg_enoe_microdatos con los catálogos de sector, ocupación y situación en el trabajo, y resuelve entidad y municipio vía FDW cvegeo. Filtrada a Jalisco (entidad_id=14). Incluye horas, ingresos, informalidad, variables COE1/COE2 y los cuatro indicadores derivados de condición de actividad.",
+        "registros": 1104066,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Identificador interno del registro en stg_enoe_microdatos.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año de levantamiento.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "trimestre",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Trimestre de levantamiento (1-4).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa (resuelto vía cvegeo_states).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio (resuelto vía cvegeo_municipalities).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "ur",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Zona urbano/rural (1=Urbano, 2=Rural).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "zona",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Zona geográfica de la encuesta.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "sex",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Sexo (1=Hombre, 2=Mujer).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "eda",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Edad en años cumplidos.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "nac_anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año de nacimiento.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "e_con",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Estado conyugal.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "niv_ins",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Nivel de instrucción recodificado.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 13,
+            "nombre": "anios_esc",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Años de escolaridad aprobados.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 14,
+            "nombre": "clase1",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Condición de actividad (1=PEA, 2=PNEA).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 15,
+            "nombre": "clase2",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Condición de ocupación (1=Ocupado, 2=Desocupado).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 16,
+            "nombre": "clase3",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Condición de ocupación desagregada.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 17,
+            "nombre": "sector",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Sector económico de la ocupación principal (resuelto de cat_enoe_sector).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 18,
+            "nombre": "ocupacion",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Grupo de ocupación (resuelto de cat_enoe_ocupacion).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 19,
+            "nombre": "situacion_trabajo",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Posición en la ocupación (resuelto de cat_enoe_situacion_trabajo).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 20,
+            "nombre": "seg_soc",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Acceso a servicios de salud por ocupación principal.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 21,
+            "nombre": "rama",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Rama de actividad económica (1 dígito SCIAN/ENOE).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 22,
+            "nombre": "scian",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Clave de subsector SCIAN.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 23,
+            "nombre": "ing7c",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Ingreso laboral en 7 categorías.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 24,
+            "nombre": "dur9c",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Horas trabajadas en 9 categorías.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 25,
+            "nombre": "emple7c",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Tamaño del establecimiento en 7 categorías.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 26,
+            "nombre": "hrsocup",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Horas trabajadas en la semana de referencia.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 27,
+            "nombre": "ingocup",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Ingreso mensual por trabajo (pesos corrientes).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 28,
+            "nombre": "ing_x_hrs",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Ingreso por hora trabajada (pesos corrientes).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 29,
+            "nombre": "salario",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Salario mínimo general diario de referencia.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 30,
+            "nombre": "tpg_p8a",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Tasa de participación en actividades no económicas.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 31,
+            "nombre": "tcco",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Tasa de condición de ocupación.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 32,
+            "nombre": "cp_anoc",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Complemento para análisis de no ocupados.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 33,
+            "nombre": "imssissste",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Acceso a IMSS o ISSSTE.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 34,
+            "nombre": "ma48me1sm",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Indicador de precariedad: más de 48 hrs o menos de 1 salario mínimo.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 35,
+            "nombre": "tue_ppal",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Informalidad en ocupación principal (1=Informal, 2=Formal).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 36,
+            "nombre": "emp_ppal",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Características del empleador en ocupación principal.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 37,
+            "nombre": "trans_ppal",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Tipo de transacción en ocupación principal.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 38,
+            "nombre": "sub_o",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Subocupación (1=Subocupado, 2=No subocupado).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 39,
+            "nombre": "mh_fil2",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Mujer de hogar: indicador fila 2.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 40,
+            "nombre": "mh_col",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Mujer de hogar: indicador columna.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 41,
+            "nombre": "sec_ins",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Sector institucional del empleador.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 42,
+            "nombre": "p3b",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "COE1 — Número de trabajadores en el establecimiento.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 43,
+            "nombre": "p3i",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "COE1 — Tipo de contrato escrito.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 44,
+            "nombre": "p10b",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "COE2 — Razón por la que no trabajó la semana de referencia.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 45,
+            "nombre": "es_pea",
+            "tipo": "boolean",
+            "nullable": true,
+            "descripcion": "TRUE si pertenece a la PEA.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 46,
+            "nombre": "es_ocupado",
+            "tipo": "boolean",
+            "nullable": true,
+            "descripcion": "TRUE si está ocupado.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 47,
+            "nombre": "es_desocupado",
+            "tipo": "boolean",
+            "nullable": true,
+            "descripcion": "TRUE si está desocupado.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 48,
+            "nombre": "es_informal",
+            "tipo": "boolean",
+            "nullable": true,
+            "descripcion": "TRUE si el trabajo principal es informal (tue_ppal=1).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 49,
+            "nombre": "fac",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Factor de expansión trimestral.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 50,
+            "nombre": "fac_men",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Factor de expansión mensual.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "mv_enoe_tasas",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Indicadores trimestrales de ocupación y empleo ENOE por municipio de Jalisco. Contiene las 11 tasas oficiales INEGI y poblaciones base, desagregadas por total y sexo. Fuente: INEGI ENOE microdatos 15 años y más. Nota: ENOE no es representativa a nivel municipio; el diseño muestral opera por cd_a (ciudad/área). Para cifras que coincidan con valores oficiales INEGI usar mv_enoe_tasas_jalisco.",
+        "registros": 3299,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año de levantamiento de la encuesta.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "trimestre",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Trimestre de levantamiento (1–4).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "municipio_id",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Clave del municipio (cve_mun INEGI).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre oficial del municipio (de cvegeo_municipalities).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "p15ymas",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población de 15 años y más expandida (SUM fac, criterio general).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "pea",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Económicamente Activa (clase1=1).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "pd",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Desocupada (clase2=2).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "po",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Ocupada (clase2=1).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "pona",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Ocupada No Agropecuaria (clase2=1 y ambito1<>1).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "tp",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Participación: PEA / P15yMAS × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "td",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Desocupación: PD / PEA × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "topd",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Ocupación Parcial y Desocupación: (PD + O<15hrs) / PEA × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 13,
+            "nombre": "tprg",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Presión General: (PD + POBOT) / PEA × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 14,
+            "nombre": "tta",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Trabajo Asalariado: PASA / PO × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 15,
+            "nombre": "tsub",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Subocupación: PSUB_O / PO × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 16,
+            "nombre": "tcco",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Condiciones Críticas de Ocupación: PCCO / PO × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 17,
+            "nombre": "tosi1",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Ocupación en el Sector Informal 1: POSI / PO × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 18,
+            "nombre": "til1",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Informalidad Laboral 1: POI (emp_ppal=1) / PO × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 19,
+            "nombre": "tosi2",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Ocupación en el Sector Informal 2: POSI / PONA × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 20,
+            "nombre": "til2",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Informalidad Laboral 2: POINA / PONA × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 21,
+            "nombre": "p15ymas_h",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población de 15 años y más — hombres (sex=1).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 22,
+            "nombre": "p15ymas_m",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población de 15 años y más — mujeres (sex=2).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 23,
+            "nombre": "pea_h",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "PEA — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 24,
+            "nombre": "pea_m",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "PEA — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 25,
+            "nombre": "pd_h",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Desocupada — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 26,
+            "nombre": "pd_m",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Desocupada — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 27,
+            "nombre": "po_h",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Ocupada — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 28,
+            "nombre": "po_m",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Ocupada — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 29,
+            "nombre": "pona_h",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Ocupada No Agropecuaria — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 30,
+            "nombre": "pona_m",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Ocupada No Agropecuaria — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 31,
+            "nombre": "tp_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Participación — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 32,
+            "nombre": "tp_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Participación — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 33,
+            "nombre": "td_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Desocupación — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 34,
+            "nombre": "td_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Desocupación — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 35,
+            "nombre": "topd_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Ocupación Parcial y Desocupación — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 36,
+            "nombre": "topd_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Ocupación Parcial y Desocupación — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 37,
+            "nombre": "tprg_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Presión General — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 38,
+            "nombre": "tprg_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Presión General — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 39,
+            "nombre": "tta_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Trabajo Asalariado — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 40,
+            "nombre": "tta_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Trabajo Asalariado — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 41,
+            "nombre": "tsub_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Subocupación — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 42,
+            "nombre": "tsub_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Subocupación — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 43,
+            "nombre": "tcco_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Condiciones Críticas de Ocupación — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 44,
+            "nombre": "tcco_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Condiciones Críticas de Ocupación — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 45,
+            "nombre": "tosi1_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Ocupación en el Sector Informal 1 — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 46,
+            "nombre": "tosi1_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Ocupación en el Sector Informal 1 — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 47,
+            "nombre": "til1_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Informalidad Laboral 1 — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 48,
+            "nombre": "til1_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Informalidad Laboral 1 — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 49,
+            "nombre": "tosi2_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Ocupación en el Sector Informal 2 — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 50,
+            "nombre": "tosi2_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Ocupación en el Sector Informal 2 — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 51,
+            "nombre": "til2_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Informalidad Laboral 2 — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 52,
+            "nombre": "til2_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Informalidad Laboral 2 — mujeres.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "mv_enoe_tasas_jalisco",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Indicadores trimestrales de ocupación y empleo ENOE a nivel estado de Jalisco. Contiene las 11 tasas oficiales INEGI y poblaciones base, desagregadas por total y sexo. Los valores replican las cifras oficiales INEGI al aplicar el criterio general: r_def=0, c_res IN (1,3), eda BETWEEN 15 AND 98, SUM(fac). Fuente: INEGI ENOE microdatos 15 años y más.",
+        "registros": 75,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año de levantamiento de la encuesta.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "trimestre",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Trimestre de levantamiento (1–4).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "p15ymas",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población de 15 años y más expandida (SUM fac, criterio general).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "pea",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Económicamente Activa (clase1=1).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "pd",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Desocupada (clase2=2).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "po",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Ocupada (clase2=1).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "pona",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Ocupada No Agropecuaria (clase2=1 y ambito1<>1).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "tp",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Participación: PEA / P15yMAS × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "td",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Desocupación: PD / PEA × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "topd",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Ocupación Parcial y Desocupación: (PD + O<15hrs) / PEA × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "tprg",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Presión General: (PD + POBOT) / PEA × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "tta",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Trabajo Asalariado: PASA / PO × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 13,
+            "nombre": "tsub",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Subocupación: PSUB_O / PO × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 14,
+            "nombre": "tcco",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Condiciones Críticas de Ocupación: PCCO / PO × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 15,
+            "nombre": "tosi1",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Ocupación en el Sector Informal 1: POSI / PO × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 16,
+            "nombre": "til1",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Informalidad Laboral 1: POI (emp_ppal=1) / PO × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 17,
+            "nombre": "tosi2",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Ocupación en el Sector Informal 2: POSI / PONA × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 18,
+            "nombre": "til2",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Informalidad Laboral 2: POINA / PONA × 100.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 19,
+            "nombre": "p15ymas_h",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población de 15 años y más — hombres (sex=1).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 20,
+            "nombre": "p15ymas_m",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población de 15 años y más — mujeres (sex=2).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 21,
+            "nombre": "pea_h",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "PEA — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 22,
+            "nombre": "pea_m",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "PEA — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 23,
+            "nombre": "pd_h",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Desocupada — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 24,
+            "nombre": "pd_m",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Desocupada — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 25,
+            "nombre": "po_h",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Ocupada — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 26,
+            "nombre": "po_m",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Ocupada — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 27,
+            "nombre": "pona_h",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Ocupada No Agropecuaria — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 28,
+            "nombre": "pona_m",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Población Ocupada No Agropecuaria — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 29,
+            "nombre": "tp_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Participación — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 30,
+            "nombre": "tp_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Participación — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 31,
+            "nombre": "td_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Desocupación — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 32,
+            "nombre": "td_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Desocupación — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 33,
+            "nombre": "topd_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Ocupación Parcial y Desocupación — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 34,
+            "nombre": "topd_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Ocupación Parcial y Desocupación — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 35,
+            "nombre": "tprg_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Presión General — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 36,
+            "nombre": "tprg_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Presión General — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 37,
+            "nombre": "tta_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Trabajo Asalariado — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 38,
+            "nombre": "tta_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Trabajo Asalariado — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 39,
+            "nombre": "tsub_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Subocupación — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 40,
+            "nombre": "tsub_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Subocupación — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 41,
+            "nombre": "tcco_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Condiciones Críticas de Ocupación — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 42,
+            "nombre": "tcco_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Condiciones Críticas de Ocupación — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 43,
+            "nombre": "tosi1_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Ocupación en el Sector Informal 1 — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 44,
+            "nombre": "tosi1_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Ocupación en el Sector Informal 1 — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 45,
+            "nombre": "til1_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Informalidad Laboral 1 — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 46,
+            "nombre": "til1_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Informalidad Laboral 1 — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 47,
+            "nombre": "tosi2_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Ocupación en el Sector Informal 2 — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 48,
+            "nombre": "tosi2_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Ocupación en el Sector Informal 2 — mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 49,
+            "nombre": "til2_h",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Informalidad Laboral 2 — hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 50,
+            "nombre": "til2_m",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Tasa de Informalidad Laboral 2 — mujeres.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      }
+    ],
+    "tablas": [
+      {
+        "nombre": "cat_enoe_ocupacion",
+        "descripcion": "Catálogo de grupos de ocupación de la ENOE (c_ocu11c). Clasifica el tipo de trabajo en 12 grupos más No aplica y No especificado.",
+        "filas": 12,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_enoe_sector",
+        "descripcion": "Catálogo de sectores económicos de la ENOE (rama_est1). Clasifica la actividad del trabajo principal: Primario, Secundario, Terciario.",
+        "filas": 5,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_enoe_situacion_trabajo",
+        "descripcion": "Catálogo de situación en el trabajo de la ENOE (pos_ocu). Clasifica la posición ocupacional: subordinado/remunerado, empleador, cuenta propia, sin pago.",
+        "filas": 6,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "stg_enoe_microdatos",
+        "descripcion": "Tabla de staging de la Encuesta Nacional de Ocupación y Empleo (ENOE) — microdatos. Contiene registros individuales de personas a partir de los archivos SDEM, COE1 y COE2 publicados por INEGI. Filtrada a Jalisco (entidad_id=14). Fuente: https://www.inegi.org.mx/contenidos/programas/enoe/15ymas/microdatos/",
+        "filas": 1104066,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "anio",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "trimestre",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "r_def",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "est",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "est_d_tri",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "est_d_men",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "ageb",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "upm",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "d_sem",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "n_pro_viv",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "per",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "tipo",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "mes_cal",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cd_a",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "entidad_id",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "con",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "v_sel",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "n_hog",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "h_mud",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "n_ent",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "n_ren",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "loc",
+            "tipo": "text",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "municipio_id",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "tipo_localidad_id",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "t_loc_men",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "ur",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "zona",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "c_res",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "par_c",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "sex",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "eda",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "nac_dia",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "nac_mes",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "nac_anio",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "l_nac_c",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cs_p12",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cs_p13_1",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cs_p13_2",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cs_p14_c",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cs_p15",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cs_p16",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cs_p17",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "niv_ins",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "anios_esc",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "n_hij",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "hij5c",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "e_con",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cs_p20a_1",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cs_p20a_c",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cs_p20b_1",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cs_p20b_c",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cs_p20c_1",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cs_ad_mot",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cs_p21_des",
+            "tipo": "text",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cs_ad_des",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cs_nr_mot",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cs_p23_des",
+            "tipo": "text",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cs_nr_ori",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "clase1",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "clase2",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "clase3",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "seg_soc",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "rama",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "rama_est2",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "ing7c",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "dur9c",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "emple7c",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "medica5c",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "buscar5c",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "dur_est",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "ambito1",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "ambito2",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "scian",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "dispo",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "nodispo",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "c_inac5c",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pnea_est",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "busqueda",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "d_ant_lab",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "d_cexp_est",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "dur_des",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "tue1",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "tue2",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "tue3",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "tue_ppal",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "emp_ppal",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "trans_ppal",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "sub_o",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "s_clasifi",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "remune2c",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pre_asa",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "tip_con",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "sec_ins",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "mh_fil2",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "mh_col",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "t_tra",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "domestico",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "eda5c",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "eda7c",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "eda12c",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "eda19c",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "hrsocup",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "ingocup",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "ing_x_hrs",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "salario",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "tpg_p8a",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "tcco",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cp_anoc",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "imssissste",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "ma48me1sm",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "p14apoyos",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "fac",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "fac_men",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "sector_id",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "ocupacion_id",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "situacion_trabajo_id",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "p3b",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "p3i",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "p10b",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "es_pea",
+            "tipo": "boolean",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "es_ocupado",
+            "tipo": "boolean",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "es_desocupado",
+            "tipo": "boolean",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "es_informal",
+            "tipo": "boolean",
+            "pk": false,
+            "nullable": true
+          }
+        ]
+      }
+    ],
+    "relaciones": [
+      {
+        "tabla": "stg_enoe_microdatos",
+        "columnas": [
+          "ocupacion_id"
+        ],
+        "ref_tabla": "cat_enoe_ocupacion",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_enoe_microdatos",
+        "columnas": [
+          "sector_id"
+        ],
+        "ref_tabla": "cat_enoe_sector",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_enoe_microdatos",
+        "columnas": [
+          "situacion_trabajo_id"
+        ],
+        "ref_tabla": "cat_enoe_situacion_trabajo",
+        "ref_columnas": [
+          "id"
+        ]
+      }
+    ]
+  },
+  "etapas": []
+}

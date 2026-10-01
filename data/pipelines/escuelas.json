@@ -1,0 +1,89 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "escuelas",
+  "clasificacion": "posible_desactualizado",
+  "documento": {
+    "nombre": "escuelas",
+    "carpeta": "escuelas",
+    "titulo": "Escuelas",
+    "producto": "Directorio y estadística de escuelas de Jalisco",
+    "descripcion": [],
+    "avisos": [],
+    "caracteristicas": [],
+    "fuente_general": null,
+    "descargas": [],
+    "variables": [
+      {
+        "etiqueta": "LOG_LEVEL",
+        "valor": "Nivel de logging del pipeline."
+      },
+      {
+        "etiqueta": "DB_USER",
+        "valor": "Usuario de PostgreSQL."
+      },
+      {
+        "etiqueta": "DB_PASSWORD",
+        "valor": "Password de PostgreSQL."
+      },
+      {
+        "etiqueta": "DB_HOST",
+        "valor": "Host de PostgreSQL."
+      },
+      {
+        "etiqueta": "DB_PORT",
+        "valor": "Puerto de PostgreSQL."
+      },
+      {
+        "etiqueta": "DB_NAME",
+        "valor": "Base de datos destino."
+      },
+      {
+        "etiqueta": "SOURCE_YEAR",
+        "valor": "Año asignado a la carga."
+      },
+      {
+        "etiqueta": "DIRECTORIO_FILENAME",
+        "valor": "Nombre esperado del CSV de directorio."
+      },
+      {
+        "etiqueta": "ESTADISTICA_FILENAME",
+        "valor": "Nombre esperado del CSV de estadística agregada."
+      },
+      {
+        "etiqueta": "GDRIVE_FOLDER_ID",
+        "valor": "ID de la carpeta de Google Drive."
+      },
+      {
+        "etiqueta": "GDRIVE_CLIENT_EMAIL",
+        "valor": "Email de la cuenta de servicio."
+      },
+      {
+        "etiqueta": "GDRIVE_PRIVATE_KEY",
+        "valor": "Llave privada de la cuenta de servicio."
+      }
+    ],
+    "descripcion_tablas": {},
+    "alcance_vistas": {},
+    "commit": null
+  },
+  "base": null,
+  "etapas": []
+}

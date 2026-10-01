@@ -1,0 +1,92 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "defunciones_inegi",
+  "clasificacion": "posible_desactualizado",
+  "documento": {
+    "nombre": "defunciones_inegi",
+    "carpeta": "defunciones_inegi",
+    "titulo": "Defunciones (INEGI)",
+    "producto": "Estadísticas de Defunciones Registradas — EDR",
+    "descripcion": [
+      "Defunciones registradas en México publicadas por INEGI en el programa **EDR** (Estadísticas de Defunciones Registradas). Cada fila es una defunción, con su causa (CIE-10 y clasificaciones agregadas), características demográficas y socioeconómicas de la persona fallecida, circunstancias de la muerte y su geografía en cuatro ámbitos: registro, residencia habitual, ocurrencia y ocurrencia de la lesión. Se carga el país completo desde la edición **2017**, la primera publicada en esta ruta de datos abiertos.",
+      "No confundir con el pipeline `defunciones`, que toma los mismos hechos de la **DGIS (Secretaría de Salud)** con un esquema distinto."
+    ],
+    "avisos": [],
+    "caracteristicas": [
+      {
+        "etiqueta": "Última fecha disponible",
+        "valor": "`2024`"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Anual"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Localidad"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "Sí"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "Automático"
+      }
+    ],
+    "fuente_general": "https://www.inegi.org.mx/programas/edr/",
+    "descargas": [],
+    "variables": [
+      {
+        "etiqueta": "DB_*",
+        "valor": "Conexión a la base `defunciones_inegi`"
+      },
+      {
+        "etiqueta": "SOURCE_BASE_URL",
+        "valor": "Raíz de los datos abiertos del programa EDR"
+      },
+      {
+        "etiqueta": "SOURCE_URL_TEMPLATES",
+        "valor": "Plantillas del archivo por año, separadas por coma y probadas en ese orden"
+      },
+      {
+        "etiqueta": "BACKFILL_MIN_YEAR",
+        "valor": "Primera edición a descubrir y cargar (por defecto `2017`)"
+      },
+      {
+        "etiqueta": "DOWNLOAD_TIMEOUT",
+        "valor": "Segundos de espera por descarga (por defecto `600`)"
+      },
+      {
+        "etiqueta": "CHUNK_SIZE",
+        "valor": "Filas por lote al leer el CSV de hechos y al hacer bulk insert"
+      }
+    ],
+    "descripcion_tablas": {
+      "stg_defunciones": "Variables presentes en **todas** las ediciones desde 2017.",
+      "stg_defunciones_ampliacion": "Variables que INEGI incorporó en **2022**. Relación 1:1 con `stg_defunciones` por `defuncion_id`; no tiene filas para ediciones anteriores."
+    },
+    "alcance_vistas": {},
+    "commit": null
+  },
+  "base": null,
+  "etapas": []
+}

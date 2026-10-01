@@ -13,7 +13,14 @@ CATALOGO = {
                 (2, "municipio", "character varying", True, "Municipio de Jalisco"),
             ]
         },
-        "conteos": {("public", "v_establecimientos"): 1500},
+        "conteos": {("public", "v_establecimientos"): 1500, ("public", "stg_denue"): 42},
+        "descripciones": {("public", "v_establecimientos"): "Establecimientos de Jalisco"},
+        "tablas": [("cat_sector", None), ("stg_denue", "Unidades económicas")],
+        "columnas_tabla": {
+            "cat_sector": [("id", "integer", True, False), ("nombre", "text", False, True)],
+            "stg_denue": [("id", "integer", True, False), ("sector_id", "integer", False, True)],
+        },
+        "relaciones": [("stg_denue", ["sector_id"], "cat_sector", ["id"])],
     },
     "cvegeo": {
         "vistas": [
@@ -32,7 +39,9 @@ class FakeCursor:
         self._count_fails = count_fails
         self._result: list[tuple] = []
 
-    def execute(self, sql: str, params: tuple = ()):
+    def execute(self, sql, params: tuple = ()):
+        if not isinstance(sql, str):
+            sql = sql.as_string(None)
         sql = sql.strip()
         if sql == db_introspect.SQL_BASES.strip():
             self._result = [(n,) for n in self._db["bases"]]
@@ -47,6 +56,15 @@ class FakeCursor:
             self._result = [(self._db["conteos"].get((esquema, nombre), 0),)]
         elif sql == db_introspect.SQL_CONTEO_ESTIMADO.strip():
             self._result = [(99,)]
+        elif sql == db_introspect.SQL_DESCRIPCION.strip():
+            descripcion = self._db.get("descripciones", {}).get(tuple(params))
+            self._result = [(descripcion,)]
+        elif sql == db_introspect.SQL_TABLAS.strip():
+            self._result = list(self._db.get("tablas", []))
+        elif sql == db_introspect.SQL_COLUMNAS_TABLA.strip():
+            self._result = list(self._db.get("columnas_tabla", {}).get(params[0], []))
+        elif sql == db_introspect.SQL_RELACIONES.strip():
+            self._result = list(self._db.get("relaciones", []))
         else:  # SET LOCAL, ROLLBACK…
             self._result = []
 
@@ -129,3 +147,30 @@ def test_fuente_caida_no_lanza():
     fuente, bases = consultar_bd(_settings(), connect=connect)
     assert fuente.estado is EstadoFuente.CAIDA
     assert bases == []
+
+
+def test_introspeccion_trae_tablas_relaciones_y_descripciones():
+    base = introspectar_base(FakeConnection(CATALOGO["denue"]), "denue")
+    assert [t.nombre for t in base.tablas] == ["cat_sector", "stg_denue"]
+    stg = base.tablas[1]
+    assert stg.descripcion == "Unidades económicas"
+    assert stg.filas == 42
+    assert [(c.nombre, c.pk) for c in stg.columnas] == [("id", True), ("sector_id", False)]
+    rel = base.relaciones[0]
+    assert (rel.tabla, rel.columnas, rel.ref_tabla, rel.ref_columnas) == (
+        "stg_denue", ["sector_id"], "cat_sector", ["id"]
+    )
+    assert base.vistas[0].descripcion == "Establecimientos de Jalisco"
+
+
+def test_una_base_inaccesible_no_tumba_la_fuente():
+    def connect(**kwargs):
+        if kwargs["dbname"] == "cvegeo":
+            raise PermissionError("permission denied for database cvegeo")
+        return FakeConnection(CATALOGO[kwargs["dbname"]])
+
+    settings = Settings(_env_file=None, pg_host="h", pg_user="u", pg_password="p")
+    fuente, bases = consultar_bd(settings, connect=connect)
+    assert fuente.estado is EstadoFuente.OK
+    assert [b.nombre for b in bases] == ["denue"]
+    assert "cvegeo" in fuente.detalle

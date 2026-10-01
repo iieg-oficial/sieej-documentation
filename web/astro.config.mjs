@@ -1,8 +1,8 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 
-// Sitio estático: los datos entran en build desde ../data/*.json (generados
-// por sieej_datalayer) y los HTML de pipelines se copian a public/docs/.
+// Sitio estático: los datos entran en build desde ../data/ (generados por
+// sieej_datalayer), incluidas las páginas de cada pipeline en ../data/pipelines/.
 export default defineConfig({
   site: process.env.SITE_URL || "https://iieg.jalisco.gob.mx",
   base: process.env.BASE_PATH || "/",

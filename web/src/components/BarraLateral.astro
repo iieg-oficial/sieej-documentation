@@ -1,0 +1,174 @@
+---
+interface Enlace {
+  href: string;
+  texto: string;
+  actual?: boolean;
+}
+
+interface Props {
+  secciones: Enlace[];
+  tituloSecciones?: string;
+  otros: Enlace[];
+  tituloOtros: string;
+}
+
+const { secciones, tituloSecciones = "En esta página", otros, tituloOtros } = Astro.props;
+---
+
+<nav class="barra" aria-label="Navegación de la página">
+  <div class="barra__fija">
+    <p class="barra__titulo">{tituloSecciones}</p>
+    <ul class="barra__lista">
+      {
+        secciones.map((s) => (
+          <li>
+            <a href={s.href}>{s.texto}</a>
+          </li>
+        ))
+      }
+    </ul>
+    <details class="barra__otros">
+      <summary>{tituloOtros}</summary>
+      <ul class="barra__lista barra__lista--otros">
+        {
+          otros.map((o) => (
+            <li>
+              <a href={o.href} aria-current={o.actual ? "page" : undefined}>
+                {o.texto}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </details>
+  </div>
+</nav>
+
+<style>
+  .barra {
+    min-width: 0;
+  }
+
+  .barra__fija {
+    position: sticky;
+    top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    max-height: calc(100vh - 3rem);
+    overflow-y: auto;
+  }
+
+  .barra__titulo {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--silenciado);
+    margin: 0 0 0.35rem;
+  }
+
+  .barra__lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .barra__lista a {
+    display: block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 0.5rem;
+    color: var(--tinta);
+    font-size: var(--texto-chico);
+    font-weight: 500;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+
+  .barra__lista a:hover,
+  .barra__lista a:focus-visible {
+    background: var(--brand-suave);
+    color: var(--brand);
+  }
+
+  .barra__lista a[aria-current="page"] {
+    background: var(--brand-suave);
+    color: var(--brand);
+    font-weight: 700;
+  }
+
+  .barra__otros {
+    margin-top: 1rem;
+    border-top: 1px solid var(--linea);
+    padding-top: 0.75rem;
+  }
+
+  .barra__otros summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 0.5rem;
+    color: var(--titulo);
+    font-size: var(--texto-chico);
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .barra__otros summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .barra__otros summary::after {
+    content: "";
+    width: 0.45rem;
+    height: 0.45rem;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 0.15s;
+  }
+
+  .barra__otros[open] summary::after {
+    transform: rotate(225deg);
+  }
+
+  .barra__otros summary:hover {
+    background: var(--brand-suave);
+  }
+
+  .barra__lista--otros {
+    margin-top: 0.35rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .barra__otros summary::after {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 960px) {
+    .barra__fija {
+      position: static;
+      max-height: none;
+    }
+
+    .barra__lista:not(.barra__lista--otros) {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .barra__lista:not(.barra__lista--otros) a {
+      background: var(--brand-suave);
+      color: var(--brand);
+      border-radius: 999px;
+      padding: 0.3rem 0.85rem;
+    }
+  }
+</style>

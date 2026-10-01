@@ -1,0 +1,81 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "datamexico",
+  "clasificacion": "posible_desactualizado",
+  "documento": {
+    "nombre": "datamexico",
+    "carpeta": "datamexico",
+    "titulo": "DataMéxico — Comercio Exterior",
+    "producto": "Flujos de comercio exterior (importaciones/exportaciones)",
+    "descripcion": [
+      "Pipeline ETL de flujos de comercio exterior de Jalisco vía la API de DataMéxico (SE). Descarga el valor trimestral de importaciones y exportaciones de Jalisco por país y producto (clasificación HS6), disponible desde el primer trimestre de 2020."
+    ],
+    "avisos": [],
+    "caracteristicas": [
+      {
+        "etiqueta": "Última fecha disponible",
+        "valor": "`2025-Q1`"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Trimestral"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Estatal"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "Sí"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "Automático"
+      }
+    ],
+    "fuente_general": "https://www.economia.gob.mx/datamexico",
+    "descargas": [
+      {
+        "variable": "DATAMEXICO_URL",
+        "url": "https://www.economia.gob.mx/apidatamexico/tesseract/data.jsonrecords"
+      }
+    ],
+    "variables": [
+      {
+        "etiqueta": "DATAMEXICO_URL",
+        "valor": "Endpoint de la API de DataMéxico"
+      },
+      {
+        "etiqueta": "START_QUARTER",
+        "valor": "Trimestre inicial del bootstrap (ej. `20201` = Q1 2020)"
+      },
+      {
+        "etiqueta": "CHUNK_SIZE",
+        "valor": "Tamaño de lote para inserción masiva"
+      }
+    ],
+    "descripcion_tablas": {},
+    "alcance_vistas": {},
+    "commit": null
+  },
+  "base": null,
+  "etapas": []
+}

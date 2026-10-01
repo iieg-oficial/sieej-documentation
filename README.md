@@ -10,18 +10,21 @@ Sitio **estático (Astro)** con **capa de datos en build time** y reconstrucció
 (decisión documentada en [docs/arquitectura.md](docs/arquitectura.md)):
 
 ```
-Airflow (API REST) ─┐                      ┌─> web  (nginx no-root, :8080)
-                    ├─> datalayer (Python) ─> data/*.json ─> astro build ─> volumen `sitio`
-PostgreSQL (RO) ────┘        ▲                                    ▲
-HTML de pipelines ───────────┴── builder (reconstrucción periódica) ┘
+Airflow (API REST) ──┐                      ┌─> web  (nginx no-root, :8080)
+PostgreSQL (RO) ─────┼─> datalayer (Python) ─> data/ ─> astro build ─> volumen `sitio`
+README de ETL-SIEEJ ─┘        ▲                                  ▲
+                              └── builder (reconstrucción periódica) ┘
 ```
 
-- **`datalayer/`** — paquete Python que consulta Airflow y PostgreSQL (**solo lectura**), cruza
-  ambas fuentes con la documentación estática y genera `data/*.json`. Si una fuente cae, conserva
-  los últimos datos válidos marcados `datos_obsoletos`; nunca rompe el build.
-- **`web/`** — sitio Astro. Los HTML de documentación de pipelines (generados fuera de este
-  repositorio) se copian tal cual a `public/docs/` en cada build: un pipeline nuevo aparece en la
-  landing con solo reconstruir, sin cambios de código.
+- **`datalayer/`** — paquete Python que consulta Airflow y PostgreSQL (**solo lectura**), lee el
+  README de cada pipeline de un clon superficial de ETL-SIEEJ (solo `core/pipelines`) y genera
+  `data/*.json` más una página por pipeline en `data/pipelines/`: texto, tablas con filas,
+  vistas con columnas y las llaves foráneas del diagrama entidad-relación. Si la BD o los README
+  caen, conserva los últimos datos válidos marcados `datos_obsoletos`; si cae Airflow, hereda el
+  último estado de los DAG. Nunca rompe el build.
+- **`web/`** — sitio Astro. Cada pipeline tiene su página `/pipelines/<nombre>/` con el diseño del
+  sitio; un pipeline nuevo aparece con solo reconstruir, sin cambios de código. Las URL antiguas
+  `/docs/<nombre>.html` redirigen con 301.
 - **`builder/`** — contenedor que regenera datos y sitio cada `REBUILD_INTERVAL_SECONDS`
   (diario por defecto) hacia el volumen que sirve nginx.
 - La BD de producción **nunca** se expone al navegador: el cliente solo recibe JSON/HTML estático.
@@ -34,7 +37,7 @@ docker compose up -d   # levanta builder + web con healthchecks
 ```
 
 El sitio queda en `http://localhost:8080` (configurable con `WEB_PORT`). Sin `.env`, el sistema
-levanta igualmente en modo degradado (sin fuentes vivas ni documentación montada).
+levanta igualmente en modo degradado (sin fuentes vivas ni README de ETL-SIEEJ).
 
 ### Acceso de red que necesitan los contenedores
 
@@ -42,6 +45,7 @@ levanta igualmente en modo degradado (sin fuentes vivas ni documentación montad
 |---|---|---|
 | Servidor PostgreSQL de producción (`PG_HOST`) | 5432 | Introspección de solo lectura |
 | API REST de Airflow (`AIRFLOW_BASE_URL`) | 8080/https | DAGs y corridas, solo GET |
+| GitHub (`ETL_REPO_URL`) | 443 | Clon superficial de ETL-SIEEJ, solo `core/pipelines` |
 
 Ambos son **servicios externos existentes**: no se levantan en este Compose. El usuario de BD y
 el de Airflow deben ser de **solo lectura**; además toda conexión a PostgreSQL se abre con
@@ -62,7 +66,7 @@ python3 -m venv .venv && .venv/bin/pip install -e "datalayer[dev]"
 
 # Sitio (Node >= 20)
 cd web && npm install
-DOCS_HTML_DIR=/ruta/a/html-documents npm run dev
+npm run dev
 npm run build                              # build de producción
 ```
 

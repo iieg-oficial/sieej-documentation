@@ -1,0 +1,73 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "centros_educativos",
+  "clasificacion": "posible_desactualizado",
+  "documento": {
+    "nombre": "centros_educativos",
+    "carpeta": "centros_educativos",
+    "titulo": "Centros Educativos (SIGED)",
+    "producto": "Catálogo de centros de trabajo educativos",
+    "descripcion": [
+      "Pipeline ETL del Sistema de Información y Gestión Educativa (SIGED) de la SEP. Extrae el catálogo de centros de trabajo educativos de Jalisco a través de la API del SIGED, incluyendo datos de tipo de servicio, nivel, modalidad, domicilio y estadísticas de alumnos y docentes."
+    ],
+    "avisos": [],
+    "caracteristicas": [
+      {
+        "etiqueta": "Última fecha disponible",
+        "valor": "`2025`"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Anual"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Estatal, Municipal, Localidad"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "No"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "No aplica"
+      }
+    ],
+    "fuente_general": "https://www.siged.sep.gob.mx",
+    "descargas": [
+      {
+        "variable": "CENTROS_EDUCATIVOS_URL",
+        "url": "https://api.siged.sep.gob.mx/CoreServices/servicios/escuela/selectCcts/cct=&turno=&tipoedu=&nivel=&subnivel=&control=&subcontrol=&entidad={}&municipio=&localidad="
+      }
+    ],
+    "variables": [
+      {
+        "etiqueta": "CENTROS_EDUCATIVOS_URL",
+        "valor": "URL de la API del SIGED con parámetro de entidad `{}`"
+      }
+    ],
+    "descripcion_tablas": {},
+    "alcance_vistas": {},
+    "commit": null
+  },
+  "base": null,
+  "etapas": []
+}

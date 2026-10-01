@@ -1,0 +1,92 @@
+---
+interface Props {
+  textos: string[];
+  etiqueta?: string;
+}
+
+import { enLinea } from "../lib/markdown";
+
+const { textos, etiqueta = "Información importante" } = Astro.props;
+const id = `info-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<span class="info">
+  <button type="button" class="info__boton" aria-label={etiqueta} aria-describedby={id}>
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"></circle>
+      <path d="M12 11v6M12 7.5v.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></path>
+    </svg>
+  </button>
+  <span role="tooltip" id={id} class="info__burbuja">
+    {textos.map((texto) => <span class="info__parrafo" set:html={enLinea(texto)} />)}
+  </span>
+</span>
+
+<style>
+  .info {
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+    margin-left: 0.4rem;
+  }
+
+  .info__boton {
+    display: inline-grid;
+    place-items: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: var(--brand-suave);
+    color: var(--brand);
+    cursor: help;
+  }
+
+  .info__boton svg {
+    width: 1.05rem;
+    height: 1.05rem;
+  }
+
+  .info__burbuja {
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 0.5rem);
+    transform: translateX(-50%);
+    z-index: 30;
+    width: min(26rem, 80vw);
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.85rem 1rem;
+    border-radius: 0.75rem;
+    background: var(--titulo);
+    color: #fff;
+    font-size: var(--texto-chico);
+    font-weight: 400;
+    line-height: 1.5;
+    box-shadow: 0 8px 24px rgba(23, 42, 85, 0.25);
+  }
+
+  .info__burbuja :global(strong) {
+    color: #fff;
+  }
+
+  .info__burbuja :global(code) {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+  }
+
+  .info:hover .info__burbuja,
+  .info:focus-within .info__burbuja {
+    display: flex;
+  }
+
+  @media (max-width: 640px) {
+    .info__burbuja {
+      left: auto;
+      right: -1rem;
+      transform: none;
+    }
+  }
+</style>

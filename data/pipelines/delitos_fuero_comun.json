@@ -1,0 +1,4440 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "delitos_fuero_comun",
+  "clasificacion": "documentado",
+  "documento": {
+    "nombre": "delitos_fuero_comun",
+    "carpeta": "delitos_fuero_comun",
+    "titulo": "Delitos del Fuero Común",
+    "producto": "Incidencia delictiva del fuero común (municipal)",
+    "descripcion": [
+      "Pipeline ETL de incidencia delictiva del fuero común a nivel municipal, publicado por el Secretariado Ejecutivo del Sistema Nacional de Seguridad Pública (SESNSP/SSPC). Almacena datos históricos mensuales desde 2015 hasta 2025 en una tabla fija, y los datos del año en curso (2026) en una tabla de actualización mensual."
+    ],
+    "avisos": [],
+    "caracteristicas": [
+      {
+        "etiqueta": "Última fecha disponible",
+        "valor": "`2025-12` (histórico) / `2026-MM` (en curso)"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Mensual"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Nacional, Municipal"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "Sí (histórico y 2026, ambos vía upsert)"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "Automático"
+      }
+    ],
+    "fuente_general": "https://www.gob.mx/sesnsp",
+    "descargas": [
+      {
+        "variable": "URL_HISTORICO",
+        "url": "https://sspcgob-my.sharepoint.com/:u:/g/personal/cni_sspc_gob_mx/IQCb5TfpF_Q0Q7VZ0JLQ6iuxAeDslGC86VBvPvy9T0VSf5o?download=1"
+      },
+      {
+        "variable": "URL_2026",
+        "url": "https://sspcgob-my.sharepoint.com/:u:/g/personal/cni_sspc_gob_mx/IQDd-W9ogDiVTbtqEmJOcuhfAfvhKP_Ler2jAMpkVWlHUuI?e=8jFc9R&download=1"
+      }
+    ],
+    "variables": [
+      {
+        "etiqueta": "URL_HISTORICO",
+        "valor": "URL de descarga del ZIP histórico 2015-2025. Se resuelve y actualiza sola en cada corrida (ver [Extract](#extract)); el valor en `.env` es solo el último caché conocido"
+      },
+      {
+        "etiqueta": "URL_2026",
+        "valor": "URL de descarga del ZIP del año en curso. Mismo mecanismo de auto-resolución que `URL_HISTORICO`"
+      }
+    ],
+    "descripcion_tablas": {},
+    "alcance_vistas": {},
+    "commit": null
+  },
+  "base": {
+    "nombre": "delitos_fuero_comun",
+    "es_infraestructura": false,
+    "vistas": [
+      {
+        "esquema": "public",
+        "nombre": "geography_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 0,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geography_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "geometry_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 34,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "character varying(256)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geometry_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "character varying(30)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_delitos_comparables_general",
+        "tipo": "VIEW",
+        "descripcion": "Serie unificada 2015-2026 con re-etiquetado de tipo_delito para subtipos exclusivos de 2026 que corresponden a categorías históricas. Permite comparabilidad longitudinal. Branch 1 (2015-2025): pass-through. Branch 2 (2026): 10 reglas de re-etiquetado.",
+        "registros": 2871161,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador de fila generado por ROW_NUMBER().",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año del registro.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_municipio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave geoestadística del municipio (5 dígitos, EEMMM).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "clave_ent",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave de entidad federativa (2 dígitos).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico_afectado",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Bien jurídico afectado según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "tipo_delito",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Tipo de delito normalizado para comparabilidad: los subtipos de 2026 sin equivalente histórico se re-etiquetan a su categoría histórica correspondiente.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "subtipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Subtipo de delito original del catálogo SSPC (sin modificar).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Modalidad del delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "mes",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre del mes en español.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "conteo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Número de carpetas de investigación.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_delitos_serie_historica",
+        "tipo": "VIEW",
+        "descripcion": "Serie histórica completa 2015-presente de delitos del fuero común a nivel municipal. Desanida columnas mensuales (enero..diciembre) en filas (mes, conteo). Excluye conteos NULL y cero. Abarca stg 2015-2025 y stg 2026 vía UNION ALL.",
+        "registros": 2871161,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador de fila generado por ROW_NUMBER().",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año del registro.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_municipio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave geoestadística del municipio (VARCHAR 5 dígitos, EEMMM).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "clave_ent",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave de entidad federativa (VARCHAR 2 dígitos).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico_afectado",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Bien jurídico afectado según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "tipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Tipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "subtipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Subtipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Modalidad del delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "mes",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre del mes en español (Enero, Febrero, …, Diciembre).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "conteo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Número de carpetas de investigación iniciadas en el mes.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_extorsion",
+        "tipo": "VIEW",
+        "descripcion": "Filtro de vw_delitos_serie_historica: extorsión, excluyendo tentativas de 2026.",
+        "registros": 33623,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador de fila generado por ROW_NUMBER().",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año del registro.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_municipio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave geoestadística del municipio (5 dígitos, EEMMM).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "clave_ent",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave de entidad federativa (2 dígitos).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico_afectado",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Bien jurídico afectado según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "tipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Tipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "subtipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Subtipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Modalidad del delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "mes",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre del mes en español.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "conteo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Número de carpetas de investigación.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_feminicidio",
+        "tipo": "VIEW",
+        "descripcion": "Filtro de vw_delitos_serie_historica: tipo = 'Feminicidio', excluye tentativa. Abarca 2015-presente.",
+        "registros": 8427,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador de fila generado por ROW_NUMBER().",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año del registro.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_municipio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave geoestadística del municipio (5 dígitos, EEMMM).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "clave_ent",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave de entidad federativa (2 dígitos).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico_afectado",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Bien jurídico afectado según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "tipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Tipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "subtipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Subtipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Modalidad del delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "mes",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre del mes en español.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "conteo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Número de carpetas de investigación.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_gold_delitos_fuero_comun",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 119582,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fecha_anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "fecha_mes",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "clave_ent",
+            "tipo": "character varying(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "cve_municipio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "nivel_jerarquico",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "bien_juridico",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "delito",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "modalidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "carpetas_investigacion",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "tasa_carpetas_investigacion",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_homicidio_doloso",
+        "tipo": "VIEW",
+        "descripcion": "Filtro de vw_delitos_serie_historica: subtipo_delito = 'Homicidio doloso'. Abarca 2015-presente.",
+        "registros": 106952,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador de fila generado por ROW_NUMBER().",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año del registro.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_municipio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave geoestadística del municipio (5 dígitos, EEMMM).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "clave_ent",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave de entidad federativa (2 dígitos).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico_afectado",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Bien jurídico afectado según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "tipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Tipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "subtipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Subtipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Modalidad del delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "mes",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre del mes en español.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "conteo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Número de carpetas de investigación.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_narcomenudeo",
+        "tipo": "VIEW",
+        "descripcion": "Filtro de vw_delitos_serie_historica: narcomenudeo (venta y posesión simple). Abarca 2015-presente.",
+        "registros": 63981,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador de fila generado por ROW_NUMBER().",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año del registro.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_municipio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave geoestadística del municipio (5 dígitos, EEMMM).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "clave_ent",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave de entidad federativa (2 dígitos).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico_afectado",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Bien jurídico afectado según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "tipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Tipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "subtipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Subtipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Modalidad del delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "mes",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre del mes en español.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "conteo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Número de carpetas de investigación.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_otros_fuero_comun",
+        "tipo": "VIEW",
+        "descripcion": "Filtro de vw_delitos_serie_historica: otros delitos del fuero común y suplantación de identidad. Abarca 2015-presente.",
+        "registros": 1337,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador de fila generado por ROW_NUMBER().",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año del registro.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_municipio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave geoestadística del municipio (5 dígitos, EEMMM).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "clave_ent",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave de entidad federativa (2 dígitos).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico_afectado",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Bien jurídico afectado según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "tipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Tipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "subtipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Subtipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Modalidad del delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "mes",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre del mes en español.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "conteo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Número de carpetas de investigación.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_otros_libertad_personal",
+        "tipo": "VIEW",
+        "descripcion": "Filtro de vw_delitos_serie_historica: otros delitos contra la libertad personal. Abarca 2015-presente.",
+        "registros": 56144,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador de fila generado por ROW_NUMBER().",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año del registro.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_municipio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave geoestadística del municipio (5 dígitos, EEMMM).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "clave_ent",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave de entidad federativa (2 dígitos).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico_afectado",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Bien jurídico afectado según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "tipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Tipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "subtipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Subtipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Modalidad del delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "mes",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre del mes en español.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "conteo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Número de carpetas de investigación.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_otros_libertad_sexual",
+        "tipo": "VIEW",
+        "descripcion": "Filtro de vw_delitos_serie_historica: otros delitos contra la libertad y seguridad sexual. Abarca 2015-presente.",
+        "registros": 1245,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador de fila generado por ROW_NUMBER().",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año del registro.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_municipio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave geoestadística del municipio (5 dígitos, EEMMM).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "clave_ent",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave de entidad federativa (2 dígitos).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico_afectado",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Bien jurídico afectado según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "tipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Tipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "subtipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Subtipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Modalidad del delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "mes",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre del mes en español.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "conteo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Número de carpetas de investigación.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_otros_patrimonio",
+        "tipo": "VIEW",
+        "descripcion": "Filtro de vw_delitos_serie_historica: otros delitos contra el patrimonio. Incluye tentativas de extorsión de 2026 para comparabilidad histórica.",
+        "registros": 435,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador de fila generado por ROW_NUMBER().",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año del registro.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_municipio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave geoestadística del municipio (5 dígitos, EEMMM).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "clave_ent",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave de entidad federativa (2 dígitos).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico_afectado",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Bien jurídico afectado según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "tipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Tipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "subtipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Subtipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Modalidad del delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "mes",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre del mes en español.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "conteo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Número de carpetas de investigación.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_otros_sociedad",
+        "tipo": "VIEW",
+        "descripcion": "Filtro de vw_delitos_serie_historica: otros delitos contra la sociedad y discriminación. Abarca 2015-presente.",
+        "registros": 17799,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador de fila generado por ROW_NUMBER().",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año del registro.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_municipio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave geoestadística del municipio (5 dígitos, EEMMM).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "clave_ent",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave de entidad federativa (2 dígitos).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico_afectado",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Bien jurídico afectado según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "tipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Tipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "subtipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Subtipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Modalidad del delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "mes",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre del mes en español.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "conteo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Número de carpetas de investigación.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_otros_vida_integridad",
+        "tipo": "VIEW",
+        "descripcion": "Filtro de vw_delitos_serie_historica: otros delitos contra la vida e integridad corporal. Incluye las tentativas de homicidio doloso y feminicidio de 2026 para comparabilidad histórica.",
+        "registros": 890,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador de fila generado por ROW_NUMBER().",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año del registro.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_municipio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave geoestadística del municipio (5 dígitos, EEMMM).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "clave_ent",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave de entidad federativa (2 dígitos).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico_afectado",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Bien jurídico afectado según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "tipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Tipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "subtipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Subtipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Modalidad del delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "mes",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre del mes en español.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "conteo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Número de carpetas de investigación.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_servidores_publicos",
+        "tipo": "VIEW",
+        "descripcion": "Filtro de vw_delitos_serie_historica: delitos cometidos por servidores públicos (tortura, delitos contra la administración de justicia). Abarca 2015-presente.",
+        "registros": 42970,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador de fila generado por ROW_NUMBER().",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año del registro.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_municipio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave geoestadística del municipio (5 dígitos, EEMMM).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "clave_ent",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave de entidad federativa (2 dígitos).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico_afectado",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Bien jurídico afectado según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "tipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Tipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "subtipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Subtipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Modalidad del delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "mes",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre del mes en español.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "conteo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Número de carpetas de investigación.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_tentativa_extorsion",
+        "tipo": "VIEW",
+        "descripcion": "Filtro de vw_delitos_serie_historica: tentativa de extorsión (presencial y por otros medios). Solo año 2026.",
+        "registros": 435,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador de fila generado por ROW_NUMBER().",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año del registro.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_municipio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave geoestadística del municipio (5 dígitos, EEMMM).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "clave_ent",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave de entidad federativa (2 dígitos).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico_afectado",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Bien jurídico afectado según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "tipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Tipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "subtipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Subtipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Modalidad del delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "mes",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre del mes en español.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "conteo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Número de carpetas de investigación.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_tentativa_feminicidio",
+        "tipo": "VIEW",
+        "descripcion": "Filtro de vw_delitos_serie_historica: subtipo = 'Tentativa de feminicidio'. Solo año 2026.",
+        "registros": 294,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador de fila generado por ROW_NUMBER().",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año del registro.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_municipio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave geoestadística del municipio (5 dígitos, EEMMM).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "clave_ent",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave de entidad federativa (2 dígitos).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico_afectado",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Bien jurídico afectado según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "tipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Tipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "subtipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Subtipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Modalidad del delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "mes",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre del mes en español.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "conteo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Número de carpetas de investigación.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_tentativa_homicidio_doloso",
+        "tipo": "VIEW",
+        "descripcion": "Filtro de vw_delitos_serie_historica: subtipo = 'Tentativa de homicidio doloso'. Solo año 2026 (nueva categoría).",
+        "registros": 596,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador de fila generado por ROW_NUMBER().",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año del registro.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_municipio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave geoestadística del municipio (5 dígitos, EEMMM).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "clave_ent",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave de entidad federativa (2 dígitos).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico_afectado",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Bien jurídico afectado según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "tipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Tipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "subtipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Subtipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Modalidad del delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "mes",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre del mes en español.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "conteo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Número de carpetas de investigación.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_trata_personas",
+        "tipo": "VIEW",
+        "descripcion": "Filtro de vw_delitos_serie_historica: trata de personas y pornografía infantil. Abarca 2015-presente.",
+        "registros": 4248,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador de fila generado por ROW_NUMBER().",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Año del registro.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_municipio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave geoestadística del municipio (5 dígitos, EEMMM).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "clave_ent",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Clave de entidad federativa (2 dígitos).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico_afectado",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Bien jurídico afectado según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "tipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Tipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "subtipo_delito",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Subtipo de delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying(200)",
+            "nullable": true,
+            "descripcion": "Modalidad del delito según catálogo SSPC.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "mes",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Nombre del mes en español.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "conteo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Número de carpetas de investigación.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vwm_datos_delitos_abuso_sexual_secretariado",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 17250,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "nivel_jerarquico",
+            "tipo": "character varying(30)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "bien_juridico",
+            "tipo": "character varying(100)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "delito",
+            "tipo": "character varying(120)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "carpetas_investigacion",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "tasa_carpetas_investigacion",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vwm_datos_delitos_feminicidio_secretariado",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 17250,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "delito",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "con_arma_de_fuego",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "con_arma_blanca",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "con_otro_elemento",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "no_especificado",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 13,
+            "nombre": "carpetas_investigacion",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 14,
+            "nombre": "tasa_carpetas_investigacion",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vwm_datos_delitos_homicidio_doloso_secretariado",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 17250,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "delito",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "con_arma_de_fuego",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "con_arma_blanca",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "con_otro_elemento",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "no_especificado",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 13,
+            "nombre": "carpetas_investigacion",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 14,
+            "nombre": "tasa_carpetas_investigacion",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vwm_datos_delitos_lesiones_dolosas_secretariado",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 17250,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "delito",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "con_arma_de_fuego",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "con_arma_blanca",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "con_otro_elemento",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "no_especificado",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 13,
+            "nombre": "carpetas_investigacion",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 14,
+            "nombre": "tasa_carpetas_investigacion",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vwm_datos_delitos_robo_autopartes_secretariado",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 17250,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "delito",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "con_violencia",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "sin_violencia",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "carpetas_investigacion",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "tasa_carpetas_investigacion",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vwm_datos_delitos_robo_casa_habitacion_secretariado",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 17250,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "delito",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "con_violencia",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "sin_violencia",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "carpetas_investigacion",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "tasa_carpetas_investigacion",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vwm_datos_delitos_robo_coche_cuatro_ruedas_secretariado",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 17250,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "delito",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "con_violencia",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "sin_violencia",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "carpetas_investigacion",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "tasa_carpetas_investigacion",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vwm_datos_delitos_robo_institucion_bancaria_secretariado",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 17250,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "delito",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "con_violencia",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "sin_violencia",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "carpetas_investigacion",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "tasa_carpetas_investigacion",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vwm_datos_delitos_robo_motocicleta_secretariado",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 17250,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "delito",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "con_violencia",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "sin_violencia",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "carpetas_investigacion",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "tasa_carpetas_investigacion",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vwm_datos_delitos_robo_negocio_secretariado",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 17250,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "delito",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "con_violencia",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "sin_violencia",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "carpetas_investigacion",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "tasa_carpetas_investigacion",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vwm_datos_delitos_robo_transeunte_via_publica_secretariado",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 17250,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "delito",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "con_violencia",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "sin_violencia",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "carpetas_investigacion",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "tasa_carpetas_investigacion",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vwm_datos_delitos_robo_transportista_secretariado",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 17250,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "bien_juridico",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "delito",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "con_violencia",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "sin_violencia",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "carpetas_investigacion",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "tasa_carpetas_investigacion",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vwm_datos_delitos_violacion_secretariado",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 17250,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "nivel_jerarquico",
+            "tipo": "character varying(30)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "bien_juridico",
+            "tipo": "character varying(100)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "delito",
+            "tipo": "character varying(120)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "carpetas_investigacion",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "tasa_carpetas_investigacion",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vwm_datos_delitos_violencia_familiar_secretariado",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 17250,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "nivel_jerarquico",
+            "tipo": "character varying(30)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "bien_juridico",
+            "tipo": "character varying(100)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "delito",
+            "tipo": "character varying(120)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "carpetas_investigacion",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "tasa_carpetas_investigacion",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vwm_datos_delitos_violencia_genero_no_familiar_secretariado",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 17250,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "nivel_jerarquico",
+            "tipo": "character varying(30)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "bien_juridico",
+            "tipo": "character varying(100)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "delito",
+            "tipo": "character varying(120)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "modalidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "carpetas_investigacion",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "tasa_carpetas_investigacion",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vwm_feminicidios",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 1375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "nivel_jerarquico",
+            "tipo": "character varying(30)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "modalidad",
+            "tipo": "character varying(100)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "carpetas_investigacion",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "tasa_carpetas_investigacion",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      }
+    ],
+    "tablas": [
+      {
+        "nombre": "cat_bien_juridico_afectado",
+        "descripcion": "Catálogo de bienes jurídicos afectados según clasificación SSPC/RNID.",
+        "filas": 7,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "bien_juridico_afectado",
+            "tipo": "character varying(200)",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_modalidad",
+        "descripcion": "Catálogo de modalidades de delito; cada modalidad pertenece a un subtipo.",
+        "filas": 79,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "modalidad",
+            "tipo": "character varying(200)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "subtipo_delito_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          }
+        ]
+      },
+      {
+        "nombre": "cat_subtipo_delito",
+        "descripcion": "Catálogo de subtipos de delito; cada subtipo pertenece a un tipo.",
+        "filas": 85,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "subtipo_delito",
+            "tipo": "character varying(200)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "tipo_delito_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_tipo_delito",
+        "descripcion": "Catálogo de tipos de delito según clasificación SSPC/RNID.",
+        "filas": 49,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "tipo_delito",
+            "tipo": "character varying(200)",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "stg_delitos_fuero_comun_2015_2025",
+        "descripcion": "Staging histórico de delitos del fuero común 2015-2025. Carga bootstrap única. Fuente: SSPC/RNID (descarga anual). NK: (anio, cvegeo, bien_juridico_afectado_id, tipo_delito_id, subtipo_delito_id, modalidad_id).",
+        "filas": 2562994,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "anio",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "cvegeo",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "bien_juridico_afectado_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "tipo_delito_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "subtipo_delito_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "modalidad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "enero",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "febrero",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "marzo",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "abril",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "mayo",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "junio",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "julio",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "agosto",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "septiembre",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "octubre",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "noviembre",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "diciembre",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "created_at",
+            "tipo": "timestamp without time zone",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "updated_at",
+            "tipo": "timestamp without time zone",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "stg_delitos_fuero_comun_2026",
+        "descripcion": "Staging del año en curso de delitos del fuero común (2026+). Se actualiza mensualmente mediante upsert. Fuente: SSPC/RNID (descarga mensual). NK: (anio, cvegeo, bien_juridico_afectado_id, tipo_delito_id, subtipo_delito_id, modalidad_id).",
+        "filas": 286140,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "anio",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "cvegeo",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "bien_juridico_afectado_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "tipo_delito_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "subtipo_delito_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "modalidad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "enero",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "febrero",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "marzo",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "abril",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "mayo",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "junio",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "julio",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "agosto",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "septiembre",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "octubre",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "noviembre",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "diciembre",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "created_at",
+            "tipo": "timestamp without time zone",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "updated_at",
+            "tipo": "timestamp without time zone",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      }
+    ],
+    "relaciones": [
+      {
+        "tabla": "cat_modalidad",
+        "columnas": [
+          "subtipo_delito_id"
+        ],
+        "ref_tabla": "cat_subtipo_delito",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "cat_subtipo_delito",
+        "columnas": [
+          "tipo_delito_id"
+        ],
+        "ref_tabla": "cat_tipo_delito",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_delitos_fuero_comun_2015_2025",
+        "columnas": [
+          "modalidad_id"
+        ],
+        "ref_tabla": "cat_modalidad",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_delitos_fuero_comun_2015_2025",
+        "columnas": [
+          "subtipo_delito_id"
+        ],
+        "ref_tabla": "cat_subtipo_delito",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_delitos_fuero_comun_2015_2025",
+        "columnas": [
+          "tipo_delito_id"
+        ],
+        "ref_tabla": "cat_tipo_delito",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_delitos_fuero_comun_2015_2025",
+        "columnas": [
+          "bien_juridico_afectado_id"
+        ],
+        "ref_tabla": "cat_bien_juridico_afectado",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_delitos_fuero_comun_2026",
+        "columnas": [
+          "bien_juridico_afectado_id"
+        ],
+        "ref_tabla": "cat_bien_juridico_afectado",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_delitos_fuero_comun_2026",
+        "columnas": [
+          "modalidad_id"
+        ],
+        "ref_tabla": "cat_modalidad",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_delitos_fuero_comun_2026",
+        "columnas": [
+          "subtipo_delito_id"
+        ],
+        "ref_tabla": "cat_subtipo_delito",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_delitos_fuero_comun_2026",
+        "columnas": [
+          "tipo_delito_id"
+        ],
+        "ref_tabla": "cat_tipo_delito",
+        "ref_columnas": [
+          "id"
+        ]
+      }
+    ]
+  },
+  "etapas": []
+}

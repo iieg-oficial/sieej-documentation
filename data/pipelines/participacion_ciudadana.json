@@ -1,0 +1,68 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "participacion_ciudadana",
+  "clasificacion": "posible_desactualizado",
+  "documento": {
+    "nombre": "participacion_ciudadana",
+    "carpeta": "participacion_ciudadana",
+    "titulo": "Participación Ciudadana",
+    "producto": "Participación electoral ciudadana municipal",
+    "descripcion": [
+      "Pipeline ETL de participación electoral ciudadana a nivel municipal del INE. Carga los porcentajes de participación por municipio de Jalisco para las elecciones de 2012, 2015, 2018 y 2021, a partir de un archivo consolidado almacenado en Google Drive."
+    ],
+    "avisos": [],
+    "caracteristicas": [
+      {
+        "etiqueta": "Última fecha disponible",
+        "valor": "`2021`"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Trienal"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Municipal"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "No"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "No aplica"
+      }
+    ],
+    "fuente_general": "https://www.ine.mx",
+    "descargas": [],
+    "variables": [
+      {
+        "etiqueta": "GDRIVE_FILE_ID",
+        "valor": "ID del archivo CSV en Google Drive"
+      }
+    ],
+    "descripcion_tablas": {},
+    "alcance_vistas": {},
+    "commit": null
+  },
+  "base": null,
+  "etapas": []
+}

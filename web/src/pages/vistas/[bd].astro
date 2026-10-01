@@ -1,5 +1,9 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import BarraLateral from "../../components/BarraLateral.astro";
+import Info from "../../components/Info.astro";
+import { enLinea } from "../../lib/markdown";
+import { paginas } from "../../lib/pipelines";
 import vistas from "../../../../data/vistas.json";
 
 export function getStaticPaths() {
@@ -11,6 +15,20 @@ export function getStaticPaths() {
 
 const { base } = Astro.props;
 const bdOk = vistas.fuentes?.bd?.estado === "ok";
+
+const pipeline = paginas.find((p) => p.nombre === base.nombre);
+const notas = [
+  base.es_infraestructura
+    ? "Base de infraestructura geoespacial: sus vistas son de sistema (PostGIS), no producto de un pipeline."
+    : null,
+  bdOk ? null : "Estructura según la documentación del pipeline; la introspección de la BD está pendiente de acceso.",
+].filter((n): n is string => n !== null);
+const secciones = base.vistas.map((v) => ({ href: `#vista-${v.nombre}`, texto: v.nombre }));
+const otras = vistas.bases.map((b) => ({
+  href: `/vistas/${b.nombre}/`,
+  texto: b.nombre,
+  actual: b.nombre === base.nombre,
+}));
 
 const TIPO_INSIGNIA: Record<string, string> = {
   VIEW: "insignia--neutra",
@@ -29,27 +47,29 @@ const TIPO_INSIGNIA: Record<string, string> = {
         <span aria-hidden="true"> / </span>
         <span aria-current="page">{base.nombre}</span>
       </nav>
-      <h1 id="titulo-bd" class="titulo-bd">{base.nombre}</h1>
+      <h1 id="titulo-bd" class="titulo-bd">
+        {base.nombre}
+        {notas.length > 0 && <Info textos={notas} etiqueta="Notas de esta base" />}
+      </h1>
       {
-        base.es_infraestructura && (
-          <p class="aviso" role="note">
-            Base de infraestructura geoespacial: sus vistas son de sistema (PostGIS), no producto
-            de un pipeline.
-          </p>
-        )
-      }
-      {
-        !bdOk && (
-          <p class="aviso" role="status">
-            Estructura según la documentación estática; la introspección de la BD de producción
-            está pendiente de acceso.
+        pipeline && (
+          <p class="enlace-pipeline">
+            <a href={`/pipelines/${pipeline.nombre}/`}>Documentación del pipeline</a>
           </p>
         )
       }
 
+      <div class="cuerpo">
+      <BarraLateral
+        secciones={secciones}
+        tituloSecciones="Vistas de esta base"
+        otros={otras}
+        tituloOtros="Otras bases"
+      />
+      <div class="contenido">
       {
         base.vistas.map((vista) => (
-          <article class="tarjeta vista" aria-label={`Vista ${vista.nombre}`}>
+          <article class="tarjeta vista" id={`vista-${vista.nombre}`} aria-label={`Vista ${vista.nombre}`}>
             <header class="vista__cabecera">
               <h3>
                 <code>
@@ -78,6 +98,7 @@ const TIPO_INSIGNIA: Record<string, string> = {
               )}
               {vista.columnas.length} columna(s)
             </p>
+            {vista.descripcion && <p class="vista__descripcion" set:html={enLinea(vista.descripcion)} />}
             {vista.columnas.length > 0 && (
               <div class="tabla-envoltura">
                 <table>
@@ -112,6 +133,8 @@ const TIPO_INSIGNIA: Record<string, string> = {
           </article>
         ))
       }
+      </div>
+      </div>
     </div>
   </section>
 </Layout>
@@ -124,7 +147,33 @@ const TIPO_INSIGNIA: Record<string, string> = {
   }
 
   .vista {
-    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    scroll-margin-top: 1.5rem;
+  }
+
+  .vista__descripcion {
+    margin: 0 0 0.75rem;
+  }
+
+  .enlace-pipeline {
+    margin: 0;
+  }
+
+  .cuerpo {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .contenido {
+    min-width: 0;
+  }
+
+  @media (max-width: 960px) {
+    .cuerpo {
+      grid-template-columns: 1fr;
+    }
   }
 
   .vista__cabecera {

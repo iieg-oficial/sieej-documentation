@@ -4,6 +4,7 @@ import SeccionSieej from "../components/SeccionSieej.astro";
 import SeccionCatalogo from "../components/SeccionCatalogo.astro";
 import SeccionNumeralia from "../components/SeccionNumeralia.astro";
 import SeccionVistas from "../components/SeccionVistas.astro";
+import FlujoDatos from "../components/FlujoDatos.astro";
 ---
 
 <Layout>
@@ -18,13 +19,9 @@ import SeccionVistas from "../components/SeccionVistas.astro";
           vistas materializadas.
         </p>
       </div>
-      <img
-        src="/img/flujo_datos_sieej.webp"
-        alt="Flujo de datos del SIEEJ: integra datos de múltiples fuentes, los procesa y entrega información organizada mediante carga, procesamiento y descarga."
-        width="256"
-        height="298"
-        class="heroe__imagen"
-      />
+      <div class="heroe__imagen">
+        <FlujoDatos />
+      </div>
     </div>
   </section>
 
@@ -77,11 +74,11 @@ import SeccionVistas from "../components/SeccionVistas.astro";
   .heroe__imagen {
     order: -1;
     justify-self: center;
-    width: auto;
     height: 18rem;
     max-width: 100%;
-    object-fit: contain;
+    aspect-ratio: 512 / 596;
     border-radius: 1.5rem;
+    overflow: hidden;
   }
 
   @media (min-width: 768px) {

@@ -63,15 +63,15 @@ const redes = [
   <body>
     <a class="salto-contenido" href="#contenido">Ir al contenido principal</a>
     <header class="encabezado">
-      <div class="contenedor encabezado__interior">
+      <div class="encabezado__interior">
         <div class="marcas">
           <a href="/" aria-label="SIEEJ, inicio">
             <img src="/logos/logo_sieej.svg" alt="SIEEJ" class="marcas__logo" />
           </a>
-          <a href={instituto.sitio} rel="noopener">
+          <a href={instituto.sitio} rel="noopener" class="marcas__institucional">
             <img src="/logos/logo_iieg.svg" alt="IIEG — Instituto de Información Estadística y Geográfica de Jalisco" class="marcas__logo" />
           </a>
-          <a href={instituto.jalisco} rel="noopener">
+          <a href={instituto.jalisco} rel="noopener" class="marcas__institucional">
             <img src="/logos/logo_jal.svg" alt="Gobierno del Estado de Jalisco" class="marcas__logo" />
           </a>
         </div>
@@ -145,29 +145,27 @@ const redes = [
 
 <style>
   .encabezado {
-    background: var(--brand);
+    background: #5c2472;
     color: #fff;
     position: sticky;
     top: 0;
     z-index: 20;
-    box-shadow: 0 2px 8px rgba(23, 42, 85, 0.18);
   }
 
   .encabezado__interior {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.75rem 2rem;
-    min-height: var(--alto-encabezado);
     flex-wrap: wrap;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
+    gap: 0.75rem 1rem;
+    min-height: 100px;
+    padding: 1rem;
   }
 
   .marcas {
     display: flex;
     align-items: center;
-    gap: 1.75rem;
+    justify-content: center;
   }
 
   .marcas a {
@@ -177,6 +175,10 @@ const redes = [
   .marcas__logo {
     height: 2.75rem;
     width: auto;
+  }
+
+  .marcas__institucional {
+    display: none !important;
   }
 
   .navegacion {
@@ -298,27 +300,41 @@ const redes = [
     height: 1.4rem;
   }
 
-  @media (max-width: 960px) {
-    .pie__rejilla {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (max-width: 720px) {
+  @media (min-width: 768px) {
     .encabezado {
-      position: static;
+      margin: 1.25rem;
+      border-radius: 10px;
+      top: 1.25rem;
+    }
+
+    .encabezado__interior {
+      flex-wrap: nowrap;
+      height: 100px;
+      padding: 1rem;
     }
 
     .marcas {
-      gap: 0.75rem;
+      gap: 1rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .encabezado__interior {
+      padding: 1rem 1rem 1rem 3.25rem;
     }
 
-    .marcas__logo {
-      height: 1.75rem;
+    .marcas {
+      gap: 4.5rem;
     }
 
-    .navegacion {
-      gap: 1.25rem;
+    .marcas__institucional {
+      display: flex !important;
+    }
+  }
+
+  @media (max-width: 960px) {
+    .pie__rejilla {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 

@@ -66,7 +66,7 @@ const redes = [
   <body>
     <a class="salto-contenido" href="#contenido">Ir al contenido principal</a>
     <header class="encabezado">
-      <div class="encabezado__interior">
+      <div class="contenedor encabezado__interior">
         <div class="marcas">
           <a href="/" aria-label="SIEEJ, inicio">
             <img src="/logos/logo_sieej.svg" alt="SIEEJ" class="marcas__logo" />
@@ -158,7 +158,8 @@ const redes = [
     flex-wrap: wrap;
     gap: 0.75rem 1rem;
     min-height: 100px;
-    padding: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
   }
 
   .marcas {
@@ -323,10 +324,6 @@ const redes = [
   }
 
   @media (min-width: 1024px) {
-    .encabezado__interior {
-      padding: 1rem 1rem 1rem 3.25rem;
-    }
-
     .marcas {
       gap: 4.5rem;
     }

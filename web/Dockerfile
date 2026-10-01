@@ -10,7 +10,7 @@ RUN cd web && npm ci --no-audit --no-fund
 
 COPY data/ data/
 COPY web/ web/
-# Build de respaldo horneado en la imagen (sin DOCS_HTML_DIR: degrada con aviso).
+# Build de respaldo horneado en la imagen con los data/ versionados.
 # El servicio builder lo reemplaza con el sitio completo en el volumen compartido.
 RUN cd web && npm run build
 

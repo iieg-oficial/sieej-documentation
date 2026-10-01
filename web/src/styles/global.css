@@ -1,76 +1,78 @@
-/* Sistema de diseño sobrio institucional del SIEEJ.
-   Identidad visual IIEG (04_identidad_visual.md): Poppins, púrpura #5C2472,
-   gris pizarra #465055, naranja #FF8300; JetBrains Mono para código. */
+/* Sistema de diseño del SIEEJ, homologado con la intranet y el portal del IIEG:
+   Garet en todo el texto, púrpura #5C2472, púrpura vivo #8936AB, naranja #FF8300,
+   títulos en #172A55 y texto en #465055; JetBrains Mono solo para código. */
 
 @font-face {
-  font-family: "Poppins";
+  font-family: "Garet";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/fonts/poppins-400.woff2") format("woff2");
+  src: url("/fonts/garet-regular.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: "Poppins";
+  font-family: "Garet";
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   font-display: swap;
-  src: url("/fonts/poppins-600.woff2") format("woff2");
+  src: url("/fonts/garet-medium.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: "Poppins";
+  font-family: "Garet";
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url("/fonts/poppins-700.woff2") format("woff2");
+  src: url("/fonts/garet-bold.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: "Poppins";
+  font-family: "Garet";
   font-style: normal;
   font-weight: 800;
   font-display: swap;
-  src: url("/fonts/poppins-800.woff2") format("woff2");
+  src: url("/fonts/garet-extrabold.woff2") format("woff2");
 }
 
 @font-face {
   font-family: "JetBrains Mono";
   font-style: normal;
-  font-weight: 400;
+  font-weight: 400 600;
   font-display: swap;
   src: url("/fonts/jetbrains-mono-400.woff2") format("woff2");
-}
-
-@font-face {
-  font-family: "JetBrains Mono";
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url("/fonts/jetbrains-mono-600.woff2") format("woff2");
 }
 
 :root {
   --brand: #5c2472;
   --brand-oscuro: #431a54;
+  --brand-vivo: #8936ab;
+  --brand-suave: #ebddf3;
   --acento: #ff8300;
-  --pizarra: #465055;
-  --fondo: #eef2f3;
-  --tarjeta: #ffffff;
-  --tinta: #384145;
+  --titulo: #172a55;
+  --tinta: #465055;
   --tinta-suave: #465055;
-  --silenciado: #667085;
-  --fuente-principal: "Poppins", Arial, "Segoe UI", sans-serif;
+  --silenciado: #6e7477;
+  --pizarra: #465055;
+  --fondo: #f9fbff;
+  --tarjeta: #ffffff;
+  --linea: #eaeffa;
+  --exito: #1f7a4d;
+  --alerta-fondo: #ffe9cc;
+  --alerta-borde: #ffd29a;
+  --error: #b3261e;
+  --error-fondo: #fbe4e2;
+  --fuente-principal: "Garet", system-ui, sans-serif;
   --fuente-codigo: "JetBrains Mono", Consolas, Menlo, monospace;
-  --linea: #e3e8ef;
-  --exito: #1a7f4e;
-  --alerta-fondo: #fff4e5;
-  --alerta-borde: #ffd8a8;
-  --error: #b42318;
-  --error-fondo: #fef3f2;
-  --radio: 12px;
-  --sombra: 0 1px 2px rgba(16, 24, 40, 0.06);
-  --ancho-max: 1080px;
+  --radio: 1rem;
+  --sombra: 0 1px 3px rgba(23, 42, 85, 0.06);
+  --ancho-max: 1180px;
+  --alto-encabezado: 4.5rem;
+  --texto-titular: clamp(1.875rem, 1.871vw + 0.704rem, 2.75rem);
+  --texto-seccion: clamp(1.5rem, 1.2vw + 0.9rem, 2rem);
+  --texto-tarjeta: 1.25rem;
+  --texto-subtitulo: 1.05rem;
+  --texto-cuerpo: 1rem;
+  --texto-chico: 0.875rem;
 }
 
 * {
@@ -81,12 +83,19 @@ html {
   scroll-behavior: smooth;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 body {
   margin: 0;
   background: var(--fondo);
   color: var(--tinta);
   font-family: var(--fuente-principal);
-  font-size: 16px;
+  font-size: var(--texto-cuerpo);
+  font-weight: 400;
   line-height: 1.6;
 }
 
@@ -94,6 +103,15 @@ code,
 pre,
 kbd {
   font-family: var(--fuente-codigo);
+}
+
+code {
+  background: var(--brand-suave);
+  color: var(--brand);
+  border-radius: 4px;
+  padding: 0 0.3rem;
+  font-size: 0.85em;
+  overflow-wrap: anywhere;
 }
 
 .contenedor {
@@ -106,27 +124,57 @@ h1,
 h2,
 h3,
 h4 {
+  color: var(--titulo);
   line-height: 1.25;
-  color: var(--tinta);
+  overflow-wrap: anywhere;
+}
+
+h1 {
+  font-size: var(--texto-titular);
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 1rem;
 }
 
 h2 {
-  font-size: 1.6rem;
-  color: var(--brand);
+  font-size: var(--texto-seccion);
+  font-weight: 800;
   margin: 0 0 0.75rem;
 }
 
 h3 {
-  font-size: 1.15rem;
+  font-size: var(--texto-tarjeta);
+  font-weight: 700;
+  margin: 1.5rem 0 0.5rem;
+}
+
+h4 {
+  font-size: var(--texto-subtitulo);
+  font-weight: 700;
+  color: var(--brand-vivo);
   margin: 1.25rem 0 0.5rem;
 }
 
+p,
+li {
+  font-size: var(--texto-cuerpo);
+}
+
+p {
+  margin: 0 0 1rem;
+}
+
+strong {
+  font-weight: 700;
+}
+
 a {
-  color: var(--brand);
+  color: var(--brand-vivo);
+  font-weight: 500;
 }
 
 a:hover {
-  color: var(--brand-oscuro);
+  color: var(--brand);
 }
 
 :focus-visible {
@@ -149,9 +197,32 @@ a:hover {
   left: 0;
 }
 
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 section.bloque {
-  padding: 3rem 0 2rem;
-  scroll-margin-top: 4.5rem;
+  padding: 3.5rem 0 1rem;
+  scroll-margin-top: var(--alto-encabezado);
+}
+
+.introduccion {
+  color: var(--tinta);
+  max-width: 48rem;
+}
+
+.pila {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .tarjeta {
@@ -159,7 +230,16 @@ section.bloque {
   border: 1px solid var(--linea);
   border-radius: var(--radio);
   box-shadow: var(--sombra);
-  padding: 1.4rem 1.5rem;
+  padding: 1.5rem 1.75rem;
+  min-width: 0;
+}
+
+.tarjeta > :first-child {
+  margin-top: 0;
+}
+
+.tarjeta > :last-child {
+  margin-bottom: 0;
 }
 
 .insignia {
@@ -167,13 +247,13 @@ section.bloque {
   border-radius: 999px;
   padding: 0.15rem 0.7rem;
   font-size: 0.78rem;
-  font-weight: 600;
+  font-weight: 500;
   border: 1px solid transparent;
   white-space: nowrap;
 }
 
 .insignia--ok {
-  background: #e8f5ee;
+  background: #e3f1e9;
   border-color: #b7e0c8;
   color: var(--exito);
 }
@@ -181,7 +261,7 @@ section.bloque {
 .insignia--pendiente {
   background: var(--alerta-fondo);
   border-color: var(--alerta-borde);
-  color: #8a4b00;
+  color: #9e5200;
 }
 
 .insignia--desactualizado {
@@ -191,9 +271,9 @@ section.bloque {
 }
 
 .insignia--neutra {
-  background: #eef1f5;
+  background: var(--linea);
   border-color: var(--linea);
-  color: var(--tinta-suave);
+  color: var(--tinta);
 }
 
 .aviso {
@@ -208,7 +288,7 @@ section.bloque {
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.92rem;
+  font-size: var(--texto-chico);
 }
 
 th,
@@ -220,21 +300,26 @@ td {
 }
 
 th {
-  color: var(--tinta-suave);
-  font-weight: 600;
-  background: #f8fafc;
+  color: var(--titulo);
+  font-weight: 700;
+  background: var(--fondo);
 }
 
 .tabla-envoltura {
   overflow-x: auto;
 }
 
+table code {
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
 @media (max-width: 640px) {
-  body {
-    font-size: 15px;
+  section.bloque {
+    padding: 2.5rem 0 0.5rem;
   }
 
-  section.bloque {
-    padding: 2rem 0 1.25rem;
+  .tarjeta {
+    padding: 1.25rem;
   }
 }

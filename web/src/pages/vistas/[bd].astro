@@ -25,11 +25,11 @@ const TIPO_INSIGNIA: Record<string, string> = {
   <section class="bloque" aria-labelledby="titulo-bd">
     <div class="contenedor">
       <nav aria-label="Miga de pan" class="miga">
-        <a href="/vistas/">Estructura de vistas</a>
+        <a href="/#vistas">Estructura de vistas</a>
         <span aria-hidden="true"> / </span>
         <span aria-current="page">{base.nombre}</span>
       </nav>
-      <h2 id="titulo-bd"><code>{base.nombre}</code></h2>
+      <h1 id="titulo-bd" class="titulo-bd">{base.nombre}</h1>
       {
         base.es_infraestructura && (
           <p class="aviso" role="note">
@@ -118,13 +118,13 @@ const TIPO_INSIGNIA: Record<string, string> = {
 
 <style>
   .miga {
-    font-size: 0.9rem;
+    font-size: var(--texto-chico);
     color: var(--silenciado);
     margin-bottom: 0.75rem;
   }
 
   .vista {
-    margin-top: 1.25rem;
+    margin-top: 1.5rem;
   }
 
   .vista__cabecera {
@@ -137,7 +137,14 @@ const TIPO_INSIGNIA: Record<string, string> = {
 
   .vista__cabecera h3 {
     margin: 0;
-    font-size: 1.05rem;
+    font-size: var(--texto-subtitulo);
+    min-width: 0;
+  }
+
+  .titulo-bd {
+    font-family: var(--fuente-codigo);
+    font-size: var(--texto-seccion);
+    font-weight: 600;
   }
 
   .vista__insignias {
@@ -149,25 +156,7 @@ const TIPO_INSIGNIA: Record<string, string> = {
 
   .vista__meta {
     color: var(--silenciado);
-    font-size: 0.88rem;
+    font-size: var(--texto-chico);
     margin: 0.35rem 0 0.75rem;
-  }
-
-  .visualmente-oculto {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-    border: 0;
-  }
-
-  code {
-    background: #f0ebf4;
-    border-radius: 4px;
-    padding: 0 0.3rem;
   }
 </style>

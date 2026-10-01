@@ -111,16 +111,16 @@ const generado = new Date(inventario.generado).toLocaleDateString("es-MX", {
             )}
             <p class="tarjeta-pipeline__acciones">
               {p.documentacion_html ? (
-                <a href={`/docs/${p.documentacion_html.archivo}`}>
-                  Ver documentación
+                <a class="pildora" href={`/docs/${p.documentacion_html.archivo}`}>
+                  Documentación
                   <span class="visualmente-oculto"> de {p.titulo}</span>
                 </a>
               ) : (
-                <span class="silenciado">Sin documento técnico publicado</span>
+                <span class="pildora pildora--inactiva">Sin documento</span>
               )}
               {p.vistas_documentadas.length > 0 || typeof p.vistas_en_bd === "number" ? (
-                <a href={`/vistas/${p.nombre}/`}>
-                  Estructura de vistas
+                <a class="pildora" href={`/vistas/${p.nombre}/`}>
+                  Vistas
                   <span class="visualmente-oculto"> de {p.titulo}</span>
                 </a>
               ) : null}
@@ -133,17 +133,12 @@ const generado = new Date(inventario.generado).toLocaleDateString("es-MX", {
 </section>
 
 <style>
-  .introduccion {
-    color: var(--tinta-suave);
-    max-width: 46rem;
-  }
-
   .rejilla {
     list-style: none;
     margin: 1.5rem 0 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
     gap: 1rem;
   }
 
@@ -163,13 +158,14 @@ const generado = new Date(inventario.generado).toLocaleDateString("es-MX", {
 
   .tarjeta-pipeline__titulo {
     margin: 0;
-    font-size: 1.05rem;
+    font-size: var(--texto-subtitulo);
+    min-width: 0;
   }
 
   .tarjeta-pipeline__meta {
     margin: 0;
     color: var(--silenciado);
-    font-size: 0.88rem;
+    font-size: var(--texto-chico);
   }
 
   .tarjeta-pipeline__etapas {
@@ -179,12 +175,12 @@ const generado = new Date(inventario.generado).toLocaleDateString("es-MX", {
     display: grid;
     gap: 0.2rem;
     color: var(--silenciado);
-    font-size: 0.88rem;
+    font-size: var(--texto-chico);
   }
 
   .etapa__nombre {
-    font-weight: 600;
-    color: var(--texto);
+    font-weight: 700;
+    color: var(--titulo);
   }
 
   .etapa__nombre::after {
@@ -196,33 +192,40 @@ const generado = new Date(inventario.generado).toLocaleDateString("es-MX", {
   }
 
   .tarjeta-pipeline__acciones {
-    margin: 0.5rem 0 0;
+    margin: auto 0 0;
+    padding-top: 0.75rem;
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
     flex-wrap: wrap;
-    font-size: 0.95rem;
+  }
+
+  .pildora {
+    display: inline-flex;
+    align-items: center;
+    height: 2.25rem;
+    padding: 0 1rem;
+    border-radius: 999px;
+    background: var(--brand-suave);
+    color: var(--brand);
+    font-size: var(--texto-chico);
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  a.pildora:hover,
+  a.pildora:focus-visible {
+    background: var(--brand);
+    color: #fff;
+  }
+
+  .pildora--inactiva {
+    background: var(--linea);
+    color: var(--silenciado);
   }
 
   .silenciado {
     color: var(--silenciado);
   }
 
-  .visualmente-oculto {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-    border: 0;
-  }
-
-  code {
-    background: #f0ebf4;
-    border-radius: 4px;
-    padding: 0 0.3rem;
-    font-size: 0.85em;
-  }
 </style>

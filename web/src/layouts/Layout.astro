@@ -12,10 +12,32 @@ const {
 } = Astro.props;
 
 const enlaces = [
-  { href: "/#sieej", texto: "El SIEEJ" },
   { href: "/#catalogo", texto: "Catálogo" },
   { href: "/#numeralia", texto: "Numeralia" },
-  { href: "/vistas/", texto: "Vistas" },
+  { href: "/#vistas", texto: "Vistas" },
+];
+
+const documentacion = [
+  { href: "/#sieej", texto: "¿Qué es el SIEEJ?" },
+  { href: "/#catalogo", texto: "Catálogo de pipelines" },
+  { href: "/#numeralia", texto: "Numeralia" },
+  { href: "/#vistas", texto: "Estructura de vistas" },
+  { href: "https://iieg.jalisco.gob.mx/sieej/", texto: "Cliente de adquisición SIEEJ" },
+];
+
+const instituto = {
+  direccion: "Calz. de los Pirules #71, Granja, 45010. Zapopan, Jal.",
+  telefono: "33 3777 1770",
+  correo: "contacto@iieg.gob.mx",
+  jalisco: "https://jalisco.gob.mx/inicio",
+  sitio: "https://iieg.jalisco.gob.mx/",
+};
+
+const redes = [
+  { nombre: "Facebook", url: "https://www.facebook.com/IIEGJalisco/", d: "M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4z" },
+  { nombre: "X", url: "https://x.com/IIEGJ", d: "M17.75 3h3.07l-6.7 7.66L22 21h-6.17l-4.83-6.32L5.46 21H2.39l7.17-8.2L2 3h6.33l4.37 5.77zm-1.08 16.18h1.7L7.4 4.73H5.58z" },
+  { nombre: "LinkedIn", url: "https://www.linkedin.com/company/iiegjalisco/", d: "M6.94 5a2 2 0 1 1-4-.002a2 2 0 0 1 4 .002M7 8.48H3V21h4zm6.32 0H9.34V21h3.94v-6.57c0-3.66 4.77-4 4.77 0V21H22v-7.93c0-6.17-7.06-5.94-8.72-2.91z" },
+  { nombre: "YouTube", url: "https://www.youtube.com/@IIEGJaliscoGob", d: "m10 15l5.19-3L10 9zm11.56-7.83c.13.47.22 1.1.28 1.9c.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83c-.25.9-.83 1.48-1.73 1.73c-.47.13-1.33.22-2.65.28c-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44c-.9-.25-1.48-.83-1.73-1.73c-.13-.47-.22-1.1-.28-1.9c-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83c.25-.9.83-1.48 1.73-1.73c.47-.13 1.33-.22 2.65-.28c1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44c.9.25 1.48.83 1.73 1.73" },
 ];
 ---
 
@@ -31,17 +53,28 @@ const enlaces = [
     <meta property="og:description" content={descripcion} />
     <meta property="og:locale" content="es_MX" />
     <meta property="og:site_name" content="SIEEJ · IIEG" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-96x96.png" type="image/png" sizes="96x96" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="preload" href="/fonts/garet-regular.woff2" as="font" type="font/woff2" crossorigin />
     <meta name="generator" content={Astro.generator} />
   </head>
   <body>
     <a class="salto-contenido" href="#contenido">Ir al contenido principal</a>
     <header class="encabezado">
       <div class="contenedor encabezado__interior">
-        <a href="/" class="marca" aria-label="SIEEJ, inicio">
-          <span class="marca__sigla">SIEEJ</span>
-          <span class="marca__detalle">Sistema de Información Estratégica del Estado de Jalisco</span>
-        </a>
+        <div class="marcas">
+          <a href="/" aria-label="SIEEJ, inicio">
+            <img src="/logos/logo_sieej.svg" alt="SIEEJ" class="marcas__logo" />
+          </a>
+          <a href={instituto.sitio} rel="noopener">
+            <img src="/logos/logo_iieg.svg" alt="IIEG — Instituto de Información Estadística y Geográfica de Jalisco" class="marcas__logo" />
+          </a>
+          <a href={instituto.jalisco} rel="noopener">
+            <img src="/logos/logo_jal.svg" alt="Gobierno del Estado de Jalisco" class="marcas__logo" />
+          </a>
+        </div>
         <nav aria-label="Navegación principal">
           <ul class="navegacion">
             {
@@ -61,20 +94,50 @@ const enlaces = [
     </main>
 
     <footer class="pie">
-      <div class="contenedor">
-        <div class="pie__logos">
-          <img src="/logos/logo_iieg.svg" alt="IIEG — Instituto de Información Estadística y Geográfica de Jalisco" class="pie__logo-iieg" />
-          <span class="pie__logo-sep" aria-hidden="true"></span>
-          <img src="/logos/logo_jal.svg" alt="Gobierno del Estado de Jalisco" class="pie__logo-jal" />
+      <div class="contenedor pie__rejilla">
+        <div class="pie__columna">
+          <img src="/logos/logo_iieg.svg" alt="IIEG — Instituto de Información Estadística y Geográfica de Jalisco" class="pie__logo" />
+          <ul class="redes" aria-label="Redes sociales">
+            {
+              redes.map((red) => (
+                <li>
+                  <a href={red.url} rel="noopener noreferrer" target="_blank" aria-label={red.nombre} title={red.nombre}>
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+                      <path d={red.d} />
+                    </svg>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
         </div>
-        <p>
-          Sistema de Información Estratégica del Estado de Jalisco (SIEEJ) · Dirección del Sistema
-          de Información.
-        </p>
-        <p class="pie__nota">
-          La información contenida en el Sistema de Información es pública y está en todo momento a
-          disposición para su consulta.
-        </p>
+        <div class="pie__columna">
+          <a href={instituto.jalisco} rel="noopener" class="pie__jalisco">
+            <img src="/logos/logo_jal.svg" alt="Gobierno del Estado de Jalisco" class="pie__logo" />
+          </a>
+          <p class="pie__nota">
+            Dirección del Sistema de Información. La información del SIEEJ es pública y está en
+            todo momento a disposición para su consulta.
+          </p>
+        </div>
+        <nav class="pie__columna" aria-label="Documentación">
+          <p class="pie__titulo">Documentación</p>
+          <ul class="pie__enlaces">
+            {
+              documentacion.map((enlace) => (
+                <li>
+                  <a href={enlace.href}>{enlace.texto}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <address class="pie__columna pie__contacto">
+          <p class="pie__titulo">Contacto</p>
+          <p>{instituto.direccion}</p>
+          <a href={`tel:+52${instituto.telefono.replace(/\s+/g, "")}`}>{instituto.telefono}</a>
+          <a href={`mailto:${instituto.correo}`}>{instituto.correo}</a>
+        </address>
       </div>
     </footer>
   </body>
@@ -87,102 +150,181 @@ const enlaces = [
     position: sticky;
     top: 0;
     z-index: 20;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 8px rgba(23, 42, 85, 0.18);
   }
 
   .encabezado__interior {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
-    min-height: 3.5rem;
+    gap: 0.75rem 2rem;
+    min-height: var(--alto-encabezado);
     flex-wrap: wrap;
-    padding-top: 0.4rem;
-    padding-bottom: 0.4rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
   }
 
-  .marca {
-    color: #fff;
-    text-decoration: none;
+  .marcas {
     display: flex;
-    align-items: baseline;
-    gap: 0.6rem;
-    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.75rem;
   }
 
-  .marca__sigla {
-    font-size: 1.2rem;
-    font-weight: 800;
-    letter-spacing: 0.14em;
+  .marcas a {
+    display: flex;
   }
 
-  .marca__detalle {
-    font-size: 0.78rem;
-    opacity: 0.92;
+  .marcas__logo {
+    height: 2.75rem;
+    width: auto;
   }
 
   .navegacion {
     list-style: none;
     display: flex;
-    gap: 1.1rem;
+    gap: 1.75rem;
     margin: 0;
     padding: 0;
-    flex-wrap: wrap;
   }
 
   .navegacion a {
     color: #fff;
     text-decoration: none;
-    font-size: 0.95rem;
-    opacity: 0.95;
+    font-weight: 500;
   }
 
   .navegacion a:hover,
   .navegacion a:focus-visible {
-    text-decoration: underline;
-    opacity: 1;
+    color: var(--acento);
   }
 
-  /* Barra de pie en gris pizarra, con los logos institucionales (identidad IIEG) */
   .pie {
-    border-top: 4px solid var(--brand);
-    background: var(--pizarra);
-    margin-top: 3rem;
-    padding: 1.75rem 0 2rem;
-    color: rgba(255, 255, 255, 0.92);
-    font-size: 0.9rem;
+    background: var(--brand);
+    color: #fff;
+    margin-top: 4rem;
+    padding: 3rem 0;
   }
 
-  .pie__logos {
+  .pie__rejilla {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2.5rem;
+  }
+
+  .pie__columna {
     display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
   }
 
-  .pie__logo-iieg {
-    height: 44px;
+  .pie__logo {
+    height: 3.5rem;
     width: auto;
   }
 
-  .pie__logo-sep {
-    width: 1px;
-    height: 36px;
-    background: rgba(255, 255, 255, 0.28);
-    margin: 0 16px;
+  .pie__jalisco {
+    display: flex;
   }
 
-  .pie__logo-jal {
-    height: 34px;
-    width: auto;
+  .pie p,
+  .pie li,
+  .pie a {
+    font-size: var(--texto-chico);
+    margin: 0;
   }
 
   .pie__nota {
-    color: rgba(255, 255, 255, 0.72);
+    color: rgba(255, 255, 255, 0.85);
   }
 
-  @media (max-width: 640px) {
-    .marca__detalle {
-      display: none;
+  .pie .pie__titulo {
+    font-weight: 700;
+    font-size: var(--texto-cuerpo);
+  }
+
+  .pie__enlaces {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .pie a {
+    color: #fff;
+    font-weight: 400;
+    text-decoration: none;
+  }
+
+  .pie a:hover,
+  .pie a:focus-visible {
+    color: var(--acento);
+  }
+
+  .pie__contacto {
+    font-style: normal;
+  }
+
+  .redes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .pie .redes a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    transition: background 0.15s;
+  }
+
+  .pie .redes a:hover,
+  .pie .redes a:focus-visible {
+    background: var(--acento);
+    color: var(--titulo);
+  }
+
+  .redes svg {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+  @media (max-width: 960px) {
+    .pie__rejilla {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 720px) {
+    .encabezado {
+      position: static;
+    }
+
+    .marcas {
+      gap: 0.75rem;
+    }
+
+    .marcas__logo {
+      height: 1.75rem;
+    }
+
+    .navegacion {
+      gap: 1.25rem;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .pie__rejilla {
+      grid-template-columns: 1fr;
     }
   }
 </style>

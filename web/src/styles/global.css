@@ -66,7 +66,7 @@
   --radio: 1rem;
   --sombra: 0 1px 3px rgba(23, 42, 85, 0.06);
   --ancho-max: 1180px;
-  --alto-encabezado: 4.5rem;
+  --alto-encabezado: 8.75rem;
   --texto-titular: clamp(1.875rem, 1.871vw + 0.704rem, 2.75rem);
   --texto-seccion: clamp(1.5rem, 1.2vw + 0.9rem, 2rem);
   --texto-tarjeta: 1.25rem;
@@ -217,6 +217,12 @@ section.bloque {
 .introduccion {
   color: var(--tinta);
   max-width: 48rem;
+}
+
+h2.titulo-tarjeta {
+  font-size: var(--texto-tarjeta);
+  font-weight: 700;
+  margin: 0 0 0.5rem;
 }
 
 .pila {

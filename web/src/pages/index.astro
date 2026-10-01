@@ -4,18 +4,24 @@ import SeccionSieej from "../components/SeccionSieej.astro";
 import SeccionCatalogo from "../components/SeccionCatalogo.astro";
 import SeccionNumeralia from "../components/SeccionNumeralia.astro";
 import SeccionVistas from "../components/SeccionVistas.astro";
+import FlujoDatos from "../components/FlujoDatos.astro";
 ---
 
 <Layout>
   <section class="heroe" aria-labelledby="titulo-heroe">
-    <div class="contenedor">
-      <p class="heroe__direccion">Dirección del Sistema de Información</p>
-      <h1 id="titulo-heroe">Sistema de Información Estratégica del Estado de Jalisco</h1>
-      <p class="heroe__resumen">
-        Documentación pública del SIEEJ: qué es el sistema, el catálogo de sus pipelines ETL en
-        producción, la numeralia que cruza Airflow con la base de datos, y la estructura de sus
-        vistas materializadas.
-      </p>
+    <div class="contenedor heroe__rejilla">
+      <div class="heroe__texto">
+        <p class="heroe__direccion">Dirección del Sistema de Información</p>
+        <h1 id="titulo-heroe">Sistema de Información Estratégica del Estado de Jalisco</h1>
+        <p class="heroe__resumen">
+          Documentación pública del SIEEJ: qué es el sistema, el catálogo de sus pipelines ETL en
+          producción, la numeralia que cruza Airflow con la base de datos, y la estructura de sus
+          vistas materializadas.
+        </p>
+      </div>
+      <div class="heroe__imagen">
+        <FlujoDatos />
+      </div>
     </div>
   </section>
 
@@ -29,24 +35,65 @@ import SeccionVistas from "../components/SeccionVistas.astro";
   .heroe {
     background: var(--brand-vivo);
     color: #fff;
-    padding: 6rem 0 6.5rem;
+    padding: 3rem 0 2.5rem;
+  }
+
+  .heroe__rejilla {
+    display: grid;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .heroe__texto {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .heroe__texto > * {
+    margin: 0;
   }
 
   .heroe__direccion {
-    margin: 0 0 0.75rem;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.85);
   }
 
   .heroe h1 {
     color: #fff;
-    max-width: 48rem;
   }
 
   .heroe__resumen {
-    max-width: 46rem;
-    font-size: 1.125rem;
-    color: rgba(255, 255, 255, 0.95);
-    margin: 0;
+    max-width: 36rem;
+    font-size: clamp(1.25rem, 1.871vw + 0.704rem, 1.375rem);
+    line-height: 1.45;
+    font-weight: 500;
+    color: #fff;
+  }
+
+  .heroe__imagen {
+    order: -1;
+    justify-self: center;
+    height: 18rem;
+    max-width: 100%;
+    aspect-ratio: 512 / 596;
+    border-radius: 1.5rem;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .heroe {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+
+    .heroe__rejilla {
+      grid-template-columns: 1fr 1.2fr;
+    }
+
+    .heroe__imagen {
+      order: 0;
+      height: 26rem;
+    }
   }
 </style>

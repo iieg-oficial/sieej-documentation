@@ -40,7 +40,7 @@ import FlujoDatos from "../components/FlujoDatos.astro";
 
   .heroe__rejilla {
     display: grid;
-    align-items: center;
+    align-items: start;
     gap: 2rem;
   }
 
@@ -64,7 +64,7 @@ import FlujoDatos from "../components/FlujoDatos.astro";
   }
 
   .heroe__resumen {
-    max-width: 36rem;
+    max-width: 44rem;
     font-size: clamp(1.25rem, 1.871vw + 0.704rem, 1.375rem);
     line-height: 1.45;
     font-weight: 500;
@@ -88,11 +88,13 @@ import FlujoDatos from "../components/FlujoDatos.astro";
     }
 
     .heroe__rejilla {
-      grid-template-columns: 1fr 1.2fr;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 3rem;
     }
 
     .heroe__imagen {
       order: 0;
+      justify-self: end;
       height: 26rem;
     }
   }

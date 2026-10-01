@@ -147,15 +147,10 @@ const generado = new Date(numeralia.generado).toLocaleString("es-MX", {
 </section>
 
 <style>
-  .introduccion {
-    color: var(--tinta-suave);
-    max-width: 46rem;
-  }
-
   .grupos {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 1.5rem;
     margin-top: 1.5rem;
   }
 
@@ -169,7 +164,7 @@ const generado = new Date(numeralia.generado).toLocaleString("es-MX", {
 
   .grupo__cabecera h3 {
     margin: 0;
-    font-size: 1rem;
+    font-size: var(--texto-subtitulo);
   }
 
   .cifras {
@@ -180,20 +175,20 @@ const generado = new Date(numeralia.generado).toLocaleString("es-MX", {
   }
 
   .cifra dt {
-    font-size: 0.8rem;
+    font-size: var(--texto-chico);
     color: var(--silenciado);
   }
 
   .cifra dd {
     margin: 0.1rem 0 0;
-    font-size: 1.55rem;
-    font-weight: 700;
+    font-size: 1.75rem;
+    font-weight: 800;
     font-variant-numeric: tabular-nums;
-    color: var(--tinta);
+    color: var(--brand);
   }
 
   .cross-check {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
   }
 
   .cross-check h3 {
@@ -208,12 +203,11 @@ const generado = new Date(numeralia.generado).toLocaleString("es-MX", {
   }
 
   .comparativa {
-    font-size: 1.05rem;
-    color: var(--tinta-suave);
+    color: var(--tinta);
   }
 
   .comparativa strong {
-    color: var(--tinta);
+    color: var(--titulo);
     font-variant-numeric: tabular-nums;
   }
 

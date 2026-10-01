@@ -1,0 +1,99 @@
+---
+import vistas from "../../../data/vistas.json";
+
+const bdOk = vistas.fuentes?.bd?.estado === "ok";
+const basesPipeline = vistas.bases.filter((b) => !b.es_infraestructura);
+const basesInfra = vistas.bases.filter((b) => b.es_infraestructura);
+const generado = new Date(vistas.generado).toLocaleDateString("es-MX", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const partes = (nombre: string) => nombre.split("_").map((parte) => parte.replace(/[&<>"]/g, ""));
+---
+
+<section id="vistas" class="bloque" aria-labelledby="titulo-vistas">
+  <div class="contenedor">
+    <h2 id="titulo-vistas">Estructura de las vistas materializadas</h2>
+    <p class="introduccion">
+      Cada pipeline del SIEEJ expone sus resultados como vistas en su propia base de datos. Aquí
+      se documenta la estructura de cada una: columnas, tipos y descripciones. Información
+      generada el {generado}.
+    </p>
+    {
+      !bdOk && (
+        <p class="aviso" role="status">
+          La estructura mostrada proviene de la documentación estática: la introspección directa
+          de la base de datos de producción está pendiente de acceso.
+        </p>
+      )
+    }
+
+    <ul class="lista-bases" role="list">
+      {
+        basesPipeline.map((base) => (
+          <li class="tarjeta base">
+            <h3 class="base__nombre">
+              <a href={`/vistas/${base.nombre}/`} set:html={partes(base.nombre).join("_<wbr>")} />
+            </h3>
+            <p class="base__meta">
+              {base.vistas.length} vista(s)
+              {base.vistas.some((v) => v.tipo === "MATERIALIZED VIEW") && " · incluye materializadas"}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+
+    {
+      basesInfra.length > 0 && (
+        <>
+          <h3 class="subtitulo-infra">Bases de infraestructura geoespacial</h3>
+          <p class="introduccion">
+            Estas bases solo exponen vistas de sistema de PostGIS; no corresponden a pipelines.
+          </p>
+          <ul class="lista-bases" role="list">
+            {basesInfra.map((base) => (
+              <li class="tarjeta base">
+                <h3 class="base__nombre">
+                  <a href={`/vistas/${base.nombre}/`}>{base.nombre}</a>
+                </h3>
+                <p class="base__meta">{base.vistas.length} vista(s) de sistema</p>
+              </li>
+            ))}
+          </ul>
+        </>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .lista-bases {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 1rem;
+  }
+
+  .base__nombre {
+    margin: 0 0 0.25rem;
+    font-family: var(--fuente-codigo);
+    font-size: var(--texto-cuerpo);
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  .base__meta {
+    margin: 0;
+    color: var(--silenciado);
+    font-size: var(--texto-chico);
+  }
+
+  .subtitulo-infra {
+    margin-top: 2.5rem;
+  }
+</style>

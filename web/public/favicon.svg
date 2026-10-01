@@ -1,4 +1,34 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="SIEEJ">
-  <rect width="64" height="64" rx="12" fill="#5C2472"/>
-  <text x="32" y="42" font-family="system-ui, Arial, sans-serif" font-size="28" font-weight="700" fill="#FFFFFF" text-anchor="middle">S</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="1000" height="1000"><style>
+    #light-icon {
+      display: inline;
+    }
+    #dark-icon {
+      display: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #light-icon {
+        display: none;
+      }
+      #dark-icon {
+        display: inline;
+      }
+    }
+  </style><g id="light-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="1000" height="1000"><g><g transform="matrix(15.625,0,0,15.625,0,0)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="64" height="64"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <g id="favicon_64px" transform="translate(-489 -1290)">
+    <g id="Grupo_15902" data-name="Grupo 15902" transform="translate(493 1294)">
+      <path id="Trazado_24780" data-name="Trazado 24780" d="M51.632,151.061a23.24,23.24,0,0,1-45.475,0H0A29.193,29.193,0,0,0,28.85,175.8h.09a29.193,29.193,0,0,0,28.85-24.739Z" transform="translate(0 -119.35)" fill="#ff8300"></path>
+      <path id="Trazado_24781" data-name="Trazado 24781" d="M100.56,0H90.978a1.5,1.5,0,0,0-1.5,1.5V13.176H84.39a1.5,1.5,0,0,0-1.5,1.5v6.288H77.8a1.5,1.5,0,0,0-1.5,1.5V36.978a1.5,1.5,0,0,0,.417,1.037,16.76,16.76,0,0,0,7.218,4.4l.011,0a20.64,20.64,0,0,0,2.452.6c.164.03.33.055.5.082.09.014.178.031.268.044h.008a25.869,25.869,0,0,0,3.8.274A14.777,14.777,0,0,0,101.6,39.392a1.5,1.5,0,0,0,.46-1.08V1.5a1.5,1.5,0,0,0-1.5-1.5M82.893,38.8A13.467,13.467,0,0,1,79.3,36.356v-12.4h3.593Zm9.582,1.548c-.493.049-.989.074-1.5.074s-1.007-.017-1.5-.047c-.2-.012-.4-.027-.6-.044a20.02,20.02,0,0,1-2.994-.485V16.17h6.588Zm6.588-2.7a11,11,0,0,1-3.593,2.061V14.673a1.5,1.5,0,0,0-1.5-1.5h-1.5V2.995h6.588Z" transform="translate(-60.287)" fill="#5b2571"></path>
+    </g>
+    <rect id="Rectángulo_14083" data-name="Rectángulo 14083" width="64" height="64" transform="translate(489 1290)" fill="none"></rect>
+  </g>
+</svg></svg></g></g></svg></g><g id="dark-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="1000" height="1000"><g><g transform="matrix(15.625,0,0,15.625,0,0)" style="filter: contrast(1) brightness(1.2)"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="64" height="64"><svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <g id="favicon_16px" transform="translate(-489 -1290)">
+    <rect id="Rectángulo_14084" data-name="Rectángulo 14084" width="64" height="64" rx="12" transform="translate(489 1290)" fill="#5b2571"></rect>
+    <g id="Grupo_15902" data-name="Grupo 15902" transform="translate(496.559 1297.477)">
+      <path id="Trazado_24780" data-name="Trazado 24780" d="M45.272,151.061a20.377,20.377,0,0,1-39.874,0H0a25.6,25.6,0,0,0,25.3,21.691h.079a25.6,25.6,0,0,0,25.3-21.691Z" transform="translate(0 -123.256)" fill="#ff8300"></path>
+      <path id="Trazado_24781" data-name="Trazado 24781" d="M97.572,0h-8.4a1.313,1.313,0,0,0-1.313,1.313v10.24H83.394a1.313,1.313,0,0,0-1.313,1.313v5.514H77.618a1.313,1.313,0,0,0-1.313,1.313V32.423a1.312,1.312,0,0,0,.366.909A14.7,14.7,0,0,0,83,37.19l.009,0a18.1,18.1,0,0,0,2.15.527c.144.026.29.049.435.072.079.013.156.027.235.039h.007a22.682,22.682,0,0,0,3.335.24,12.957,12.957,0,0,0,9.311-3.531,1.312,1.312,0,0,0,.4-.947V1.313A1.313,1.313,0,0,0,97.572,0M82.081,34.023a11.808,11.808,0,0,1-3.151-2.145V21h3.151Zm8.4,1.358a13.143,13.143,0,0,1-1.313.065c-.446,0-.883-.015-1.313-.041-.176-.011-.352-.023-.525-.039a17.554,17.554,0,0,1-2.626-.425V14.178h5.776Zm5.776-2.367a9.643,9.643,0,0,1-3.151,1.807V12.865A1.313,1.313,0,0,0,91.8,11.553H90.483V2.626h5.776Z" transform="translate(-62.26)" fill="#fff"></path>
+    </g>
+    <rect id="Rectángulo_14083" data-name="Rectángulo 14083" width="64" height="64" transform="translate(489 1290)" fill="none"></rect>
+  </g>
+</svg></svg></g></g></svg></g></svg>

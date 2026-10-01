@@ -1,0 +1,550 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "ilmm",
+  "clasificacion": "documentado",
+  "documento": {
+    "nombre": "ilmm",
+    "carpeta": "ilmm",
+    "titulo": "ILMM",
+    "producto": "Indicadores del Mercado Laboral a Nivel Municipal",
+    "descripcion": [],
+    "avisos": [],
+    "caracteristicas": [],
+    "fuente_general": null,
+    "descargas": [],
+    "variables": [
+      {
+        "etiqueta": "LOG_LEVEL",
+        "valor": "Nivel de log (`INFO` por defecto)"
+      },
+      {
+        "etiqueta": "DB_USER",
+        "valor": "Usuario de la base de datos"
+      },
+      {
+        "etiqueta": "DB_PASSWORD",
+        "valor": "Contraseña de la base de datos"
+      },
+      {
+        "etiqueta": "DB_HOST",
+        "valor": "Host de la base de datos"
+      },
+      {
+        "etiqueta": "DB_PORT",
+        "valor": "Puerto de la base de datos"
+      },
+      {
+        "etiqueta": "DB_NAME",
+        "valor": "Nombre de la base de datos (`ilmm`)"
+      },
+      {
+        "etiqueta": "ILMM_BASE_URL",
+        "valor": "URL plantilla de descarga (contiene `{year}`)"
+      },
+      {
+        "etiqueta": "BOOTSTRAP_YEARS",
+        "valor": "Lista de años a cargar en bootstrap (ej. `[2017,...,2024]`)"
+      }
+    ],
+    "descripcion_tablas": {},
+    "alcance_vistas": {},
+    "commit": null
+  },
+  "base": {
+    "nombre": "ilmm",
+    "es_infraestructura": false,
+    "vistas": [
+      {
+        "esquema": "public",
+        "nombre": "geography_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 0,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geography_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "geometry_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 6,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "character varying(256)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geometry_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "character varying(30)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_ilmm",
+        "tipo": "VIEW",
+        "descripcion": "Vista de integración que desnormaliza stg_ilmm con descripción del estimador y nombre del municipio. Une stg_ilmm con cat_ilmm_estimador y cvegeo_municipalities para agregar nombres descriptivos.",
+        "registros": 110855,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador único que corresponde al registro en stg_ilmm.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha de referencia del trimestre (primer día del trimestre).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave INEGI de 5 dígitos del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre oficial del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "estimador_id",
+            "tipo": "smallint",
+            "nullable": true,
+            "descripcion": "Tipo de estimador (1 = puntual, 2 = error estándar).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "estimador",
+            "tipo": "character varying(60)",
+            "nullable": true,
+            "descripcion": "Descripción textual del tipo de estimador.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "pob_econo_activa",
+            "tipo": "numeric(12,4)",
+            "nullable": true,
+            "descripcion": "Población económicamente activa (PEA).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "ocupados",
+            "tipo": "numeric(12,4)",
+            "nullable": true,
+            "descripcion": "Número de personas ocupadas.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "informales",
+            "tipo": "numeric(12,4)",
+            "nullable": true,
+            "descripcion": "Número de personas en el sector informal.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_ocupacion_informal",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Porcentaje de ocupación en el sector informal por municipio y fecha, con geometría y estructura homologada a economia.ocupacion_informal (proxmox).",
+        "registros": 22171,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "valor",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "error_estandar",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_tasa_desocupacion",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Tasa de desocupación por municipio y fecha, con geometría y estructura homologada a economia.tasa_desocupacion (proxmox).",
+        "registros": 22171,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "valor",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "error_estandar",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      }
+    ],
+    "tablas": [
+      {
+        "nombre": "cat_ilmm_estimador",
+        "descripcion": "Catálogo de tipos de estimador estadístico de la ILMM. El id 1 representa el estimador puntual (proporción) y el id 2 representa el error estándar asociado, utilizado para construir intervalos de confianza.",
+        "filas": 5,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "smallint",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "character varying(60)",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "stg_ilmm",
+        "descripcion": "Tabla de staging que contiene indicadores del mercado laboral municipal (ILMM). Cada registro representa un estimador puntual o error estándar para un municipio, fecha y tipo de indicador. Fuente: Encuesta Nacional de Ocupación y Empleo (ENOE), INEGI. Periodicidad: trimestral. Historico: 2017-2024.",
+        "filas": 110855,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "bigint",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "estimador_id",
+            "tipo": "smallint",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "pob_econo_activa",
+            "tipo": "numeric(12,4)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "ocupados",
+            "tipo": "numeric(12,4)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "informales",
+            "tipo": "numeric(12,4)",
+            "pk": false,
+            "nullable": true
+          }
+        ]
+      }
+    ],
+    "relaciones": [
+      {
+        "tabla": "stg_ilmm",
+        "columnas": [
+          "estimador_id"
+        ],
+        "ref_tabla": "cat_ilmm_estimador",
+        "ref_columnas": [
+          "id"
+        ]
+      }
+    ]
+  },
+  "etapas": []
+}

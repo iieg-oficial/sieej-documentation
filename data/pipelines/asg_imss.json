@@ -1,0 +1,1515 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "asg_imss",
+  "clasificacion": "documentado",
+  "documento": {
+    "nombre": "asg_imss",
+    "carpeta": "asg_imss",
+    "titulo": "ASG IMSS",
+    "producto": "Asegurados, Salarios y Grupos de cotización del IMSS",
+    "descripcion": [
+      "Pipeline ETL de Asegurados, Salarios y Grupos de cotización del IMSS. Descarga datos mensuales desde el portal de datos abiertos del IMSS con 12 catálogos normalizados (delegaciones, subdelegaciones, entidades, municipios, sectores económicos, tamaños de registro patronal, sexo, rangos de edad, salario y UMA) y una tabla de hechos con registros patronales filtrados a Jalisco desde enero de 2015."
+    ],
+    "avisos": [],
+    "caracteristicas": [
+      {
+        "etiqueta": "Última fecha disponible",
+        "valor": "`2024-10`"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Mensual"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Municipal"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "Sí"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "Automático"
+      }
+    ],
+    "fuente_general": "https://datos.imss.gob.mx",
+    "descargas": [
+      {
+        "variable": "ASG_IMSS_CATALOG_URL",
+        "url": "http://datos.imss.gob.mx/sites/default/files/diccionario_de_datos_1.xlsx"
+      },
+      {
+        "variable": "ASG_IMSS_DATA_URL",
+        "url": "http://datos.imss.gob.mx/sites/default/files/asg-{date}.csv"
+      }
+    ],
+    "variables": [
+      {
+        "etiqueta": "ASG_IMSS_CATALOG_URL",
+        "valor": "URL del diccionario de datos IMSS (XLSX con catálogos)"
+      },
+      {
+        "etiqueta": "ASG_IMSS_DATA_URL",
+        "valor": "URL de datos con template `{date}` (ej. `asg-2024-01-31.csv`)"
+      },
+      {
+        "etiqueta": "ASG_IMSS_DATA_START_DATE",
+        "valor": "Fecha de inicio del bootstrap (ej. `2015-01-31`)"
+      },
+      {
+        "etiqueta": "ASG_IMSS_DATA_END_DATE",
+        "valor": "Fecha de fin del bootstrap (vacío = fecha actual)"
+      },
+      {
+        "etiqueta": "BATCH_SIZE",
+        "valor": "Tamaño de lote para inserción"
+      },
+      {
+        "etiqueta": "MAX_RETRIES",
+        "valor": "Número de reintentos de descarga"
+      },
+      {
+        "etiqueta": "TIMEOUT",
+        "valor": "Timeout HTTP en segundos"
+      }
+    ],
+    "descripcion_tablas": {},
+    "alcance_vistas": {},
+    "commit": null
+  },
+  "base": {
+    "nombre": "asg_imss",
+    "es_infraestructura": false,
+    "vistas": [
+      {
+        "esquema": "public",
+        "nombre": "brecha_salarial",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Brecha salarial estimada entre hombres y mujeres en Jalisco a partir de la masa salarial (masa_sal_ta) y puestos con salario (ta_sal) del IMSS.",
+        "registros": 500,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de fila para herramientas GIS.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria municipal (EPSG:6368) alineada por el IIEG.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria municipal (EPSG:6368) original INEGI.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre oficial del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha de corte (primer dia del mes de la fuente IMSS).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave INEGI del municipio (5 digitos, con entidad).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "brecha_salarial",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Porcentaje de diferencia del salario promedio diario de mujeres respecto al de hombres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "salario_promedio_diario_mujeres",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Salario promedio diario estimado para mujeres (masa_sal_ta / ta_sal).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "salario_promedio_diario_hombres",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Salario promedio diario estimado para hombres (masa_sal_ta / ta_sal).",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "geography_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 0,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geography_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "geometry_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 10,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "character varying(256)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geometry_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "character varying(30)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "trabajadores_asegurados",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Puestos de trabajo afiliados al IMSS por municipio de Jalisco. Fuente: ASG IMSS.",
+        "registros": 500,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de fila para herramientas GIS.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria municipal (EPSG:6368) alineada por el IIEG.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria municipal (EPSG:6368) original INEGI.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre oficial del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha de corte (primer dia del mes de la fuente IMSS).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave INEGI del municipio (5 digitos, con entidad).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "total",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Total de puestos de trabajo asegurados (ta).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "total_mujeres",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Total de puestos de trabajo asegurados para mujeres (sexo=2).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "total_hombres",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Total de puestos de trabajo asegurados para hombres (sexo=1).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "total_no_binario",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Total de puestos de trabajo asegurados para personas no binarias (sexo=3).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "porcentaje_mujeres",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Porcentaje de puestos de trabajo asegurados ocupados por mujeres.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 13,
+            "nombre": "porcentaje_hombres",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Porcentaje de puestos de trabajo asegurados ocupados por hombres.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "trabajadores_asegurados_hombres",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Puestos de trabajo afiliados al IMSS ocupados por hombres por municipio de Jalisco.",
+        "registros": 500,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de fila para herramientas GIS.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria municipal (EPSG:6368) alineada por el IIEG.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria municipal (EPSG:6368) original INEGI.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre oficial del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha de corte (primer dia del mes de la fuente IMSS).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave INEGI del municipio (5 digitos, con entidad).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "total_hombres",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Total de puestos de trabajo asegurados para hombres (sexo=1).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "porcentaje_hombres",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Porcentaje de puestos de trabajo asegurados ocupados por hombres, respecto al total del municipio.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "trabajadores_asegurados_mujeres",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Puestos de trabajo afiliados al IMSS ocupados por mujeres por municipio de Jalisco.",
+        "registros": 500,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de fila para herramientas GIS.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria municipal (EPSG:6368) alineada por el IIEG.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria municipal (EPSG:6368) original INEGI.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre oficial del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha de corte (primer dia del mes de la fuente IMSS).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave INEGI del municipio (5 digitos, con entidad).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "total_mujeres",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Total de puestos de trabajo asegurados para mujeres (sexo=2).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "porcentaje_mujeres",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Porcentaje de puestos de trabajo asegurados ocupados por mujeres, respecto al total del municipio.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_asg_imss",
+        "tipo": "VIEW",
+        "descripcion": "Datos ASG-IMSS (Jalisco) con claves IMSS (cve_municipio) e INEGI (cvegeo). cvegeo NULL = municipio sin correspondencia en cvegeo_municipalities.",
+        "registros": 1882961,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fecha_corte",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "cve_delegacion",
+            "tipo": "character varying(3)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_subdelegacion",
+            "tipo": "character varying(3)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "cve_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "cve_municipio",
+            "tipo": "character varying(4)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "cvegeo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "sector_economico_1",
+            "tipo": "character(1)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "sector_economico_2",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "sector_economico_4",
+            "tipo": "character(4)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "tamano_patron",
+            "tipo": "character varying(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "sexo",
+            "tipo": "character varying(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "rango_edad",
+            "tipo": "character varying(3)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 13,
+            "nombre": "rango_salario",
+            "tipo": "character varying(3)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 14,
+            "nombre": "rango_uma",
+            "tipo": "character varying(3)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 15,
+            "nombre": "asegurados",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 16,
+            "nombre": "no_trabajadores",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 17,
+            "nombre": "ta",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 18,
+            "nombre": "teu",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 19,
+            "nombre": "tec",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 20,
+            "nombre": "tpu",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 21,
+            "nombre": "tpc",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 22,
+            "nombre": "ta_sal",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 23,
+            "nombre": "teu_sal",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 24,
+            "nombre": "tec_sal",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 25,
+            "nombre": "tpu_sal",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 26,
+            "nombre": "tpc_sal",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 27,
+            "nombre": "masa_sal_ta",
+            "tipo": "numeric(18,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 28,
+            "nombre": "masa_sal_teu",
+            "tipo": "numeric(18,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 29,
+            "nombre": "masa_sal_tec",
+            "tipo": "numeric(18,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 30,
+            "nombre": "masa_sal_tpu",
+            "tipo": "numeric(18,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 31,
+            "nombre": "masa_sal_tpc",
+            "tipo": "numeric(18,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      }
+    ],
+    "tablas": [
+      {
+        "nombre": "cat_delegacion",
+        "descripcion": null,
+        "filas": 35,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "clave",
+            "tipo": "character varying(3)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_entidad",
+        "descripcion": null,
+        "filas": 1,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "clave",
+            "tipo": "character(2)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_municipio",
+        "descripcion": null,
+        "filas": 125,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "clave",
+            "tipo": "character varying(4)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "entidad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_rango_edad",
+        "descripcion": null,
+        "filas": 15,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "clave",
+            "tipo": "character varying(3)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_rango_salario",
+        "descripcion": null,
+        "filas": 26,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "clave",
+            "tipo": "character varying(3)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_rango_uma",
+        "descripcion": null,
+        "filas": 26,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "clave",
+            "tipo": "character varying(3)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_sector_1",
+        "descripcion": null,
+        "filas": 10,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "clave",
+            "tipo": "character(1)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_sector_2",
+        "descripcion": null,
+        "filas": 62,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "clave",
+            "tipo": "character(2)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "sector_1_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_sector_4",
+        "descripcion": null,
+        "filas": 276,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "clave",
+            "tipo": "character(4)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "sector_2_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_sexo",
+        "descripcion": null,
+        "filas": 3,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "clave",
+            "tipo": "character varying(2)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_subdelegacion",
+        "descripcion": null,
+        "filas": 133,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "clave",
+            "tipo": "character varying(3)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "delegacion_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_tamano_registro_patronal",
+        "descripcion": null,
+        "filas": 8,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "clave",
+            "tipo": "character varying(2)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "descripcion",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "stg_asg_imss",
+        "descripcion": "Hechos IMSS-ASG (append-only). Una fila por combinación de catálogos publicada en el corte mensual de IMSS, filtrada a Jalisco (entidad=14) en transform.",
+        "filas": 1882961,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "bigint",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha_corte",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "subdelegacion_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "municipio_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "sector_4_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "tamano_registro_patronal_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "sexo_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "rango_edad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "rango_salario_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "rango_uma_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "asegurados",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "no_trabajadores",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "ta",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "teu",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "tec",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "tpu",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "tpc",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "ta_sal",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "teu_sal",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "tec_sal",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "tpu_sal",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "tpc_sal",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "masa_sal_ta",
+            "tipo": "numeric(18,2)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "masa_sal_teu",
+            "tipo": "numeric(18,2)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "masa_sal_tec",
+            "tipo": "numeric(18,2)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "masa_sal_tpu",
+            "tipo": "numeric(18,2)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "masa_sal_tpc",
+            "tipo": "numeric(18,2)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "created_at",
+            "tipo": "timestamp with time zone",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      }
+    ],
+    "relaciones": [
+      {
+        "tabla": "cat_municipio",
+        "columnas": [
+          "entidad_id"
+        ],
+        "ref_tabla": "cat_entidad",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "cat_sector_2",
+        "columnas": [
+          "sector_1_id"
+        ],
+        "ref_tabla": "cat_sector_1",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "cat_sector_4",
+        "columnas": [
+          "sector_2_id"
+        ],
+        "ref_tabla": "cat_sector_2",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "cat_subdelegacion",
+        "columnas": [
+          "delegacion_id"
+        ],
+        "ref_tabla": "cat_delegacion",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_asg_imss",
+        "columnas": [
+          "municipio_id"
+        ],
+        "ref_tabla": "cat_municipio",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_asg_imss",
+        "columnas": [
+          "rango_edad_id"
+        ],
+        "ref_tabla": "cat_rango_edad",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_asg_imss",
+        "columnas": [
+          "rango_salario_id"
+        ],
+        "ref_tabla": "cat_rango_salario",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_asg_imss",
+        "columnas": [
+          "rango_uma_id"
+        ],
+        "ref_tabla": "cat_rango_uma",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_asg_imss",
+        "columnas": [
+          "sector_4_id"
+        ],
+        "ref_tabla": "cat_sector_4",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_asg_imss",
+        "columnas": [
+          "sexo_id"
+        ],
+        "ref_tabla": "cat_sexo",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_asg_imss",
+        "columnas": [
+          "subdelegacion_id"
+        ],
+        "ref_tabla": "cat_subdelegacion",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_asg_imss",
+        "columnas": [
+          "tamano_registro_patronal_id"
+        ],
+        "ref_tabla": "cat_tamano_registro_patronal",
+        "ref_columnas": [
+          "id"
+        ]
+      }
+    ]
+  },
+  "etapas": []
+}

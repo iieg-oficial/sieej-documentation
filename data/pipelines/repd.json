@@ -1,0 +1,1658 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "repd",
+  "clasificacion": "documentado",
+  "documento": {
+    "nombre": "repd",
+    "carpeta": "repd",
+    "titulo": "REPD",
+    "producto": "Registro Estatal de Personas Desaparecidas",
+    "descripcion": [
+      "Pipeline ETL del Registro Estatal de Personas Desaparecidas (REPD) de Jalisco. Descarga el registro actualizado de casos de personas desaparecidas e implementa SCD Tipo 2 para rastrear el historial de cambios en el estatus y la información de cada caso."
+    ],
+    "avisos": [],
+    "caracteristicas": [
+      {
+        "etiqueta": "Última fecha disponible",
+        "valor": "`2025-05`"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Mensual"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Estatal, Municipal"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "Sí"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "Automático"
+      }
+    ],
+    "fuente_general": "https://repd.jalisco.gob.mx",
+    "descargas": [],
+    "variables": [
+      {
+        "etiqueta": "REPD_DATA_URL",
+        "valor": "URL de descarga del archivo del REPD"
+      }
+    ],
+    "descripcion_tablas": {},
+    "alcance_vistas": {},
+    "commit": null
+  },
+  "base": {
+    "nombre": "repd",
+    "es_infraestructura": false,
+    "vistas": [
+      {
+        "esquema": "public",
+        "nombre": "geography_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 0,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geography_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "geometry_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 14,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "character varying(256)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geometry_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "character varying(30)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "personas_desaparecidas",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 50000,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "total",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "total_hombres",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "total_mujeres",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "tasa_total",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "tasa_hombres",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 13,
+            "nombre": "tasa_mujeres",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "personas_desaparecidas_hombres",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 50000,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "total_hombres",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "tasa_hombres",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "personas_desaparecidas_mujeres",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 50000,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "total_mujeres",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "tasa_mujeres",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "personas_localizadas",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 50000,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "total",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "total_hombres",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "total_mujeres",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "con_vida",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "sin_vida",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 13,
+            "nombre": "hombres_con_vida",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 14,
+            "nombre": "hombres_sin_vida",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 15,
+            "nombre": "mujeres_con_vida",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 16,
+            "nombre": "mujeres_sin_vida",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 17,
+            "nombre": "tasa_total",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 18,
+            "nombre": "tasa_hombres",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 19,
+            "nombre": "tasa_mujeres",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "personas_localizadas_hombres",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 50000,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "total_hombres",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "hombres_con_vida",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "hombres_sin_vida",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "tasa_hombres",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "personas_localizadas_mujeres",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": null,
+        "registros": 50000,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character(5)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "total_mujeres",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "mujeres_con_vida",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "mujeres_sin_vida",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "tasa_mujeres",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_repd",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 38965,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "feb",
+            "tipo": "character varying(64)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "sexo",
+            "tipo": "character varying(60)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "nacionalidad",
+            "tipo": "character varying(100)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "rango_edad",
+            "tipo": "character varying(50)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "fecha_reporte",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "fecha_desaparicion",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "estado_desaparicion",
+            "tipo": "character varying(100)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "municipio_desaparicion",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "estatus",
+            "tipo": "character varying(100)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "fecha_localizacion",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "condicion_localizacion",
+            "tipo": "character varying(60)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 13,
+            "nombre": "clasificacion_localizacion",
+            "tipo": "character varying(100)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 14,
+            "nombre": "estado_localizacion",
+            "tipo": "character varying(100)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 15,
+            "nombre": "municipio_localizacion",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 16,
+            "nombre": "fecha_cierre",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 17,
+            "nombre": "tipo_cierre",
+            "tipo": "character varying(100)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 18,
+            "nombre": "feb_vinculado",
+            "tipo": "character varying(64)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 19,
+            "nombre": "tiene_carpeta_investigacion",
+            "tipo": "boolean",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 20,
+            "nombre": "version_actual",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 21,
+            "nombre": "fecha_creacion",
+            "tipo": "timestamp without time zone",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 22,
+            "nombre": "fecha_actualizacion",
+            "tipo": "timestamp without time zone",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      }
+    ],
+    "tablas": [
+      {
+        "nombre": "cat_clasificacion_localizacion",
+        "descripcion": null,
+        "filas": 3,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "nombre",
+            "tipo": "character varying(100)",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_condicion_localizacion",
+        "descripcion": null,
+        "filas": 2,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "nombre",
+            "tipo": "character varying(60)",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_estatus",
+        "descripcion": null,
+        "filas": 3,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "nombre",
+            "tipo": "character varying(100)",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_nacionalidad",
+        "descripcion": null,
+        "filas": 43,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "nombre",
+            "tipo": "character varying(100)",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_rango_edad",
+        "descripcion": null,
+        "filas": 21,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "nombre",
+            "tipo": "character varying(50)",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_sexo",
+        "descripcion": null,
+        "filas": 2,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "nombre",
+            "tipo": "character varying(60)",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_tipo_cierre",
+        "descripcion": null,
+        "filas": 4,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "nombre",
+            "tipo": "character varying(100)",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "stg_repd_casos",
+        "descripcion": null,
+        "filas": 38965,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "feb",
+            "tipo": "character varying(64)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "sexo_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "nacionalidad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "rango_edad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha_reporte",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha_desaparicion",
+            "tipo": "date",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "estado_desaparicion",
+            "tipo": "character varying(100)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "municipio_desaparicion_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "estatus_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha_localizacion",
+            "tipo": "date",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "condicion_localizacion_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "clasificacion_localizacion_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "estado_localizacion",
+            "tipo": "character varying(100)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "municipio_localizacion_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "fecha_cierre",
+            "tipo": "date",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "tipo_cierre_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "feb_vinculado",
+            "tipo": "character varying(64)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "tiene_carpeta_investigacion",
+            "tipo": "boolean",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "record_hash",
+            "tipo": "character varying(64)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "version_actual",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha_creacion",
+            "tipo": "timestamp without time zone",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "fecha_actualizacion",
+            "tipo": "timestamp without time zone",
+            "pk": false,
+            "nullable": true
+          }
+        ]
+      },
+      {
+        "nombre": "stg_repd_casos_historial",
+        "descripcion": null,
+        "filas": 38965,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "caso_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "feb",
+            "tipo": "character varying(64)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "numero_version",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "es_vigente",
+            "tipo": "boolean",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "vigente_desde",
+            "tipo": "timestamp without time zone",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "vigente_hasta",
+            "tipo": "timestamp without time zone",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "sexo_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "nacionalidad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "rango_edad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha_reporte",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha_desaparicion",
+            "tipo": "date",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "estado_desaparicion",
+            "tipo": "character varying(100)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "municipio_desaparicion_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "estatus_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha_localizacion",
+            "tipo": "date",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "condicion_localizacion_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "clasificacion_localizacion_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "estado_localizacion",
+            "tipo": "character varying(100)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "municipio_localizacion_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "fecha_cierre",
+            "tipo": "date",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "tipo_cierre_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "feb_vinculado",
+            "tipo": "character varying(64)",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "tiene_carpeta_investigacion",
+            "tipo": "boolean",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "record_hash",
+            "tipo": "character varying(64)",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha_creacion",
+            "tipo": "timestamp without time zone",
+            "pk": false,
+            "nullable": true
+          }
+        ]
+      }
+    ],
+    "relaciones": [
+      {
+        "tabla": "stg_repd_casos",
+        "columnas": [
+          "clasificacion_localizacion_id"
+        ],
+        "ref_tabla": "cat_clasificacion_localizacion",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_repd_casos",
+        "columnas": [
+          "condicion_localizacion_id"
+        ],
+        "ref_tabla": "cat_condicion_localizacion",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_repd_casos",
+        "columnas": [
+          "estatus_id"
+        ],
+        "ref_tabla": "cat_estatus",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_repd_casos",
+        "columnas": [
+          "nacionalidad_id"
+        ],
+        "ref_tabla": "cat_nacionalidad",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_repd_casos",
+        "columnas": [
+          "rango_edad_id"
+        ],
+        "ref_tabla": "cat_rango_edad",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_repd_casos",
+        "columnas": [
+          "sexo_id"
+        ],
+        "ref_tabla": "cat_sexo",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_repd_casos",
+        "columnas": [
+          "tipo_cierre_id"
+        ],
+        "ref_tabla": "cat_tipo_cierre",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_repd_casos_historial",
+        "columnas": [
+          "caso_id"
+        ],
+        "ref_tabla": "stg_repd_casos",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_repd_casos_historial",
+        "columnas": [
+          "clasificacion_localizacion_id"
+        ],
+        "ref_tabla": "cat_clasificacion_localizacion",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_repd_casos_historial",
+        "columnas": [
+          "condicion_localizacion_id"
+        ],
+        "ref_tabla": "cat_condicion_localizacion",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_repd_casos_historial",
+        "columnas": [
+          "estatus_id"
+        ],
+        "ref_tabla": "cat_estatus",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_repd_casos_historial",
+        "columnas": [
+          "nacionalidad_id"
+        ],
+        "ref_tabla": "cat_nacionalidad",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_repd_casos_historial",
+        "columnas": [
+          "rango_edad_id"
+        ],
+        "ref_tabla": "cat_rango_edad",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_repd_casos_historial",
+        "columnas": [
+          "sexo_id"
+        ],
+        "ref_tabla": "cat_sexo",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_repd_casos_historial",
+        "columnas": [
+          "tipo_cierre_id"
+        ],
+        "ref_tabla": "cat_tipo_cierre",
+        "ref_columnas": [
+          "id"
+        ]
+      }
+    ]
+  },
+  "etapas": []
+}

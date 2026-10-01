@@ -1,0 +1,1283 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "marginacion",
+  "clasificacion": "documentado",
+  "documento": {
+    "nombre": "marginacion",
+    "carpeta": "marginacion",
+    "titulo": "Marginación",
+    "producto": "Índice de Marginación",
+    "descripcion": [
+      "Pipeline ETL del Índice de Marginación del CONAPO para Jalisco. Carga indicadores de marginación a nivel municipal y de localidad para los años 2010, 2015 y 2020, incluyendo indicadores de rezago educativo, servicios básicos, vivienda y concentración poblacional."
+    ],
+    "avisos": [],
+    "caracteristicas": [
+      {
+        "etiqueta": "Última fecha disponible",
+        "valor": "`2020`"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Quinquenal"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Estatal, Municipal, Localidad"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "No"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "No aplica"
+      }
+    ],
+    "fuente_general": "https://www.gob.mx/conapo",
+    "descargas": [
+      {
+        "variable": "URL_MUNICIPAL",
+        "url": "https://conapo.segob.gob.mx/work/models/CONAPO/Datos_Abiertos/Municipio/IMM_{}.xlsx"
+      },
+      {
+        "variable": "URL_MUNICIPAL_DP2",
+        "url": "https://conapo.segob.gob.mx/work/models/CONAPO/Datos_Abiertos/Municipio/IMM_DP2_{}.xlsx"
+      }
+    ],
+    "variables": [
+      {
+        "etiqueta": "URL_MUNICIPAL",
+        "valor": "URL del XLSX municipal con parámetro de año `{}`"
+      },
+      {
+        "etiqueta": "URL_MUNICIPAL_DP2",
+        "valor": "URL del XLSX municipal formato DP2 (para 2010 y 2015)"
+      },
+      {
+        "etiqueta": "URL_LOCALIDAD",
+        "valor": "URL del ZIP de localidades con parámetro de año `{}`"
+      },
+      {
+        "etiqueta": "DATA_YEARS",
+        "valor": "Lista de años a procesar (ej. `[2010,2015,2020]`)"
+      }
+    ],
+    "descripcion_tablas": {},
+    "alcance_vistas": {},
+    "commit": null
+  },
+  "base": {
+    "nombre": "marginacion",
+    "es_infraestructura": false,
+    "vistas": [
+      {
+        "esquema": "public",
+        "nombre": "geography_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 0,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geography_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "geometry_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 4,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "character varying(256)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geometry_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "character varying(30)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "view_marginacion_estatal",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 96,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "grado_marginacion",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "pob_total",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "porc_pob15_analfabeta",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "pob15_sin_educ_bas",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "porc_viv_sin_drenaje_ni_excusado",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "porc_viv_sin_energia",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "porc_viv_sin_agua_entubada",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "porc_viv_piso_tierra",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "porc_viv_con_hacinamiento",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "porc_pob_loc_menos5000_hab",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 13,
+            "nombre": "pob_ocup_hasta_2_sal_min",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 14,
+            "nombre": "porc_viv_sin_refrigerador",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 15,
+            "nombre": "indice_marginacion",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 16,
+            "nombre": "indice_marginacion_normalizado",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 17,
+            "nombre": "lugar_contexto_nacional",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 18,
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "view_marginacion_localidades",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 6108,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "localidad",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "grado_marginacion",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "pob_total",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "porc_pob15_analfabeta",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "porc_pob15_sin_educ_basica",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "porc_viv_sin_drenaje_ni_excusado",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "porc_viv_sin_energia",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "porc_viv_sin_agua_entubada",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "porc_viv_piso_tierra",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "prom_ocup_por_cuarto",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 13,
+            "nombre": "porc_viv_sin_refrigerador",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 14,
+            "nombre": "indice_marginacion",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 15,
+            "nombre": "indice_marginacion_normalizado",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 16,
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "view_marginacion_municipal",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "grado_marginacion",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "pob_total",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "porc_pob15_analfabeta",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "pob15_sin_educ_bas",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "porc_viv_sin_drenaje_ni_excusado",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "porc_viv_sin_energia",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "porc_viv_sin_agua_entubada",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "porc_viv_piso_tierra",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "prom_ocup_por_cuarto",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "porc_pob_loc_menos5000_hab",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 13,
+            "nombre": "pob_ocup_hasta_2_sal_min",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 14,
+            "nombre": "indice_marginacion",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 15,
+            "nombre": "indice_marginacion_normalizado",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 16,
+            "nombre": "porc_viv_sin_refrigerador",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 17,
+            "nombre": "lugar_contexto_nacional",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 18,
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vm_marginacion_geo",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Indice de Marginacion por municipio de Jalisco, para consumo GIS.",
+        "registros": 375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Identificador estable de la fila.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha de actualizacion del indice.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_ent",
+            "tipo": "character varying(2)",
+            "nullable": true,
+            "descripcion": "Clave INEGI de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "cvegeo",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave INEGI del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "grado_marginacion",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Grado de marginacion en palabras.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "porcentaje_poblacion_15mas_analfabeta",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "porcentaje_poblacion_15mas_sin_educacion_basica",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "porcentaje_ocupantes_vivienda_sin_drenaje_ni_excusado",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "porcentaje_ocupantes_vivienda_sin_electricidad",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "porcentaje_ocupantes_vivienda_sin_agua_entubada",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 13,
+            "nombre": "porcentaje_ocupantes_vivienda_piso_tierra",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 14,
+            "nombre": "porcentaje_viviendas_hacinamiento",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 15,
+            "nombre": "porcentaje_poblacion_localidades_menos_5k_habitantes",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 16,
+            "nombre": "porcentaje_poblacion_ingresos_hasta_2_salarios_minimos",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 17,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria municipal del marco geoestadistico IIEG, SRID 6368.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 18,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria municipal del marco geoestadistico INEGI, SRID 6368.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      }
+    ],
+    "tablas": [
+      {
+        "nombre": "grados_marginacion",
+        "descripcion": null,
+        "filas": 5,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "grado_marginacion",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "localidades",
+        "descripcion": null,
+        "filas": 6108,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "cve_geo_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "clave_localidad",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "municipio_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "entidad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "localidad",
+            "tipo": "text",
+            "pk": false,
+            "nullable": true
+          }
+        ]
+      },
+      {
+        "nombre": "marginaciones_estatales",
+        "descripcion": null,
+        "filas": 96,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "entidad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "grado_marginacion_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_total",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_pob15_analfabeta",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob15_sin_educ_bas",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_viv_sin_drenaje_ni_excusado",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_viv_sin_energia",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_viv_sin_agua_entubada",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_viv_piso_tierra",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_viv_con_hacinamiento",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_pob_loc_menos5000_hab",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_ocup_hasta_2_sal_min",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_viv_sin_refrigerador",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "indice_marginacion",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "indice_marginacion_normalizado",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "lugar_contexto_nacional",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "marginaciones_localidades",
+        "descripcion": null,
+        "filas": 6108,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "localidad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "grado_marginacion_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_total",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_pob15_analfabeta",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_pob15_sin_educ_basica",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_viv_sin_drenaje_ni_excusado",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_viv_sin_energia",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_viv_sin_agua_entubada",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_viv_piso_tierra",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "prom_ocup_por_cuarto",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_viv_sin_refrigerador",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "indice_marginacion",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "indice_marginacion_normalizado",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "marginaciones_municipales",
+        "descripcion": null,
+        "filas": 375,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "municipio_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "grado_marginacion_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_total",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_pob15_analfabeta",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob15_sin_educ_bas",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_viv_sin_drenaje_ni_excusado",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_viv_sin_energia",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_viv_sin_agua_entubada",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_viv_piso_tierra",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "prom_ocup_por_cuarto",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_pob_loc_menos5000_hab",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_ocup_hasta_2_sal_min",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "indice_marginacion",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "indice_marginacion_normalizado",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "porc_viv_sin_refrigerador",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "lugar_contexto_nacional",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      }
+    ],
+    "relaciones": [
+      {
+        "tabla": "marginaciones_estatales",
+        "columnas": [
+          "grado_marginacion_id"
+        ],
+        "ref_tabla": "grados_marginacion",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "marginaciones_localidades",
+        "columnas": [
+          "grado_marginacion_id"
+        ],
+        "ref_tabla": "grados_marginacion",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "marginaciones_localidades",
+        "columnas": [
+          "localidad_id"
+        ],
+        "ref_tabla": "localidades",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "marginaciones_municipales",
+        "columnas": [
+          "grado_marginacion_id"
+        ],
+        "ref_tabla": "grados_marginacion",
+        "ref_columnas": [
+          "id"
+        ]
+      }
+    ]
+  },
+  "etapas": []
+}

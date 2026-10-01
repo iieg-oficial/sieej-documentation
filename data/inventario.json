@@ -1,44 +1,46 @@
 {
-  "generado": "2026-09-02T18:33:11.707370Z",
+  "generado": "2026-10-01T22:28:45.442028Z",
   "datos_obsoletos": false,
   "fuentes": {
     "airflow": {
-      "estado": "ok",
-      "detalle": "56 DAGs",
-      "consultado_en": "2026-09-02T18:33:18.397356Z"
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
     },
     "bd": {
       "estado": "ok",
-      "detalle": "35 bases de datos",
-      "consultado_en": "2026-09-02T18:36:30.350210Z"
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
     },
-    "docs_html": {
+    "readme": {
       "estado": "ok",
-      "detalle": "32 documentos HTML",
-      "consultado_en": "2026-09-02T18:33:11.714134Z"
-    },
-    "views_md": {
-      "estado": "ok",
-      "detalle": "53 vistas en 20 bases",
-      "consultado_en": "2026-09-02T18:33:11.750102Z"
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
     }
   },
   "resumen": {
-    "pipelines": 35,
-    "con_html": 32,
-    "dags_emparejados": 56,
-    "pipelines_con_etapas": 35,
+    "pipelines": 36,
+    "con_documento": 35,
+    "dags_emparejados": 0,
+    "pipelines_con_etapas": 0,
     "dags_fuera_de_convencion": 0,
-    "bases_en_bd": 33,
+    "bases_en_bd": 28,
     "verificado_contra_produccion": true
   },
   "cross_check": {
-    "pipelines_sin_html": [
-      "defunciones_inegi",
-      "edafologia",
-      "nacimientos_dgis"
+    "pipelines_sin_documento": [
+      "iieg"
     ],
-    "html_sin_pipeline_vivo": [],
+    "documento_sin_pipeline_vivo": [
+      "censo_poblacion",
+      "centros_educativos",
+      "datamexico",
+      "defunciones_inegi",
+      "escuelas",
+      "establecimientos_de_salud",
+      "participacion_ciudadana",
+      "scian"
+    ],
     "dags_sin_pipeline": [],
     "dags_fuera_de_convencion": [],
     "alias_nombres": {
@@ -48,14 +50,11 @@
   "pipelines": {
     "agropecuario_siap": {
       "nombre": "agropecuario_siap",
-      "documentacion_html": {
-        "archivo": "agropecuario_siap.html",
-        "titulo": "Agropecuario SIAP — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "Agropecuario SIAP",
+        "producto": "Estadística de producción agrícola municipal"
       },
-      "alias_html": null,
-      "vistas_documentadas": [
-        "view_agricola_jalisco"
-      ],
+      "vistas_documentadas": [],
       "etapas": [
         {
           "dag_id": "etl_agropecuario_siap_bootstrap",
@@ -83,19 +82,16 @@
         }
       ],
       "bd_existe": true,
-      "vistas_en_bd": 1,
+      "vistas_en_bd": 4,
       "clasificacion": "documentado"
     },
     "asg_imss": {
       "nombre": "asg_imss",
-      "documentacion_html": {
-        "archivo": "asg_imss.html",
-        "titulo": "ASG IMSS — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "ASG IMSS",
+        "producto": "Asegurados, Salarios y Grupos de cotización del IMSS"
       },
-      "alias_html": null,
-      "vistas_documentadas": [
-        "v_asg_imss"
-      ],
+      "vistas_documentadas": [],
       "etapas": [
         {
           "dag_id": "etl_asg_imss_bootstrap",
@@ -123,24 +119,16 @@
         }
       ],
       "bd_existe": true,
-      "vistas_en_bd": 1,
+      "vistas_en_bd": 7,
       "clasificacion": "documentado"
     },
     "censo_economico": {
       "nombre": "censo_economico",
-      "documentacion_html": {
-        "archivo": "censos_economicos.html",
-        "titulo": "Censos Económicos — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "Censos Económicos",
+        "producto": "Censos Económicos"
       },
-      "alias_html": "censos_economicos",
-      "vistas_documentadas": [
-        "vw_economico_estatal_2019",
-        "vw_economico_estatal_2024",
-        "vw_economico_municipal_2019",
-        "vw_economico_municipal_2024",
-        "vw_economico_nacional_2019",
-        "vw_economico_nacional_2024"
-      ],
+      "vistas_documentadas": [],
       "etapas": [
         {
           "dag_id": "etl_censos_economicos_bootstrap",
@@ -161,16 +149,11 @@
     },
     "censo_poblacion": {
       "nombre": "censo_poblacion",
-      "documentacion_html": {
-        "archivo": "censo_poblacion.html",
-        "titulo": "Censo de Población — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "Censo de Población",
+        "producto": "Censo de Población y Vivienda (ITER / Intercensal)"
       },
-      "alias_html": null,
-      "vistas_documentadas": [
-        "view_inegi_2010",
-        "view_inegi_2015",
-        "view_inegi_2020"
-      ],
+      "vistas_documentadas": [],
       "etapas": [
         {
           "dag_id": "etl_censo_poblacion_bootstrap",
@@ -185,20 +168,17 @@
           }
         }
       ],
-      "bd_existe": true,
-      "vistas_en_bd": 3,
-      "clasificacion": "documentado"
+      "bd_existe": false,
+      "vistas_en_bd": null,
+      "clasificacion": "posible_desactualizado"
     },
     "centros_educativos": {
       "nombre": "centros_educativos",
-      "documentacion_html": {
-        "archivo": "centros_educativos.html",
-        "titulo": "Centros Educativos (SIGED) — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "Centros Educativos (SIGED)",
+        "producto": "Catálogo de centros de trabajo educativos"
       },
-      "alias_html": null,
-      "vistas_documentadas": [
-        "v_centros_educativos"
-      ],
+      "vistas_documentadas": [],
       "etapas": [
         {
           "dag_id": "etl_centros_educativos_bootstrap",
@@ -213,17 +193,16 @@
           }
         }
       ],
-      "bd_existe": true,
-      "vistas_en_bd": 1,
-      "clasificacion": "documentado"
+      "bd_existe": false,
+      "vistas_en_bd": null,
+      "clasificacion": "posible_desactualizado"
     },
     "conapo": {
       "nombre": "conapo",
-      "documentacion_html": {
-        "archivo": "conapo.html",
-        "titulo": "CONAPO — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "CONAPO",
+        "producto": "Proyecciones de Población Municipal — Jalisco"
       },
-      "alias_html": null,
       "vistas_documentadas": [],
       "etapas": [
         {
@@ -240,19 +219,16 @@
         }
       ],
       "bd_existe": true,
-      "vistas_en_bd": 3,
+      "vistas_en_bd": 13,
       "clasificacion": "documentado"
     },
     "datamexico": {
       "nombre": "datamexico",
-      "documentacion_html": {
-        "archivo": "datamexico.html",
-        "titulo": "DataMéxico — Comercio Exterior — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "DataMéxico — Comercio Exterior",
+        "producto": "Flujos de comercio exterior (importaciones/exportaciones)"
       },
-      "alias_html": null,
-      "vistas_documentadas": [
-        "v_flujo_comercio"
-      ],
+      "vistas_documentadas": [],
       "etapas": [
         {
           "dag_id": "etl_datamexico_update",
@@ -267,17 +243,16 @@
           }
         }
       ],
-      "bd_existe": true,
-      "vistas_en_bd": 1,
-      "clasificacion": "documentado"
+      "bd_existe": false,
+      "vistas_en_bd": null,
+      "clasificacion": "posible_desactualizado"
     },
     "defunciones": {
       "nombre": "defunciones",
-      "documentacion_html": {
-        "archivo": "defunciones.html",
-        "titulo": "Defunciones — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "Defunciones",
+        "producto": "Registro de defunciones generales — DGIS"
       },
-      "alias_html": null,
       "vistas_documentadas": [],
       "etapas": [
         {
@@ -311,8 +286,10 @@
     },
     "defunciones_inegi": {
       "nombre": "defunciones_inegi",
-      "documentacion_html": null,
-      "alias_html": null,
+      "documento": {
+        "titulo": "Defunciones (INEGI)",
+        "producto": "Estadísticas de Defunciones Registradas — EDR"
+      },
       "vistas_documentadas": [],
       "etapas": [
         {
@@ -342,34 +319,15 @@
       ],
       "bd_existe": false,
       "vistas_en_bd": null,
-      "clasificacion": "documentacion_pendiente"
+      "clasificacion": "posible_desactualizado"
     },
     "delitos_fuero_comun": {
       "nombre": "delitos_fuero_comun",
-      "documentacion_html": {
-        "archivo": "delitos_fuero_comun.html",
-        "titulo": "Delitos del Fuero Común — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "Delitos del Fuero Común",
+        "producto": "Incidencia delictiva del fuero común (municipal)"
       },
-      "alias_html": null,
-      "vistas_documentadas": [
-        "v_delitos_comparables_general",
-        "v_delitos_serie_historica",
-        "v_extorsion",
-        "v_feminicidio",
-        "v_homicidio_doloso",
-        "v_narcomenudeo",
-        "v_otros_fuero_comun",
-        "v_otros_libertad_personal",
-        "v_otros_libertad_sexual",
-        "v_otros_patrimonio",
-        "v_otros_sociedad",
-        "v_otros_vida_integridad",
-        "v_servidores_publicos",
-        "v_tentativa_extorsion",
-        "v_tentativa_feminicidio",
-        "v_tentativa_homicidio_doloso",
-        "v_trata_personas"
-      ],
+      "vistas_documentadas": [],
       "etapas": [
         {
           "dag_id": "etl_delitos_fuero_comun_bootstrap",
@@ -402,15 +360,11 @@
     },
     "denue": {
       "nombre": "denue",
-      "documentacion_html": {
-        "archivo": "denue.html",
-        "titulo": "DENUE — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "DENUE",
+        "producto": "Directorio Estadístico Nacional de Unidades Económicas"
       },
-      "alias_html": null,
-      "vistas_documentadas": [
-        "v_establecimientos",
-        "v_establecimientos_jalisco"
-      ],
+      "vistas_documentadas": [],
       "etapas": [
         {
           "dag_id": "etl_denue_bootstrap",
@@ -443,8 +397,10 @@
     },
     "edafologia": {
       "nombre": "edafologia",
-      "documentacion_html": null,
-      "alias_html": null,
+      "documento": {
+        "titulo": "Edafología",
+        "producto": "Edafología histórica 1:250 000, Serie III — INEGI"
+      },
       "vistas_documentadas": [],
       "etapas": [
         {
@@ -460,20 +416,17 @@
           }
         }
       ],
-      "bd_existe": false,
-      "vistas_en_bd": null,
-      "clasificacion": "documentacion_pendiente"
+      "bd_existe": true,
+      "vistas_en_bd": 7,
+      "clasificacion": "documentado"
     },
     "efipem": {
       "nombre": "efipem",
-      "documentacion_html": {
-        "archivo": "efipem.html",
-        "titulo": "EFIPEM — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "EFIPEM",
+        "producto": "Estadísticas de Finanzas Públicas Estatales y Municipales"
       },
-      "alias_html": null,
-      "vistas_documentadas": [
-        "v_efipem"
-      ],
+      "vistas_documentadas": [],
       "etapas": [
         {
           "dag_id": "etl_efipem_bootstrap",
@@ -489,17 +442,19 @@
         }
       ],
       "bd_existe": true,
-      "vistas_en_bd": 1,
+      "vistas_en_bd": 14,
       "clasificacion": "documentado"
     },
     "emec": {
       "nombre": "emec",
-      "documentacion_html": {
-        "archivo": "emec.html",
-        "titulo": "EMEC — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "EMEC",
+        "producto": "Encuesta Mensual sobre Empresas Comerciales"
       },
-      "alias_html": null,
-      "vistas_documentadas": [],
+      "vistas_documentadas": [
+        "vw_emec",
+        "vw_emec_jalisco"
+      ],
       "etapas": [
         {
           "dag_id": "etl_emec_bootstrap",
@@ -532,12 +487,14 @@
     },
     "emim": {
       "nombre": "emim",
-      "documentacion_html": {
-        "archivo": "emim.html",
-        "titulo": "EMIM — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "EMIM",
+        "producto": "Encuesta Mensual de la Industria Manufacturera"
       },
-      "alias_html": null,
-      "vistas_documentadas": [],
+      "vistas_documentadas": [
+        "vw_emim",
+        "vw_emim_jalisco"
+      ],
       "etapas": [
         {
           "dag_id": "etl_emim_bootstrap",
@@ -570,12 +527,14 @@
     },
     "ems": {
       "nombre": "ems",
-      "documentacion_html": {
-        "archivo": "ems.html",
-        "titulo": "EMS — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "EMS",
+        "producto": "Encuesta Mensual de Servicios"
       },
-      "alias_html": null,
-      "vistas_documentadas": [],
+      "vistas_documentadas": [
+        "vw_ems",
+        "vw_ems_jalisco"
+      ],
       "etapas": [
         {
           "dag_id": "etl_ems_bootstrap",
@@ -608,12 +567,15 @@
     },
     "enec": {
       "nombre": "enec",
-      "documentacion_html": {
-        "archivo": "enec.html",
-        "titulo": "ENEC — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "ENEC",
+        "producto": "Encuesta Nacional de Empresas Constructoras"
       },
-      "alias_html": null,
-      "vistas_documentadas": [],
+      "vistas_documentadas": [
+        "vw_enec_nacional",
+        "vw_enec_entidad",
+        "vw_enec_jalisco"
+      ],
       "etapas": [
         {
           "dag_id": "etl_enec_bootstrap",
@@ -646,11 +608,10 @@
     },
     "enoe": {
       "nombre": "enoe",
-      "documentacion_html": {
-        "archivo": "enoe.html",
-        "titulo": "ENOE — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "ENOE",
+        "producto": "Encuesta Nacional de Ocupación y Empleo"
       },
-      "alias_html": null,
       "vistas_documentadas": [],
       "etapas": [
         {
@@ -684,11 +645,10 @@
     },
     "enoe_microdatos": {
       "nombre": "enoe_microdatos",
-      "documentacion_html": {
-        "archivo": "enoe_microdatos.html",
-        "titulo": "ENOE Microdatos — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "ENOE Microdatos",
+        "producto": "ENOE — microdatos completos (SDEM + COE1 + COE2)"
       },
-      "alias_html": null,
       "vistas_documentadas": [],
       "etapas": [
         {
@@ -722,11 +682,10 @@
     },
     "escuelas": {
       "nombre": "escuelas",
-      "documentacion_html": {
-        "archivo": "escuelas.html",
-        "titulo": "Escuelas — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "Escuelas",
+        "producto": "Directorio y estadística de escuelas de Jalisco"
       },
-      "alias_html": null,
       "vistas_documentadas": [],
       "etapas": [
         {
@@ -742,22 +701,17 @@
           }
         }
       ],
-      "bd_existe": true,
-      "vistas_en_bd": 2,
-      "clasificacion": "documentado"
+      "bd_existe": false,
+      "vistas_en_bd": null,
+      "clasificacion": "posible_desactualizado"
     },
     "establecimientos_de_salud": {
       "nombre": "establecimientos_de_salud",
-      "documentacion_html": {
-        "archivo": "establecimientos_de_salud.html",
-        "titulo": "Establecimientos de Salud (CLUES) — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "Establecimientos de Salud (CLUES)",
+        "producto": "Catálogo de Establecimientos de Salud (CLUES)"
       },
-      "alias_html": null,
-      "vistas_documentadas": [
-        "v_establecimientos",
-        "v_establecimientos_activos_jalisco",
-        "v_establecimientos_jalisco"
-      ],
+      "vistas_documentadas": [],
       "etapas": [
         {
           "dag_id": "etl_establecimientos_de_salud_bootstrap",
@@ -784,20 +738,17 @@
           }
         }
       ],
-      "bd_existe": true,
-      "vistas_en_bd": 3,
-      "clasificacion": "documentado"
+      "bd_existe": false,
+      "vistas_en_bd": null,
+      "clasificacion": "posible_desactualizado"
     },
     "etef": {
       "nombre": "etef",
-      "documentacion_html": {
-        "archivo": "etef.html",
-        "titulo": "ETEF — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "ETEF",
+        "producto": "Estadísticas de la Industria de Exportación"
       },
-      "alias_html": null,
-      "vistas_documentadas": [
-        "v_etef"
-      ],
+      "vistas_documentadas": [],
       "etapas": [
         {
           "dag_id": "etl_etef_bootstrap",
@@ -830,14 +781,11 @@
     },
     "fiscalia": {
       "nombre": "fiscalia",
-      "documentacion_html": {
-        "archivo": "fiscalia.html",
-        "titulo": "Fiscalía Jalisco — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "Fiscalía Jalisco",
+        "producto": "Carpetas de investigación / denuncias"
       },
-      "alias_html": null,
-      "vistas_documentadas": [
-        "delitos_vw"
-      ],
+      "vistas_documentadas": [],
       "etapas": [
         {
           "dag_id": "etl_fiscalia_bootstrap",
@@ -868,13 +816,21 @@
       "vistas_en_bd": 19,
       "clasificacion": "documentado"
     },
+    "iieg": {
+      "nombre": "iieg",
+      "documento": null,
+      "vistas_documentadas": [],
+      "etapas": [],
+      "bd_existe": true,
+      "vistas_en_bd": 6,
+      "clasificacion": "documentacion_pendiente"
+    },
     "ilmm": {
       "nombre": "ilmm",
-      "documentacion_html": {
-        "archivo": "ilmm.html",
-        "titulo": "ILMM — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "ILMM",
+        "producto": "Indicadores del Mercado Laboral a Nivel Municipal"
       },
-      "alias_html": null,
       "vistas_documentadas": [],
       "etapas": [
         {
@@ -903,17 +859,21 @@
         }
       ],
       "bd_existe": true,
-      "vistas_en_bd": 3,
+      "vistas_en_bd": 5,
       "clasificacion": "documentado"
     },
     "indice_shf_vivienda": {
       "nombre": "indice_shf_vivienda",
-      "documentacion_html": {
-        "archivo": "indice_shf_vivienda.html",
-        "titulo": "Índice SHF Vivienda — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "Índice SHF Vivienda",
+        "producto": "Índice SHF de Precios de la Vivienda en México"
       },
-      "alias_html": null,
-      "vistas_documentadas": [],
+      "vistas_documentadas": [
+        "vw_indice_shf_vivienda_global",
+        "vw_indice_shf_vivienda_estatal",
+        "vw_indice_shf_vivienda_municipal",
+        "vw_indice_shf_vivienda_jalisco"
+      ],
       "etapas": [
         {
           "dag_id": "etl_indice_shf_vivienda_bootstrap",
@@ -934,16 +894,11 @@
     },
     "inpc": {
       "nombre": "inpc",
-      "documentacion_html": {
-        "archivo": "inpc.html",
-        "titulo": "INPC — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "INPC",
+        "producto": "Índice Nacional de Precios al Consumidor"
       },
-      "alias_html": null,
-      "vistas_documentadas": [
-        "v_inpc_ciudades",
-        "v_inpc_entidades",
-        "v_inpc_nacional"
-      ],
+      "vistas_documentadas": [],
       "etapas": [
         {
           "dag_id": "etl_inpc_bootstrap",
@@ -976,15 +931,11 @@
     },
     "intensidad_migratoria": {
       "nombre": "intensidad_migratoria",
-      "documentacion_html": {
-        "archivo": "intensidad_migratoria.html",
-        "titulo": "Intensidad Migratoria — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "Intensidad Migratoria",
+        "producto": "Índice de Intensidad Migratoria México-EUA"
       },
-      "alias_html": null,
-      "vistas_documentadas": [
-        "view_iim_entidades",
-        "view_iim_municipios_jalisco"
-      ],
+      "vistas_documentadas": [],
       "etapas": [
         {
           "dag_id": "etl_intensidad_migratoria_bootstrap",
@@ -1005,16 +956,11 @@
     },
     "marginacion": {
       "nombre": "marginacion",
-      "documentacion_html": {
-        "archivo": "marginacion.html",
-        "titulo": "Marginación — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "Marginación",
+        "producto": "Índice de Marginación"
       },
-      "alias_html": null,
-      "vistas_documentadas": [
-        "view_marginacion_estatal",
-        "view_marginacion_localidades",
-        "view_marginacion_municipal"
-      ],
+      "vistas_documentadas": [],
       "etapas": [
         {
           "dag_id": "etl_marginacion_bootstrap",
@@ -1030,13 +976,15 @@
         }
       ],
       "bd_existe": true,
-      "vistas_en_bd": 3,
+      "vistas_en_bd": 6,
       "clasificacion": "documentado"
     },
     "nacimientos_dgis": {
       "nombre": "nacimientos_dgis",
-      "documentacion_html": null,
-      "alias_html": null,
+      "documento": {
+        "titulo": "Nacimientos Dgis",
+        "producto": "Nacimientos Dgis"
+      },
       "vistas_documentadas": [],
       "etapas": [
         {
@@ -1066,15 +1014,14 @@
       ],
       "bd_existe": true,
       "vistas_en_bd": 8,
-      "clasificacion": "documentacion_pendiente"
+      "clasificacion": "documentado"
     },
     "participacion_ciudadana": {
       "nombre": "participacion_ciudadana",
-      "documentacion_html": {
-        "archivo": "participacion_ciudadana.html",
-        "titulo": "Participación Ciudadana — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "Participación Ciudadana",
+        "producto": "Participación electoral ciudadana municipal"
       },
-      "alias_html": null,
       "vistas_documentadas": [],
       "etapas": [
         {
@@ -1090,20 +1037,17 @@
           }
         }
       ],
-      "bd_existe": true,
-      "vistas_en_bd": 1,
-      "clasificacion": "documentado"
+      "bd_existe": false,
+      "vistas_en_bd": null,
+      "clasificacion": "posible_desactualizado"
     },
     "pobreza_multidimensional": {
       "nombre": "pobreza_multidimensional",
-      "documentacion_html": {
-        "archivo": "pobreza_multidimensional.html",
-        "titulo": "Pobreza Multidimensional — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "Pobreza Multidimensional",
+        "producto": "Indicadores de pobreza multidimensional municipal"
       },
-      "alias_html": null,
-      "vistas_documentadas": [
-        "vw_pobreza_multidimencional"
-      ],
+      "vistas_documentadas": [],
       "etapas": [
         {
           "dag_id": "etl_pobreza_multidimensional_bootstrap",
@@ -1119,19 +1063,16 @@
         }
       ],
       "bd_existe": true,
-      "vistas_en_bd": 1,
+      "vistas_en_bd": 19,
       "clasificacion": "documentado"
     },
     "produccion_ganadera": {
       "nombre": "produccion_ganadera",
-      "documentacion_html": {
-        "archivo": "produccion_ganadera.html",
-        "titulo": "Producción Ganadera SIAP — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "Producción Ganadera SIAP",
+        "producto": "Estadística de producción ganadera municipal"
       },
-      "alias_html": null,
-      "vistas_documentadas": [
-        "view_ganadera_jalisco"
-      ],
+      "vistas_documentadas": [],
       "etapas": [
         {
           "dag_id": "etl_produccion_ganadera_bootstrap",
@@ -1159,17 +1100,19 @@
         }
       ],
       "bd_existe": true,
-      "vistas_en_bd": 1,
+      "vistas_en_bd": 4,
       "clasificacion": "documentado"
     },
     "rastros": {
       "nombre": "rastros",
-      "documentacion_html": {
-        "archivo": "rastros.html",
-        "titulo": "Rastros (ESGRM) — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "Rastros (ESGRM)",
+        "producto": "Sacrificio de Ganado en Rastros Municipales"
       },
-      "alias_html": null,
-      "vistas_documentadas": [],
+      "vistas_documentadas": [
+        "vw_rastros",
+        "vw_rastros_jalisco"
+      ],
       "etapas": [
         {
           "dag_id": "etl_rastros_bootstrap",
@@ -1202,14 +1145,11 @@
     },
     "repd": {
       "nombre": "repd",
-      "documentacion_html": {
-        "archivo": "repd.html",
-        "titulo": "REPD — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "REPD",
+        "producto": "Registro Estatal de Personas Desaparecidas"
       },
-      "alias_html": null,
-      "vistas_documentadas": [
-        "stg_repd_case_current_vw"
-      ],
+      "vistas_documentadas": [],
       "etapas": [
         {
           "dag_id": "etl_repd_bootstrap",
@@ -1242,11 +1182,10 @@
     },
     "scian": {
       "nombre": "scian",
-      "documentacion_html": {
-        "archivo": "scian.html",
-        "titulo": "SCIAN — Documentación de pipeline ETL-SIEEJ"
+      "documento": {
+        "titulo": "SCIAN",
+        "producto": "Sistema de Clasificación Industrial de América del Norte 2023"
       },
-      "alias_html": null,
       "vistas_documentadas": [],
       "etapas": [
         {
@@ -1262,9 +1201,9 @@
           }
         }
       ],
-      "bd_existe": true,
-      "vistas_en_bd": 1,
-      "clasificacion": "documentado"
+      "bd_existe": false,
+      "vistas_en_bd": null,
+      "clasificacion": "posible_desactualizado"
     }
   }
 }

@@ -1,0 +1,797 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "agropecuario_siap",
+  "clasificacion": "documentado",
+  "documento": {
+    "nombre": "agropecuario_siap",
+    "carpeta": "agropecuario_siap",
+    "titulo": "Agropecuario SIAP",
+    "producto": "Estadística de producción agrícola municipal",
+    "descripcion": [
+      "Pipeline ETL del Sistema de Información Agroalimentaria y Pesquera (SIAP) de la Secretaría de Agricultura y Desarrollo Rural. Contiene datos anuales de producción agrícola a nivel municipal y distrital para México, incluyendo superficies sembradas, cosechadas, volumen de producción, rendimiento y valor por cultivo desde 2003."
+    ],
+    "avisos": [],
+    "caracteristicas": [
+      {
+        "etiqueta": "Última fecha disponible",
+        "valor": "`2024`"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Anual"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Nacional, Estatal, Municipal"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "Sí"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "Automático"
+      }
+    ],
+    "fuente_general": "https://www.gob.mx/siap",
+    "descargas": [
+      {
+        "variable": "SIAP_URL",
+        "url": "https://nube.agricultura.gob.mx/index.php?view=10AE434F-A2158368-A120BC5A-EDF4AFAA&ANIO={anio}"
+      }
+    ],
+    "variables": [
+      {
+        "etiqueta": "SIAP_URL",
+        "valor": "URL con parámetro `{anio}` para descargar el CSV de cada año"
+      },
+      {
+        "etiqueta": "START_DATE",
+        "valor": "Año inicial del bootstrap (ej. `2003`)"
+      },
+      {
+        "etiqueta": "END_DATE",
+        "valor": "Año final del bootstrap (ej. `2024`)"
+      },
+      {
+        "etiqueta": "CHUNK_SIZE",
+        "valor": "Tamaño de lote para inserción masiva"
+      }
+    ],
+    "descripcion_tablas": {},
+    "alcance_vistas": {},
+    "commit": null
+  },
+  "base": {
+    "nombre": "agropecuario_siap",
+    "es_infraestructura": false,
+    "vistas": [
+      {
+        "esquema": "public",
+        "nombre": "geography_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 0,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geography_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "geometry_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 4,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "character varying(256)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geometry_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "character varying(30)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "view_agricola_jalisco",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 51538,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "anio",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "dis_des_rural",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "ctr_apoyo_des_rural",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "tipo_ciclo",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "modalidad",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "unidad_med",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "cultivo",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "sup_sembrada",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "sup_cosechada",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 13,
+            "nombre": "sup_siniestrada",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 14,
+            "nombre": "volumen_produccion",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 15,
+            "nombre": "rendimiento",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 16,
+            "nombre": "precio_med_rural",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 17,
+            "nombre": "valor_produccion",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vm_agricola_geo",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Produccion agricola municipal de Jalisco, para consumo GIS.",
+        "registros": 51538,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Identificador estable de la fila.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha de referencia anual de la produccion agricola.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "cve_ent",
+            "tipo": "character varying(2)",
+            "nullable": true,
+            "descripcion": "Clave INEGI de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "cvegeo",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave INEGI del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "valor_produccion_total_mdp",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Valor total de la produccion agricola en millones de pesos corrientes.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "superficie_sembrada_total_ha",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Superficie total sembrada en hectareas.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "superficie_cosechada_total_ha",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Superficie total cosechada en hectareas.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "superficie_siniestrada_total_ha",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Superficie total siniestrada en hectareas.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "volumen_produccion_total_toneladas",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Volumen total de produccion en toneladas.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria municipal del marco geoestadistico IIEG, SRID 6368.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 13,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria municipal del marco geoestadistico INEGI, SRID 6368.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      }
+    ],
+    "tablas": [
+      {
+        "nombre": "cat_ciclos",
+        "descripcion": null,
+        "filas": 3,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "tipo_ciclo",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_ctrs_apoyo_des_rural",
+        "descripcion": null,
+        "filas": 678,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "codigo_siap",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "ctr_apoyo_des_rural",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_cultivos",
+        "descripcion": null,
+        "filas": 453,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "codigo_siap",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cultivo",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_distritos_des_rural",
+        "descripcion": null,
+        "filas": 191,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "dis_des_rural",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_modalidades",
+        "descripcion": null,
+        "filas": 2,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "modalidad",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_unidades_medida",
+        "descripcion": null,
+        "filas": 6,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "unidad_med",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "stg_agricola",
+        "descripcion": null,
+        "filas": 789104,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "anio",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "entidad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "municipio_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "distrito_des_rural_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "ctr_apoyo_des_rural_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "tipo_ciclo_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "modalidad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "unidad_med_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "cultivo_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "sup_sembrada",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "sup_cosechada",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "sup_siniestrada",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "volumen_produccion",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "rendimiento",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "precio_med_rural",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "valor_produccion",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          }
+        ]
+      }
+    ],
+    "relaciones": [
+      {
+        "tabla": "stg_agricola",
+        "columnas": [
+          "ctr_apoyo_des_rural_id"
+        ],
+        "ref_tabla": "cat_ctrs_apoyo_des_rural",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_agricola",
+        "columnas": [
+          "cultivo_id"
+        ],
+        "ref_tabla": "cat_cultivos",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_agricola",
+        "columnas": [
+          "distrito_des_rural_id"
+        ],
+        "ref_tabla": "cat_distritos_des_rural",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_agricola",
+        "columnas": [
+          "modalidad_id"
+        ],
+        "ref_tabla": "cat_modalidades",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_agricola",
+        "columnas": [
+          "tipo_ciclo_id"
+        ],
+        "ref_tabla": "cat_ciclos",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_agricola",
+        "columnas": [
+          "unidad_med_id"
+        ],
+        "ref_tabla": "cat_unidades_medida",
+        "ref_columnas": [
+          "id"
+        ]
+      }
+    ]
+  },
+  "etapas": []
+}

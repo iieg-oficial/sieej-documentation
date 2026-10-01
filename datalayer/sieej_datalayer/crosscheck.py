@@ -1,4 +1,4 @@
-"""Cruce Airflow ↔ BD de producción ↔ documentación estática.
+"""Cruce Airflow ↔ BD de producción ↔ README de ETL-SIEEJ.
 
 Las fuentes vivas mandan: la documentación solo enriquece. Toda discrepancia
 se reporta de forma explícita para que la landing la muestre, no la oculte.
@@ -7,20 +7,22 @@ se reporta de forma explícita para que la landing la muestre, no la oculte.
 from datetime import datetime, timezone
 
 from .db_introspect import VISTAS_SISTEMA_POSTGIS
+from .etl_readme import ALIAS_NOMBRE_A_BD
 from .models import (
     BaseDeDatos,
     ClasificacionPipeline,
     Dag,
-    DocumentacionHtml,
+    DocumentoPipeline,
+    DocumentoRef,
     EstadoFuente,
     EstructuraVistas,
     Fuente,
     Inventario,
     Numeralia,
+    PaginaPipeline,
     Pipeline,
     Vista,
 )
-from .static_docs import ALIAS_NOMBRE_A_BD
 
 _PREFIJOS_DAG = ("etl_", "dag_", "pipeline_")
 # Sufijos que nombran la etapa, no el pipeline: etl_denue_update es la etapa
@@ -101,17 +103,28 @@ def _clasificar(p: Pipeline, vivas_ok: bool) -> ClasificacionPipeline:
     if not vivas_ok:
         return ClasificacionPipeline.SIN_VERIFICAR
     vivo = bool(p.bd_existe) or bool(p.etapas)
-    if vivo and p.documentacion_html:
+    if vivo and p.documento:
         return ClasificacionPipeline.DOCUMENTADO
     if vivo:
         return ClasificacionPipeline.DOCUMENTACION_PENDIENTE
     return ClasificacionPipeline.POSIBLE_DESACTUALIZADO
 
 
+def vistas_documentadas(documentos: dict[str, DocumentoPipeline]) -> dict[str, list[Vista]]:
+    """Vistas que el README de cada pipeline declara, por base de datos."""
+    return {
+        nombre: [
+            Vista(nombre=vista, descripcion=alcance, en_docs=True)
+            for vista, alcance in doc.alcance_vistas.items()
+        ]
+        for nombre, doc in documentos.items()
+        if doc.alcance_vistas
+    }
+
+
 def construir_inventario(
     fuentes: dict[str, Fuente],
-    html_docs: dict[str, DocumentacionHtml],
-    vistas_docs: dict[str, list[Vista]],
+    documentos: dict[str, DocumentoPipeline],
     dags: dict[str, Dag],
     bases: list[BaseDeDatos],
     generado: datetime | None = None,
@@ -122,9 +135,8 @@ def construir_inventario(
     vivas_ok = EstadoFuente.OK in (bd_ok, airflow_ok)
 
     bases_pipeline = {b.nombre: b for b in bases if not b.es_infraestructura}
-    bases_docs = {bd for bd in vistas_docs if not _es_infra_docs(vistas_docs[bd])}
 
-    nombres = set(html_docs) | set(bases_pipeline) | bases_docs
+    nombres = set(documentos) | set(bases_pipeline)
     # Se cuelan los nombres derivados de los DAG para que un pipeline que solo
     # existe en Airflow —recién desplegado, sin base ni ficha— también aparezca.
     # El precio es que un dag_id fuera de convención se vuelve un pipeline
@@ -136,11 +148,11 @@ def construir_inventario(
     pipelines: dict[str, Pipeline] = {}
     for nombre in sorted(nombres):
         base_viva = bases_pipeline.get(nombre)
+        doc = documentos.get(nombre)
         p = Pipeline(
             nombre=nombre,
-            documentacion_html=html_docs.get(nombre),
-            alias_html=_alias_de(nombre, html_docs),
-            vistas_documentadas=[v.nombre for v in vistas_docs.get(nombre, [])],
+            documento=DocumentoRef(titulo=doc.titulo, producto=doc.producto) if doc else None,
+            vistas_documentadas=list(doc.alcance_vistas) if doc else [],
             etapas=dags_por_nombre.get(nombre, []),
             bd_existe=(nombre in bases_pipeline) if bd_ok == EstadoFuente.OK else None,
             vistas_en_bd=len(base_viva.vistas) if base_viva else None,
@@ -152,22 +164,23 @@ def construir_inventario(
         d for d in dags if partir_dag_id(d)[0] not in pipelines and d not in pipelines
     )
     cross_check = {
-        "pipelines_sin_html": sorted(
-            n for n, p in pipelines.items() if p.documentacion_html is None
+        "pipelines_sin_documento": sorted(
+            n for n, p in pipelines.items() if p.documento is None
         ),
-        "html_sin_pipeline_vivo": sorted(
+        "documento_sin_pipeline_vivo": sorted(
             n
             for n, p in pipelines.items()
-            if p.documentacion_html
-            and p.clasificacion is ClasificacionPipeline.POSIBLE_DESACTUALIZADO
+            if p.documento and p.clasificacion is ClasificacionPipeline.POSIBLE_DESACTUALIZADO
         ),
         "dags_sin_pipeline": dags_sin_pipeline,
         "dags_fuera_de_convencion": fuera_de_convencion,
-        "alias_nombres": {p.alias_html: n for n, p in pipelines.items() if p.alias_html},
+        "alias_nombres": {
+            d.carpeta: n for n, d in documentos.items() if d.carpeta != n and n in pipelines
+        },
     }
     resumen = {
         "pipelines": len(pipelines),
-        "con_html": sum(1 for p in pipelines.values() if p.documentacion_html),
+        "con_documento": sum(1 for p in pipelines.values() if p.documento),
         "dags_emparejados": sum(len(e) for e in dags_por_nombre.values()),
         "pipelines_con_etapas": len(dags_por_nombre),
         "dags_fuera_de_convencion": len(fuera_de_convencion),
@@ -183,13 +196,6 @@ def construir_inventario(
     )
 
 
-def _alias_de(nombre: str, html_docs: dict[str, DocumentacionHtml]) -> str | None:
-    doc = html_docs.get(nombre)
-    if doc and doc.archivo != f"{nombre}.html":
-        return doc.archivo.removesuffix(".html")
-    return None
-
-
 def _es_infra_docs(vistas: list[Vista]) -> bool:
     return bool(vistas) and all(v.nombre in VISTAS_SISTEMA_POSTGIS for v in vistas)
 
@@ -199,7 +205,7 @@ def construir_numeralia(
     inventario: Inventario,
     dags: dict[str, Dag],
     bases: list[BaseDeDatos],
-    vistas_docs: dict[str, list[Vista]],
+    documentos: dict[str, DocumentoPipeline],
     generado: datetime | None = None,
 ) -> Numeralia:
     generado = generado or datetime.now(timezone.utc)
@@ -234,15 +240,16 @@ def construir_numeralia(
             "matviews_total": sum(1 for v in vistas_vivas if v.tipo == "MATERIALIZED VIEW"),
             "registros_totales": sum(v.registros or 0 for v in vistas_vivas),
         }
+    vistas_docs = vistas_documentadas(documentos)
     documentacion = {
-        "html_pipelines": inventario.resumen.get("con_html", 0),
+        "pipelines_documentados": inventario.resumen.get("con_documento", 0),
         "bases_documentadas": sum(1 for bd_ in vistas_docs.values() if not _es_infra_docs(bd_)),
         "vistas_documentadas": sum(len(v) for k, v in vistas_docs.items() if not _es_infra_docs(v)),
     }
 
     discrepancias: list[str] = []
     cifras = {
-        "pipelines_documentados": documentacion["html_pipelines"],
+        "pipelines_documentados": documentacion["pipelines_documentados"],
         "dags_activos": airflow.get("dags_activos"),
         "bases_con_vistas": bd.get("bases_pipeline"),
     }
@@ -253,7 +260,7 @@ def construir_numeralia(
             "Las cifras de documentación, Airflow y BD no coinciden: "
             + ", ".join(f"{k}={v}" for k, v in cifras.items() if v is not None)
         )
-    for clave in ("pipelines_sin_html", "html_sin_pipeline_vivo", "dags_sin_pipeline"):
+    for clave in ("pipelines_sin_documento", "documento_sin_pipeline_vivo", "dags_sin_pipeline"):
         elementos = inventario.cross_check.get(clave, [])
         if elementos:
             discrepancias.append(f"{clave}: {', '.join(elementos)}")
@@ -275,11 +282,12 @@ def construir_numeralia(
 def construir_estructura_vistas(
     fuentes: dict[str, Fuente],
     bases: list[BaseDeDatos],
-    vistas_docs: dict[str, list[Vista]],
+    documentos: dict[str, DocumentoPipeline],
     generado: datetime | None = None,
 ) -> EstructuraVistas:
-    """Estructura por base: la introspección manda, los markdown enriquecen."""
+    """Estructura por base: la introspección manda, el README enriquece."""
     generado = generado or datetime.now(timezone.utc)
+    vistas_docs = vistas_documentadas(documentos)
     bd_ok = fuentes.get("bd", Fuente(estado=EstadoFuente.SIN_CONFIGURAR)).estado
 
     if bd_ok != EstadoFuente.OK:
@@ -299,8 +307,8 @@ def construir_estructura_vistas(
             vista = vista.model_copy(deep=True)
             vista.en_docs = doc is not None
             vista.solo_en_bd = doc is None and vista.nombre not in VISTAS_SISTEMA_POSTGIS
-            if doc:
-                vista.archivo_md = doc.archivo_md
+            if doc and not vista.descripcion:
+                vista.descripcion = doc.descripcion
             vistas.append(vista)
         for doc in docs.values():  # documentadas pero ya no existen en la BD
             doc = doc.model_copy(deep=True)
@@ -326,3 +334,38 @@ def construir_estructura_vistas(
                 BaseDeDatos(nombre=bd, es_infraestructura=_es_infra_docs(vistas), vistas=marcadas)
             )
     return EstructuraVistas(generado=generado, fuentes=fuentes, bases=resultado)
+
+
+def construir_paginas(
+    fuentes: dict[str, Fuente],
+    inventario: Inventario,
+    estructura: EstructuraVistas,
+    documentos: dict[str, DocumentoPipeline],
+    bases: list[BaseDeDatos],
+    generado: datetime | None = None,
+) -> dict[str, PaginaPipeline]:
+    """Una página por pipeline: README, tablas y relaciones de la BD, vistas y DAGs."""
+    generado = generado or datetime.now(timezone.utc)
+    vivas = {b.nombre: b for b in bases}
+    vistas = {b.nombre: b.vistas for b in estructura.bases}
+    paginas: dict[str, PaginaPipeline] = {}
+    for nombre, p in inventario.pipelines.items():
+        doc = documentos.get(nombre)
+        base = vivas.get(nombre)
+        if base is not None:
+            base = base.model_copy(deep=True)
+            base.vistas = vistas.get(nombre, base.vistas)
+            if doc:
+                for tabla in base.tablas:
+                    if not tabla.descripcion:
+                        tabla.descripcion = doc.descripcion_tablas.get(tabla.nombre)
+        paginas[nombre] = PaginaPipeline(
+            generado=generado,
+            fuentes=fuentes,
+            nombre=nombre,
+            clasificacion=p.clasificacion,
+            documento=doc,
+            base=base,
+            etapas=p.etapas,
+        )
+    return paginas

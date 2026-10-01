@@ -1,0 +1,494 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "rastros",
+  "clasificacion": "documentado",
+  "documento": {
+    "nombre": "rastros",
+    "carpeta": "rastros",
+    "titulo": "Rastros (ESGRM)",
+    "producto": "Sacrificio de Ganado en Rastros Municipales",
+    "descripcion": [
+      "Pipeline ETL de la **Estadística de Sacrificio de Ganado en Rastros Municipales (ESGRM)** del INEGI. Reporta, con periodicidad **mensual desde enero de 2008**, el número de cabezas sacrificadas, el volumen de carne en canal y su valor, por entidad federativa y especie ganadera."
+    ],
+    "avisos": [
+      "**Cobertura geográfica: ESTATAL.** El nombre \"rastros municipales\" describe al administrador del establecimiento (los gobiernos municipales), **no** al nivel de desglose publicado. La fuente entrega `CVEGEO` de 2 dígitos (clave de entidad) y `COBERTURA = 'Estatal'` en el 100% de los registros. **No existe desglose municipal** en los datos abiertos de ESGRM, ni en el conjunto mensual ni en el anual."
+    ],
+    "caracteristicas": [
+      {
+        "etiqueta": "Primer periodo disponible",
+        "valor": "`2008-01`"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Mensual"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Estatal"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "Sí"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "Automático (`@monthly`)"
+      },
+      {
+        "etiqueta": "Estrategia de carga",
+        "valor": "`upsert_records`"
+      }
+    ],
+    "fuente_general": "https://www.inegi.org.mx/programas/sacrificioganado/#datos_abiertos",
+    "descargas": [
+      {
+        "variable": "ESGRM_URL",
+        "url": "https://www.inegi.org.mx/contenidos/programas/sacrificioganado/datosabiertos/conjunto_de_datos_esgrm_mensual_csv.zip"
+      }
+    ],
+    "variables": [
+      {
+        "etiqueta": "ESGRM_URL",
+        "valor": "URL del ZIP del conjunto"
+      },
+      {
+        "etiqueta": "DOWNLOAD_TIMEOUT",
+        "valor": "Timeout de descarga en segundos"
+      },
+      {
+        "etiqueta": "CHUNK_SIZE",
+        "valor": "Tamaño de lote para el upsert"
+      }
+    ],
+    "descripcion_tablas": {
+      "Catálogos": "Los tres catálogos se derivan de los datos, no están hardcodeados: si el INEGI publica un valor nuevo, aparece solo.",
+      "cat_estatus": "Disponibilidad de una cifra. La fuente usa hoy `Disponible` y `No significativo`; el diccionario del INEGI también contempla `No disponible`, `No aplicable` y `Confidencial`",
+      "cat_especies_ganaderas": "`Ganado bovino`, `Ganado caprino`, `Ganado ovino`, `Ganado porcino`",
+      "cat_tipo_cifra": "`Cifras Definitivas`, `Cifras Preliminares`"
+    },
+    "alcance_vistas": {
+      "vw_rastros": "Las 32 entidades federativas, para comparativos nacionales",
+      "vw_rastros_jalisco": "Solo Jalisco (`entidad_id = 14`)"
+    },
+    "commit": null
+  },
+  "base": {
+    "nombre": "rastros",
+    "es_infraestructura": false,
+    "vistas": [
+      {
+        "esquema": "public",
+        "nombre": "vw_rastros",
+        "tipo": "VIEW",
+        "descripcion": "Vista desnormalizada de la Estadística de Sacrificio de Ganado en Rastros Municipales (ESGRM) del INEGI para las 32 entidades federativas, con periodicidad mensual desde 2008.",
+        "registros": 0,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Primer día del mes de referencia de la información.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa a la que corresponden las cifras.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "especie_ganadera",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Especie ganadera sacrificada (ej. Ganado bovino, Ganado porcino).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "numero_cabezas",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Número de animales vivos que ingresan al rastro para su matanza, destinados a la producción de carne apta para consumo humano.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "estatus_cabeza",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Disponibilidad de la cifra de numero_cabezas.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "produccion_carne",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Volumen de carne en canal obtenida del sacrificio del ganado, en TONELADAS.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "estatus_produccion",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Disponibilidad de la cifra de produccion_carne.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "vproduccion",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Valor de la carne en canal producida, en MILES DE PESOS.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "estatus_vproduccion",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Disponibilidad de la cifra de vproduccion.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "tipo_cifra",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Indica si el registro corresponde a cifras definitivas o preliminares.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha en que el pipeline cargó o actualizó el registro en esta base.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": true,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vw_rastros_jalisco",
+        "tipo": "VIEW",
+        "descripcion": "Misma información que vw_rastros, acotada a Jalisco (clave de entidad 14).",
+        "registros": 0,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Primer día del mes de referencia de la información.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa; siempre Jalisco en esta vista.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "especie_ganadera",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Especie ganadera sacrificada (ej. Ganado bovino, Ganado porcino).",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "numero_cabezas",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Número de animales vivos que ingresan al rastro para su matanza, destinados a la producción de carne apta para consumo humano.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "estatus_cabeza",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Disponibilidad de la cifra de numero_cabezas.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "produccion_carne",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Volumen de carne en canal obtenida del sacrificio del ganado, en TONELADAS.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "estatus_produccion",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Disponibilidad de la cifra de produccion_carne.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "vproduccion",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Valor de la carne en canal producida, en MILES DE PESOS.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "estatus_vproduccion",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Disponibilidad de la cifra de vproduccion.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "tipo_cifra",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Indica si el registro corresponde a cifras definitivas o preliminares.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha en que el pipeline cargó o actualizó el registro en esta base.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": true,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      }
+    ],
+    "tablas": [
+      {
+        "nombre": "cat_especies_ganaderas",
+        "descripcion": "Catálogo de especies ganaderas sacrificadas en rastros municipales. Clasificación de los animales que agrupa a los individuos con rasgos comunes entre sí dentro de una misma categoría.",
+        "filas": 4,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "especie_ganadera",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_estatus",
+        "descripcion": "Catálogo del estatus de disponibilidad de una cifra en la ESGRM. Valores posibles según el diccionario de datos del INEGI: Disponible (cumple el principio de confidencialidad de la LSNIEG), No disponible (la información no se genera o está en proceso), No aplicable (cruces conceptuales incompatibles o cálculos no procedentes), No significativo (número distinto de cero que por redondeo se expresaría como tal) y Confidencial (no publicable por el principio de confidencialidad de la LSNIEG).",
+        "filas": 2,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "estatus",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "cat_tipo_cifra",
+        "descripcion": "Catálogo del estatus de las cifras conforme a los Lineamientos de Cambios a la información divulgada en las publicaciones estadísticas y geográficas del INEGI.",
+        "filas": 2,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "tipo_cifra",
+            "tipo": "text",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "stg_rastros",
+        "descripcion": "Estadística de Sacrificio de Ganado en Rastros Municipales (ESGRM) del INEGI, información mensual desde 2008. Reporta la producción de carne en canal destinada al consumo humano que aportan los rastros administrados por los gobiernos municipales del país. La cobertura geográfica de la fuente es ESTATAL: el nombre \"rastros municipales\" describe al administrador del establecimiento, no al nivel de desglose publicado. Grano: un registro por periodo, entidad federativa y especie ganadera.",
+        "filas": 27528,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "fecha",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "entidad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "especie_ganadera_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "numero_cabezas",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "estatus_cabeza_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "produccion_carne",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "estatus_produccion_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "vproduccion",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "estatus_vproduccion_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "tipo_cifra_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      }
+    ],
+    "relaciones": [
+      {
+        "tabla": "stg_rastros",
+        "columnas": [
+          "especie_ganadera_id"
+        ],
+        "ref_tabla": "cat_especies_ganaderas",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_rastros",
+        "columnas": [
+          "estatus_cabeza_id"
+        ],
+        "ref_tabla": "cat_estatus",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_rastros",
+        "columnas": [
+          "estatus_produccion_id"
+        ],
+        "ref_tabla": "cat_estatus",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_rastros",
+        "columnas": [
+          "estatus_vproduccion_id"
+        ],
+        "ref_tabla": "cat_estatus",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_rastros",
+        "columnas": [
+          "tipo_cifra_id"
+        ],
+        "ref_tabla": "cat_tipo_cifra",
+        "ref_columnas": [
+          "id"
+        ]
+      }
+    ]
+  },
+  "etapas": []
+}

@@ -1,0 +1,740 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "iieg",
+  "clasificacion": "documentacion_pendiente",
+  "documento": null,
+  "base": {
+    "nombre": "iieg",
+    "es_infraestructura": false,
+    "vistas": [
+      {
+        "esquema": "public",
+        "nombre": "geography_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 0,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geography_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "geometry_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 16,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "character varying(256)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geometry_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "character varying(30)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "view_iim_entidades",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 32,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "entidad_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "viv_totales",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "por_viv_remesas",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "por_viv_emigrantes",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "por_viv_reto",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "iim_dp2",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "gim_dp2",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "lugar_contexto_nacional",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "fecha",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "view_iim_municipios_jalisco_2010",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 125,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "municipio_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "viv_totales",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "por_viv_remesas",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "por_viv_emigrantes",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "por_viv_reto",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "iaim",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "gaim",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "lugar_contexto_nacional",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "lugar_entidad",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "view_iim_municipios_jalisco_2020",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 125,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "municipio_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "viv_totales",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "por_viv_remesas",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "por_viv_emigrantes",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "por_viv_reto",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "iim_dp2",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "gim_dp2",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "lugar_contexto_nacional",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "lugar_entidad",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "vm_iim_geo",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Indice de Intensidad Migratoria Mexico-EUA por municipio de Jalisco, para consumo GIS.",
+        "registros": 250,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Identificador estable de la fila.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "fecha",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Anio de referencia del indice.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "clave_entidad",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Clave INEGI de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre de la entidad federativa.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "clave_municipio",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Clave INEGI del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": "Nombre del municipio.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "grado_absoluto_intensidad_migratoria",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": "Grado de intensidad migratoria disponible para el anio de referencia.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "total_viviendas",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": "Total de viviendas.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "porcentaje_viviendas_remesas",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Porcentaje de viviendas que reciben remesas.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "porcentaje_viviendas_emigrantes",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Porcentaje de viviendas con emigrantes a Estados Unidos.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 11,
+            "nombre": "porcentaje_viviendas_migrantes_circulares",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Porcentaje de viviendas con migrantes circulares.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 12,
+            "nombre": "porcentaje_viviendas_migrantes_de_retorno",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": "Porcentaje de viviendas con migrantes de retorno.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 13,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria municipal del marco geoestadistico IIEG, SRID 6368.",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 14,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria municipal del marco geoestadistico INEGI, SRID 6368.",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      }
+    ],
+    "tablas": [
+      {
+        "nombre": "iim_estatal",
+        "descripcion": null,
+        "filas": 32,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "entidad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "viv_totales",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "por_viv_remesas",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "por_viv_emigrantes",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "por_viv_circ",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "por_viv_reto",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "iim_dp2",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "gim_dp2",
+            "tipo": "text",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "lugar_contexto_nacional",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "fecha",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "iim_municipal",
+        "descripcion": null,
+        "filas": 4925,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "municipio_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "viv_totales",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "por_viv_remesas",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "por_viv_emigrantes",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "por_viv_circ",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "por_viv_reto",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "iaim",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "gaim",
+            "tipo": "text",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "iim_dp2",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "gim_dp2",
+            "tipo": "text",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "lugar_contexto_nacional",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "fecha",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      }
+    ],
+    "relaciones": []
+  },
+  "etapas": []
+}

@@ -1,0 +1,1918 @@
+{
+  "generado": "2026-10-01T22:28:45.442028Z",
+  "datos_obsoletos": false,
+  "fuentes": {
+    "airflow": {
+      "estado": "caida",
+      "detalle": "HTTPStatusError: Client error '404 Not Found' for url 'http://10.25.7.5:8080/auth/token'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+      "consultado_en": null
+    },
+    "bd": {
+      "estado": "ok",
+      "detalle": "29 bases de datos",
+      "consultado_en": "2026-10-01T22:31:33.681752Z"
+    },
+    "readme": {
+      "estado": "ok",
+      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
+      "consultado_en": "2026-10-01T22:28:45.465079Z"
+    }
+  },
+  "nombre": "conapo",
+  "clasificacion": "documentado",
+  "documento": {
+    "nombre": "conapo",
+    "carpeta": "conapo",
+    "titulo": "CONAPO",
+    "producto": "Proyecciones de Población Municipal — Jalisco",
+    "descripcion": [
+      "Pipeline ETL para las proyecciones de población municipal de CONAPO (Consejo Nacional de Población) en el estado de Jalisco. Contiene estimaciones anuales de población por grupos de edad quinquenales, grandes grupos de edad e indicadores demográficos diversos, cubriendo el periodo 1990–2040. Los datos están desagregados a nivel municipal y por sexo. Es la fuente base de las vistas materializadas de población en el esquema `public` (consumo GIS) y denominador de cruce en economía, desarrollo social y gobierno."
+    ],
+    "avisos": [],
+    "caracteristicas": [
+      {
+        "etiqueta": "Última fecha disponible",
+        "valor": "`1990–2040`"
+      },
+      {
+        "etiqueta": "Frecuencia de actualización",
+        "valor": "Bajo demanda (CONAPO publica aprox. cada quinquenio)"
+      },
+      {
+        "etiqueta": "Desagregación",
+        "valor": "Municipal"
+      },
+      {
+        "etiqueta": "¿Tiene update?",
+        "valor": "No"
+      },
+      {
+        "etiqueta": "Update",
+        "valor": "N/A"
+      }
+    ],
+    "fuente_general": "https://www.gob.mx/conapo",
+    "descargas": [
+      {
+        "variable": "CONAPO_URL",
+        "url": "https://conapo.segob.gob.mx/work/models/CONAPO/pry23/DBMun/14_Jalisco.zip"
+      }
+    ],
+    "variables": [
+      {
+        "etiqueta": "LOG_LEVEL",
+        "valor": "Nivel de logging (INFO, DEBUG, etc.)"
+      },
+      {
+        "etiqueta": "DB_USER",
+        "valor": "Usuario de la base de datos"
+      },
+      {
+        "etiqueta": "DB_PASSWORD",
+        "valor": "Contraseña de la base de datos"
+      },
+      {
+        "etiqueta": "DB_HOST",
+        "valor": "Host de la base de datos"
+      },
+      {
+        "etiqueta": "DB_PORT",
+        "valor": "Puerto de la base de datos"
+      },
+      {
+        "etiqueta": "DB_NAME",
+        "valor": "Nombre de la base de datos (`conapo`)"
+      },
+      {
+        "etiqueta": "FDW_DB_NAME",
+        "valor": "Nombre de la BD de cvegeo para el FDW"
+      },
+      {
+        "etiqueta": "FDW_DB_HOST",
+        "valor": "Host de la BD de cvegeo para el FDW"
+      },
+      {
+        "etiqueta": "FDW_DB_PORT",
+        "valor": "Puerto de la BD de cvegeo para el FDW"
+      },
+      {
+        "etiqueta": "FDW_DB_USER",
+        "valor": "Usuario de la BD de cvegeo para el FDW"
+      },
+      {
+        "etiqueta": "FDW_DB_PASSWORD",
+        "valor": "Contraseña de la BD de cvegeo para el FDW"
+      },
+      {
+        "etiqueta": "CONAPO_URL",
+        "valor": "URL de descarga directa del ZIP de CONAPO"
+      }
+    ],
+    "descripcion_tablas": {},
+    "alcance_vistas": {},
+    "commit": null
+  },
+  "base": {
+    "nombre": "conapo",
+    "es_infraestructura": false,
+    "vistas": [
+      {
+        "esquema": "public",
+        "nombre": "edad_mediana",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Edad mediana proyectada por municipio y anio (CONAPO).",
+        "registros": 6375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de la fila",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico IIEG, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico INEGI, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre del municipio",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha del periodo anual (YYYY-01-01)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave del municipio (EEMMM, 5 digitos)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "valor",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": "Edad mediana proyectada",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "geography_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 0,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geography_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "geometry_columns",
+        "tipo": "VIEW",
+        "descripcion": null,
+        "registros": 18,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "f_table_catalog",
+            "tipo": "character varying(256)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "f_table_schema",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "f_table_name",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "f_geometry_column",
+            "tipo": "name",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "coord_dimension",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "srid",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "type",
+            "tipo": "character varying(30)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "poblacion",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Proyeccion anual de poblacion total, hombres y mujeres por municipio (CONAPO).",
+        "registros": 6375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de la fila",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico IIEG, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico INEGI, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre del municipio",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha del periodo anual (YYYY-01-01)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "poblacion_total",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Poblacion total proyectada",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "poblacion_mujeres",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Poblacion femenina proyectada",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 9,
+            "nombre": "poblacion_hombres",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Poblacion masculina proyectada",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 10,
+            "nombre": "poblacion_respecto_jalisco",
+            "tipo": "numeric",
+            "nullable": true,
+            "descripcion": "Porcentaje de la poblacion municipal respecto al total de Jalisco (0-100)",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "poblacion_hombres",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Proyeccion anual de poblacion masculina por municipio (CONAPO).",
+        "registros": 6375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de la fila",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico IIEG, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico INEGI, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre del municipio",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha del periodo anual (YYYY-01-01)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave del municipio (EEMMM, 5 digitos)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "valor",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": "Poblacion masculina proyectada",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "poblacion_mujeres",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Proyeccion anual de poblacion femenina por municipio (CONAPO).",
+        "registros": 6375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de la fila",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico IIEG, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico INEGI, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre del municipio",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha del periodo anual (YYYY-01-01)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave del municipio (EEMMM, 5 digitos)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "valor",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": "Poblacion femenina proyectada",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "porcentaje_poblacional_municipal_en_entidad",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Peso demografico del municipio respecto al total de Jalisco (CONAPO).",
+        "registros": 6375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de la fila",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico IIEG, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico INEGI, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre del municipio",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha del periodo anual (YYYY-01-01)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave del municipio (EEMMM, 5 digitos)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "valor",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": "Porcentaje de la poblacion municipal respecto al total de Jalisco (0-100)",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "razon_dependencia",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Razon de dependencia total (dependientes / poblacion en edad activa) por municipio (CONAPO).",
+        "registros": 6375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de la fila",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico IIEG, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico INEGI, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre del municipio",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha del periodo anual (YYYY-01-01)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave del municipio (EEMMM, 5 digitos)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "valor",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": "Razon de dependencia total",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "razon_dependencia_adulta",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Razon de dependencia adulta (65+ / poblacion en edad activa) por municipio (CONAPO).",
+        "registros": 6375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de la fila",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico IIEG, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico INEGI, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre del municipio",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha del periodo anual (YYYY-01-01)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave del municipio (EEMMM, 5 digitos)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "valor",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": "Razon de dependencia adulta",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "razon_dependencia_infantil",
+        "tipo": "MATERIALIZED VIEW",
+        "descripcion": "Razon de dependencia infantil (0-14 / poblacion en edad activa) por municipio (CONAPO).",
+        "registros": 6375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "fid",
+            "tipo": "bigint",
+            "nullable": true,
+            "descripcion": "Identificador unico de la fila",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 2,
+            "nombre": "geom_iieg",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico IIEG, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 3,
+            "nombre": "geom_inegi",
+            "tipo": "geometry(MultiPolygon,6368)",
+            "nullable": true,
+            "descripcion": "Geometria del municipio (marco geoestadistico INEGI, SRID 6368)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre",
+            "tipo": "character varying(254)",
+            "nullable": true,
+            "descripcion": "Nombre del municipio",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 5,
+            "nombre": "fecha",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": "Fecha del periodo anual (YYYY-01-01)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 6,
+            "nombre": "clave_entidad",
+            "tipo": "character(2)",
+            "nullable": true,
+            "descripcion": "Clave de la entidad federativa (14 = Jalisco)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 7,
+            "nombre": "clave_municipio",
+            "tipo": "character varying(5)",
+            "nullable": true,
+            "descripcion": "Clave del municipio (EEMMM, 5 digitos)",
+            "origen_descripcion": "bd"
+          },
+          {
+            "posicion": 8,
+            "nombre": "valor",
+            "tipo": "numeric(12,2)",
+            "nullable": true,
+            "descripcion": "Razon de dependencia infantil",
+            "origen_descripcion": "bd"
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "view_grandes_grupos_edad",
+        "tipo": "VIEW",
+        "descripcion": "Vista de integración que desnormaliza stg_grandes_grupos_edad con nombres de municipio, entidad y sexo. Filtra solo datos de Jalisco (cve_ent = 14).",
+        "registros": 12750,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "sexo",
+            "tipo": "character varying(10)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "anio",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "pob_00_11",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "pob_12_29",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "pob_30_59",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "pob_60_mm",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "pob_total",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "view_indicadores_demograficos",
+        "tipo": "VIEW",
+        "descripcion": "Vista de integración que desnormaliza stg_indicadores_demograficos con nombres de municipio y entidad. Filtra solo datos de Jalisco (cve_ent = 14).",
+        "registros": 6375,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "anio",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "hom_mit_ano",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "muj_mit_ano",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "pob_mit_mun",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "muj_00_14",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "hom_00_14",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "pob_00_14",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "muj_15_64",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "hom_15_64",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 13,
+            "nombre": "pob_15_64",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 14,
+            "nombre": "muj_60_mas",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 15,
+            "nombre": "hom_60_mas",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 16,
+            "nombre": "pob_60_mas",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 17,
+            "nombre": "muj_65_mas",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 18,
+            "nombre": "hom_65_mas",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 19,
+            "nombre": "pob_65_mas",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 20,
+            "nombre": "pob_mit_ent",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 21,
+            "nombre": "edad_med",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 22,
+            "nombre": "por_mun",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 23,
+            "nombre": "ind_env_60",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 24,
+            "nombre": "ind_env_65",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 25,
+            "nombre": "rhm",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 26,
+            "nombre": "raz_dep_adu",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 27,
+            "nombre": "raz_dep_inf",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 28,
+            "nombre": "raz_dep",
+            "tipo": "double precision",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 29,
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "view_poblacion_mitad_anio",
+        "tipo": "VIEW",
+        "descripcion": "Vista de integración que desnormaliza stg_poblacion_mitad_anio con nombres de municipio, entidad y sexo. Filtra solo datos de Jalisco (cve_ent = 14).",
+        "registros": 12750,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "municipio",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "entidad",
+            "tipo": "character varying",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "sexo",
+            "tipo": "character varying(10)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "anio",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "pob_00_04",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "pob_05_09",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "pob_10_14",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "pob_15_19",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "pob_20_24",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "pob_25_29",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "pob_30_34",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 13,
+            "nombre": "pob_35_39",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 14,
+            "nombre": "pob_40_44",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 15,
+            "nombre": "pob_45_49",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 16,
+            "nombre": "pob_50_54",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 17,
+            "nombre": "pob_55_59",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 18,
+            "nombre": "pob_60_64",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 19,
+            "nombre": "pob_65_69",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 20,
+            "nombre": "pob_70_74",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 21,
+            "nombre": "pob_75_79",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 22,
+            "nombre": "pob_80_84",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 23,
+            "nombre": "pob_85_mm",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 24,
+            "nombre": "pob_total",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 25,
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": true,
+        "en_docs": false,
+        "solo_en_bd": true,
+        "solo_en_docs": false,
+        "archivo_md": null
+      }
+    ],
+    "tablas": [
+      {
+        "nombre": "cat_sexo",
+        "descripcion": "Catálogo de sexo para clasificar datos demográficos. Contiene las categorías HOMBRES y MUJERES utilizadas en las proyecciones de población de CONAPO.",
+        "filas": 2,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "sexo",
+            "tipo": "character varying(10)",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "stg_grandes_grupos_edad",
+        "descripcion": "Tabla de staging que contiene proyecciones de población por grandes grupos de edad, sexo, municipio y año. Datos de CONAPO para Jalisco, periodo 1990-2040. Los grupos son: 0-11, 12-29, 30-59, 60 y más.",
+        "filas": 12750,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "municipio_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "entidad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "sexo_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "anio",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "pob_00_11",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_12_29",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_30_59",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_60_mm",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_total",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "stg_indicadores_demograficos",
+        "descripcion": "Tabla de staging que contiene indicadores demográficos diversos por municipio y año. Datos de CONAPO para Jalisco, periodo 1990-2040. Incluye razones de dependencia, edad mediana, índices de envejecimiento y otros indicadores.",
+        "filas": 6375,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "municipio_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "entidad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "anio",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "hom_mit_ano",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "muj_mit_ano",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_mit_mun",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "muj_00_14",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "hom_00_14",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_00_14",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "muj_15_64",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "hom_15_64",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_15_64",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "muj_60_mas",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "hom_60_mas",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_60_mas",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "muj_65_mas",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "hom_65_mas",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_65_mas",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_mit_ent",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "edad_med",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "por_mun",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "ind_env_60",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "ind_env_65",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "rhm",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "raz_dep_adu",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "raz_dep_inf",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "raz_dep",
+            "tipo": "double precision",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      },
+      {
+        "nombre": "stg_poblacion_mitad_anio",
+        "descripcion": "Tabla de staging que contiene proyecciones de población a mitad de año por grupo quinquenal de edad, sexo, municipio y año. Datos de CONAPO para Jalisco, periodo 1990-2040. Cada registro representa la población de un grupo de edad específico para un municipio, sexo y año.",
+        "filas": 12750,
+        "columnas": [
+          {
+            "nombre": "id",
+            "tipo": "integer",
+            "pk": true,
+            "nullable": false
+          },
+          {
+            "nombre": "municipio_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "entidad_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "sexo_id",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "anio",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": false
+          },
+          {
+            "nombre": "pob_00_04",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_05_09",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_10_14",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_15_19",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_20_24",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_25_29",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_30_34",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_35_39",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_40_44",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_45_49",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_50_54",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_55_59",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_60_64",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_65_69",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_70_74",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_75_79",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_80_84",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_85_mm",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "pob_total",
+            "tipo": "integer",
+            "pk": false,
+            "nullable": true
+          },
+          {
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "pk": false,
+            "nullable": false
+          }
+        ]
+      }
+    ],
+    "relaciones": [
+      {
+        "tabla": "stg_grandes_grupos_edad",
+        "columnas": [
+          "sexo_id"
+        ],
+        "ref_tabla": "cat_sexo",
+        "ref_columnas": [
+          "id"
+        ]
+      },
+      {
+        "tabla": "stg_poblacion_mitad_anio",
+        "columnas": [
+          "sexo_id"
+        ],
+        "ref_tabla": "cat_sexo",
+        "ref_columnas": [
+          "id"
+        ]
+      }
+    ]
+  },
+  "etapas": []
+}

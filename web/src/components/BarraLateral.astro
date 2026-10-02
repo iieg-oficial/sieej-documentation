@@ -51,11 +51,11 @@ const { secciones, tituloSecciones = "En esta página", otros, tituloOtros } = A
 
   .barra__fija {
     position: sticky;
-    top: 1.5rem;
+    top: calc(var(--alto-encabezado) + var(--respiro-ancla));
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-    max-height: calc(100vh - 3rem);
+    max-height: calc(100vh - var(--alto-encabezado) - 2 * var(--respiro-ancla));
     overflow-y: auto;
   }
 

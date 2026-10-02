@@ -1,0 +1,1080 @@
+{
+  "nombre": "delitos_fuero_comun",
+  "corte": "29 de mayo de 2026",
+  "tablas": [
+    {
+      "nombre": "stg_delitos_fuero_comun_2015_2025",
+      "descripcion": "Tabla histórica fija de incidencia delictiva municipal mensual 2015–2025.",
+      "filas": 2562546
+    },
+    {
+      "nombre": "stg_delitos_fuero_comun_2026",
+      "descripcion": "Tabla del año en curso (2026), recargada mensualmente.",
+      "filas": 286140
+    },
+    {
+      "nombre": "cat_bien_juridico_afectado",
+      "descripcion": "Catálogo de bienes jurídicos afectados.",
+      "filas": 7
+    },
+    {
+      "nombre": "cat_tipo_delito",
+      "descripcion": "Catálogo de tipos de delito.",
+      "filas": 49
+    },
+    {
+      "nombre": "cat_subtipo_delito",
+      "descripcion": "Catálogo de subtipos de delito.",
+      "filas": 85
+    },
+    {
+      "nombre": "cat_modalidad",
+      "descripcion": "Catálogo de modalidades delictivas.",
+      "filas": 79
+    },
+    {
+      "nombre": "cat_municipio",
+      "descripcion": "Catálogo de municipios (clave INEGI).",
+      "filas": 2515
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "v_delitos_comparables_general",
+      "descripcion": "Vista de delitos comparables a nivel general.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "cve_municipio",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "clave_ent",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "municipio",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "bien_juridico_afectado",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "tipo_delito",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subtipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "modalidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "mes",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "conteo",
+          "tipo": "integer"
+        }
+      ]
+    },
+    {
+      "nombre": "v_delitos_serie_historica",
+      "descripcion": "Serie histórica unificada (histórico + año en curso).",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "cve_municipio",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "clave_ent",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "municipio",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "bien_juridico_afectado",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "tipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subtipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "modalidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "mes",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "conteo",
+          "tipo": "integer"
+        }
+      ]
+    },
+    {
+      "nombre": "v_extorsion",
+      "descripcion": "Vista de extorsión.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "cve_municipio",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "clave_ent",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "municipio",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "bien_juridico_afectado",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "tipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subtipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "modalidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "mes",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "conteo",
+          "tipo": "integer"
+        }
+      ]
+    },
+    {
+      "nombre": "v_feminicidio",
+      "descripcion": "Vista de feminicidio.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "cve_municipio",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "clave_ent",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "municipio",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "bien_juridico_afectado",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "tipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subtipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "modalidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "mes",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "conteo",
+          "tipo": "integer"
+        }
+      ]
+    },
+    {
+      "nombre": "v_homicidio_doloso",
+      "descripcion": "Vista de homicidio doloso.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "cve_municipio",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "clave_ent",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "municipio",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "bien_juridico_afectado",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "tipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subtipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "modalidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "mes",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "conteo",
+          "tipo": "integer"
+        }
+      ]
+    },
+    {
+      "nombre": "v_narcomenudeo",
+      "descripcion": "Vista de narcomenudeo.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "cve_municipio",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "clave_ent",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "municipio",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "bien_juridico_afectado",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "tipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subtipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "modalidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "mes",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "conteo",
+          "tipo": "integer"
+        }
+      ]
+    },
+    {
+      "nombre": "v_otros_fuero_comun",
+      "descripcion": "Vista de otros delitos del fuero común.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "cve_municipio",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "clave_ent",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "municipio",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "bien_juridico_afectado",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "tipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subtipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "modalidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "mes",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "conteo",
+          "tipo": "integer"
+        }
+      ]
+    },
+    {
+      "nombre": "v_otros_libertad_personal",
+      "descripcion": "Vista de otros delitos contra la libertad personal.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "cve_municipio",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "clave_ent",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "municipio",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "bien_juridico_afectado",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "tipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subtipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "modalidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "mes",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "conteo",
+          "tipo": "integer"
+        }
+      ]
+    },
+    {
+      "nombre": "v_otros_libertad_sexual",
+      "descripcion": "Vista de otros delitos contra la libertad y seguridad sexual.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "cve_municipio",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "clave_ent",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "municipio",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "bien_juridico_afectado",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "tipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subtipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "modalidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "mes",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "conteo",
+          "tipo": "integer"
+        }
+      ]
+    },
+    {
+      "nombre": "v_otros_patrimonio",
+      "descripcion": "Vista de otros delitos contra el patrimonio.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "cve_municipio",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "clave_ent",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "municipio",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "bien_juridico_afectado",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "tipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subtipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "modalidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "mes",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "conteo",
+          "tipo": "integer"
+        }
+      ]
+    },
+    {
+      "nombre": "v_otros_sociedad",
+      "descripcion": "Vista de otros delitos contra la sociedad.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "cve_municipio",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "clave_ent",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "municipio",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "bien_juridico_afectado",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "tipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subtipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "modalidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "mes",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "conteo",
+          "tipo": "integer"
+        }
+      ]
+    },
+    {
+      "nombre": "v_otros_vida_integridad",
+      "descripcion": "Vista de otros delitos contra la vida y la integridad.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "cve_municipio",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "clave_ent",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "municipio",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "bien_juridico_afectado",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "tipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subtipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "modalidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "mes",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "conteo",
+          "tipo": "integer"
+        }
+      ]
+    },
+    {
+      "nombre": "v_servidores_publicos",
+      "descripcion": "Vista de delitos cometidos por servidores públicos.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "cve_municipio",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "clave_ent",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "municipio",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "bien_juridico_afectado",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "tipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subtipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "modalidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "mes",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "conteo",
+          "tipo": "integer"
+        }
+      ]
+    },
+    {
+      "nombre": "v_tentativa_extorsion",
+      "descripcion": "Vista de tentativa de extorsión.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "cve_municipio",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "clave_ent",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "municipio",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "bien_juridico_afectado",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "tipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subtipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "modalidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "mes",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "conteo",
+          "tipo": "integer"
+        }
+      ]
+    },
+    {
+      "nombre": "v_tentativa_feminicidio",
+      "descripcion": "Vista de tentativa de feminicidio.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "cve_municipio",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "clave_ent",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "municipio",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "bien_juridico_afectado",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "tipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subtipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "modalidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "mes",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "conteo",
+          "tipo": "integer"
+        }
+      ]
+    },
+    {
+      "nombre": "v_tentativa_homicidio_doloso",
+      "descripcion": "Vista de tentativa de homicidio doloso.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "cve_municipio",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "clave_ent",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "municipio",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "bien_juridico_afectado",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "tipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subtipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "modalidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "mes",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "conteo",
+          "tipo": "integer"
+        }
+      ]
+    },
+    {
+      "nombre": "v_trata_personas",
+      "descripcion": "Vista de trata de personas.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "cve_municipio",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "clave_ent",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "municipio",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "bien_juridico_afectado",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "tipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subtipo_delito",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "modalidad",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "mes",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "conteo",
+          "tipo": "integer"
+        }
+      ]
+    }
+  ]
+}

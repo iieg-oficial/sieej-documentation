@@ -1,0 +1,119 @@
+{
+  "nombre": "etef",
+  "corte": "29 de mayo de 2026",
+  "tablas": [
+    {
+      "nombre": "stg_etef_datos",
+      "descripcion": "Tabla principal de exportaciones trimestrales con versionado SCD Tipo 2 (row_hash, valid_from/valid_to, is_current).",
+      "filas": 65664
+    },
+    {
+      "nombre": "stg_etef_cat_codigo_scian",
+      "descripcion": "Catálogo de códigos SCIAN.",
+      "filas": 27
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "v_etef",
+      "descripcion": "Vista de los registros vigentes (is_current) de exportaciones.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "anio",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 3,
+          "nombre": "trimestre",
+          "tipo": "varchar(3)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "mes",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "prod_est",
+          "tipo": "varchar(150)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "cobertura",
+          "tipo": "varchar(50)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "cve_ent",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 8,
+          "nombre": "nom_ent",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 9,
+          "nombre": "codigo_scian_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 10,
+          "nombre": "codigo_scian",
+          "tipo": "varchar(10)"
+        },
+        {
+          "posicion": 11,
+          "nombre": "subsector",
+          "tipo": "varchar(255)"
+        },
+        {
+          "posicion": 12,
+          "nombre": "val_usd",
+          "tipo": "numeric(15,2)"
+        },
+        {
+          "posicion": 13,
+          "nombre": "estatus_cifra",
+          "tipo": "varchar(20)"
+        },
+        {
+          "posicion": 14,
+          "nombre": "estatus",
+          "tipo": "varchar(30)"
+        },
+        {
+          "posicion": 15,
+          "nombre": "row_hash",
+          "tipo": "varchar(64)"
+        },
+        {
+          "posicion": 16,
+          "nombre": "valid_from",
+          "tipo": "timestamp"
+        },
+        {
+          "posicion": 17,
+          "nombre": "valid_to",
+          "tipo": "timestamp"
+        },
+        {
+          "posicion": 18,
+          "nombre": "is_current",
+          "tipo": "boolean"
+        },
+        {
+          "posicion": 19,
+          "nombre": "created_at",
+          "tipo": "timestamp"
+        }
+      ]
+    }
+  ]
+}

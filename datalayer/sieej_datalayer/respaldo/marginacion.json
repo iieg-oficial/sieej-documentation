@@ -1,0 +1,311 @@
+{
+  "nombre": "marginacion",
+  "corte": "29 de mayo de 2026",
+  "tablas": [
+    {
+      "nombre": "marginaciones_municipales",
+      "descripcion": "Índice de marginación municipal por año con sus indicadores componentes.",
+      "filas": 375
+    },
+    {
+      "nombre": "marginaciones_estatales",
+      "descripcion": "Índice de marginación estatal por año.",
+      "filas": 64
+    },
+    {
+      "nombre": "marginaciones_localidades",
+      "descripcion": "Índice de marginación por localidad y año.",
+      "filas": 6108
+    },
+    {
+      "nombre": "grados_marginacion",
+      "descripcion": "Catálogo de grados de marginación (Muy alto … Muy bajo).",
+      "filas": 5
+    },
+    {
+      "nombre": "localidades",
+      "descripcion": "Catálogo de localidades.",
+      "filas": 6108
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "view_marginacion_estatal",
+      "descripcion": "Vista de marginación estatal.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "entidad",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 3,
+          "nombre": "grado_marginacion",
+          "tipo": "text"
+        },
+        {
+          "posicion": 4,
+          "nombre": "pob_total",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 5,
+          "nombre": "porc_pob15_analfabeta",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 6,
+          "nombre": "pob15_sin_educ_bas",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 7,
+          "nombre": "porc_viv_sin_drenaje_ni_excusado",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 8,
+          "nombre": "porc_viv_sin_energia",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 9,
+          "nombre": "porc_viv_sin_agua_entubada",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 10,
+          "nombre": "porc_viv_piso_tierra",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 11,
+          "nombre": "porc_viv_con_hacinamiento",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 12,
+          "nombre": "porc_pob_loc_menos5000_hab",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 13,
+          "nombre": "pob_ocup_hasta_2_sal_min",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 14,
+          "nombre": "porc_viv_sin_refrigerador",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 15,
+          "nombre": "indice_marginacion",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 16,
+          "nombre": "indice_marginacion_normalizado",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 17,
+          "nombre": "lugar_contexto_nacional",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 18,
+          "nombre": "fecha_actualizacion",
+          "tipo": "date"
+        }
+      ]
+    },
+    {
+      "nombre": "view_marginacion_localidades",
+      "descripcion": "Vista de marginación por localidad.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "localidad",
+          "tipo": "text"
+        },
+        {
+          "posicion": 3,
+          "nombre": "municipio",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 4,
+          "nombre": "grado_marginacion",
+          "tipo": "text"
+        },
+        {
+          "posicion": 5,
+          "nombre": "pob_total",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 6,
+          "nombre": "porc_pob15_analfabeta",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 7,
+          "nombre": "porc_pob15_sin_educ_basica",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 8,
+          "nombre": "porc_viv_sin_drenaje_ni_excusado",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 9,
+          "nombre": "porc_viv_sin_energia",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 10,
+          "nombre": "porc_viv_sin_agua_entubada",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 11,
+          "nombre": "porc_viv_piso_tierra",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 12,
+          "nombre": "prom_ocup_por_cuarto",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 13,
+          "nombre": "porc_viv_sin_refrigerador",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 14,
+          "nombre": "indice_marginacion",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 15,
+          "nombre": "indice_marginacion_normalizado",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 16,
+          "nombre": "fecha_actualizacion",
+          "tipo": "date"
+        }
+      ]
+    },
+    {
+      "nombre": "view_marginacion_municipal",
+      "descripcion": "Vista de marginación municipal.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "municipio",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 3,
+          "nombre": "grado_marginacion",
+          "tipo": "text"
+        },
+        {
+          "posicion": 4,
+          "nombre": "pob_total",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 5,
+          "nombre": "porc_pob15_analfabeta",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 6,
+          "nombre": "pob15_sin_educ_bas",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 7,
+          "nombre": "porc_viv_sin_drenaje_ni_excusado",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 8,
+          "nombre": "porc_viv_sin_energia",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 9,
+          "nombre": "porc_viv_sin_agua_entubada",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 10,
+          "nombre": "porc_viv_piso_tierra",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 11,
+          "nombre": "prom_ocup_por_cuarto",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 12,
+          "nombre": "porc_pob_loc_menos5000_hab",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 13,
+          "nombre": "pob_ocup_hasta_2_sal_min",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 14,
+          "nombre": "indice_marginacion",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 15,
+          "nombre": "indice_marginacion_normalizado",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 16,
+          "nombre": "porc_viv_sin_refrigerador",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 17,
+          "nombre": "lugar_contexto_nacional",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 18,
+          "nombre": "fecha_actualizacion",
+          "tipo": "date"
+        }
+      ]
+    }
+  ]
+}

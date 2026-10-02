@@ -1,0 +1,244 @@
+{
+  "nombre": "pobreza_multidimensional",
+  "corte": "29 de mayo de 2026",
+  "tablas": [
+    {
+      "nombre": "stg_pobreza_multidimensional_datos",
+      "descripcion": "Tabla principal en formato tidy (municipio × año) con indicadores de pobreza, vulnerabilidad y carencias sociales.",
+      "filas": 7407
+    },
+    {
+      "nombre": "stg_pobreza_multidimensional_cat_entidad",
+      "descripcion": "Catálogo de entidades federativas.",
+      "filas": 32
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "vw_pobreza_multidimencional",
+      "descripcion": "Vista analítica desnormalizada de los indicadores de pobreza.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "cve_mun",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "nombre_municipio",
+          "tipo": "varchar(150)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "cve_ent",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "nombre_entidad",
+          "tipo": "varchar(100)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 7,
+          "nombre": "poblacion",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 8,
+          "nombre": "pobreza_porcentaje",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 9,
+          "nombre": "pobreza_personas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 10,
+          "nombre": "pobreza_promedio",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 11,
+          "nombre": "pobreza_ext_porcentaje",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 12,
+          "nombre": "pobreza_ext_personas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 13,
+          "nombre": "pobreza_ext_promedio",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 14,
+          "nombre": "pobreza_mod_porcentaje",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 15,
+          "nombre": "pobreza_mod_personas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 16,
+          "nombre": "pobreza_mod_promedio",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 17,
+          "nombre": "vul_carencia_porcentaje",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 18,
+          "nombre": "vul_carencia_personas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 19,
+          "nombre": "vul_carencia_promedio",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 20,
+          "nombre": "vul_ingreso_porcentaje",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 21,
+          "nombre": "vul_ingreso_personas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 22,
+          "nombre": "no_pobre_porcentaje",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 23,
+          "nombre": "no_pobre_personas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 24,
+          "nombre": "rez_edu_porcentaje",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 25,
+          "nombre": "rez_edu_personas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 26,
+          "nombre": "car_salud_porcentaje",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 27,
+          "nombre": "car_salud_personas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 28,
+          "nombre": "car_seg_soc_porcentaje",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 29,
+          "nombre": "car_seg_soc_personas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 30,
+          "nombre": "car_viv_porcentaje",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 31,
+          "nombre": "car_viv_personas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 32,
+          "nombre": "car_sbv_porcentaje",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 33,
+          "nombre": "car_sbv_personas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 34,
+          "nombre": "car_ali_porcentaje",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 35,
+          "nombre": "car_ali_personas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 36,
+          "nombre": "al_1_car_porcentaje",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 37,
+          "nombre": "al_1_car_personas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 38,
+          "nombre": "tres_mas_car_porcentaje",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 39,
+          "nombre": "tres_mas_car_personas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 40,
+          "nombre": "lpi_porcentaje",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 41,
+          "nombre": "lpi_personas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 42,
+          "nombre": "lpei_porcentaje",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 43,
+          "nombre": "lpei_personas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 44,
+          "nombre": "created_at",
+          "tipo": "timestamp"
+        }
+      ]
+    }
+  ]
+}

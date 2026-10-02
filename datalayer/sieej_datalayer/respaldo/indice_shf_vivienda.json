@@ -1,0 +1,187 @@
+{
+  "nombre": "indice_shf_vivienda",
+  "corte": "27 de agosto de 2026",
+  "tablas": [
+    {
+      "nombre": "stg_indice_shf_vivienda_estatal",
+      "descripcion": "Índice SHF de precios de la vivienda desglosado por entidad federativa. Año base 2017 = 100: el promedio de los cuatro trimestres de 2017 es exactamente 100 en las 121 series.",
+      "filas": 0
+    },
+    {
+      "nombre": "stg_indice_shf_vivienda_global",
+      "descripcion": "Índice SHF de precios de la vivienda para las series sin desglose geográfico: nacional, por condición (nueva/usada), por tipo de vivienda, por segmento y por zona metropolitana. Año base 2017 = 100: el promedio de los cuatro trimestres de 2017 es exactamente 100 en las 121 series.",
+      "filas": 0
+    },
+    {
+      "nombre": "stg_indice_shf_vivienda_municipal",
+      "descripcion": "Índice SHF de precios de la vivienda desglosado por municipio. SHF publica una selección de municipios (74 en la edición del 2T 2026), no los 2,469 del país. Año base 2017 = 100: el promedio de los cuatro trimestres de 2017 es exactamente 100 en las 121 series.",
+      "filas": 0
+    },
+    {
+      "nombre": "cat_serie_global",
+      "descripcion": "Las 15 series sin desglose geográfico que SHF agrupa bajo la columna \"Global\" del archivo de datos abiertos.",
+      "filas": 0
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "vw_indice_shf_vivienda_estatal",
+      "descripcion": "Índice SHF de precios de la vivienda por entidad federativa, con el nombre oficial del INEGI resuelto. Año base 2017 = 100.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "entidad_id",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "nom_ent",
+          "tipo": "character varying"
+        },
+        {
+          "posicion": 3,
+          "nombre": "fecha",
+          "tipo": "date"
+        },
+        {
+          "posicion": 4,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 5,
+          "nombre": "trimestre",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 6,
+          "nombre": "indice",
+          "tipo": "numeric(8,2)"
+        }
+      ]
+    },
+    {
+      "nombre": "vw_indice_shf_vivienda_global",
+      "descripcion": "Índice SHF de precios de la vivienda de las series sin desglose geográfico, con el nombre y el tipo de serie resueltos. Año base 2017 = 100.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "serie",
+          "tipo": "text"
+        },
+        {
+          "posicion": 2,
+          "nombre": "tipo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 3,
+          "nombre": "fecha",
+          "tipo": "date"
+        },
+        {
+          "posicion": 4,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 5,
+          "nombre": "trimestre",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 6,
+          "nombre": "indice",
+          "tipo": "numeric(8,2)"
+        }
+      ]
+    },
+    {
+      "nombre": "vw_indice_shf_vivienda_jalisco",
+      "descripcion": "Corte de Jalisco: los municipios que SHF publica del estado (Guadalajara, Zapopan, San Pedro Tlaquepaque y Tlajomulco de Zúñiga), la entidad y la serie de la Zona Metropolitana de Guadalajara, apiladas en una sola serie de tiempo comparable. Año base 2017 = 100.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "nivel",
+          "tipo": "text"
+        },
+        {
+          "posicion": 2,
+          "nombre": "serie",
+          "tipo": "character varying"
+        },
+        {
+          "posicion": 3,
+          "nombre": "municipio_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 4,
+          "nombre": "fecha",
+          "tipo": "date"
+        },
+        {
+          "posicion": 5,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 6,
+          "nombre": "trimestre",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 7,
+          "nombre": "indice",
+          "tipo": "numeric(8,2)"
+        }
+      ]
+    },
+    {
+      "nombre": "vw_indice_shf_vivienda_municipal",
+      "descripcion": "Índice SHF de precios de la vivienda de los municipios que publica SHF, con los nombres oficiales del INEGI resueltos. Año base 2017 = 100.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "municipio_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "nomgeo",
+          "tipo": "character varying"
+        },
+        {
+          "posicion": 3,
+          "nombre": "entidad_id",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 4,
+          "nombre": "nom_ent",
+          "tipo": "character varying"
+        },
+        {
+          "posicion": 5,
+          "nombre": "fecha",
+          "tipo": "date"
+        },
+        {
+          "posicion": 6,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 7,
+          "nombre": "trimestre",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 8,
+          "nombre": "indice",
+          "tipo": "numeric(8,2)"
+        }
+      ]
+    }
+  ]
+}

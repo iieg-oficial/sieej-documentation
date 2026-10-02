@@ -1,5 +1,5 @@
 {
-  "generado": "2026-10-01T22:28:45.442028Z",
+  "generado": "2026-10-02T16:34:57.255182Z",
   "datos_obsoletos": false,
   "fuentes": {
     "airflow": {
@@ -10,12 +10,12 @@
     "bd": {
       "estado": "ok",
       "detalle": "29 bases de datos",
-      "consultado_en": "2026-10-01T22:31:33.681752Z"
+      "consultado_en": "2026-10-02T16:37:44.412777Z"
     },
     "readme": {
       "estado": "ok",
-      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
-      "consultado_en": "2026-10-01T22:28:45.465079Z"
+      "detalle": "35 README de ETL-SIEEJ @ 9b0ddc3",
+      "consultado_en": "2026-10-02T16:34:57.283811Z"
     }
   },
   "nombre": "defunciones",
@@ -90,7 +90,7 @@
       "cat_localidades": "Catálogo versionado y jerárquico (`entidad_municipio_localidad_<edicion>.csv`). Su `codigo` de 9 dígitos combina `cve_ent` (2) + `cve_mun` (3) + `cve_loc` (4). El archivo trae una fila por cada nivel, no solo por localidad:"
     },
     "alcance_vistas": {},
-    "commit": null
+    "commit": "9b0ddc3"
   },
   "base": {
     "nombre": "defunciones",
@@ -3357,5 +3357,8 @@
       }
     ]
   },
+  "origen_base": "bd",
+  "corte_respaldo": null,
+  "der_svg": null,
   "etapas": []
 }

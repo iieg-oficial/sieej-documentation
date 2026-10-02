@@ -4,9 +4,11 @@ import type { Pagina } from "../lib/pipelines";
 
 interface Props {
   base: NonNullable<Pagina["base"]>;
+  svg?: string | null;
 }
 
-const { base } = Astro.props;
+const { base, svg = null } = Astro.props;
+const usarSvg = Boolean(svg) && base.relaciones.length === 0;
 
 const MAX_OTRAS = 6;
 const ALTO_CABECERA = 30;
@@ -41,7 +43,7 @@ const aristas = base.relaciones
   .map((r, i) => ({ id: `e${i}`, sources: [r.tabla], targets: [r.ref_tabla] }));
 
 const elk = new ELK();
-const grafo = await elk.layout({
+const grafo = usarSvg ? { children: [], edges: [], width: 0, height: 0 } : await elk.layout({
   id: "raiz",
   layoutOptions: {
     "elk.algorithm": "layered",
@@ -57,7 +59,8 @@ const grafo = await elk.layout({
 });
 
 const posicion = new Map((grafo.children ?? []).map((n) => [n.id, n]));
-const ancho = Math.ceil(grafo.width ?? 0);
+const anchoSvg = Number(svg?.match(/viewBox="0 0 ([\d.]+)/)?.[1] ?? 0);
+const ancho = usarSvg ? Math.ceil(anchoSvg) : Math.ceil(grafo.width ?? 0);
 const alto = Math.ceil(grafo.height ?? 0);
 const trazos = (grafo.edges ?? []).flatMap((e) =>
   (e.sections ?? []).map((s) =>
@@ -74,7 +77,8 @@ const id = `der-${base.nombre}`;
     <button type="button" data-zoom="ajustar" aria-label="Ajustar el diagrama al ancho">Ajustar</button>
   </div>
   <div class="der__lienzo">
-    <svg
+    {usarSvg && <div class="der__repo" role="img" aria-label={`Diagrama entidad-relación de ${base.nombre}`} set:html={svg} />}
+    {!usarSvg && <svg
       viewBox={`0 0 ${ancho} ${alto}`}
       width={ancho}
       height={alto}
@@ -112,7 +116,7 @@ const id = `der-${base.nombre}`;
           );
         })
       }
-    </svg>
+    </svg>}
   </div>
 </div>
 
@@ -121,6 +125,7 @@ const id = `der-${base.nombre}`;
     const svg = der.querySelector("svg");
     const natural = Number(der.dataset.ancho);
     if (!svg || !natural) return;
+    svg.removeAttribute("height");
     let escala = 1;
     const ajustar = () => {
       escala = Math.min(1, der.clientWidth / natural);
@@ -179,7 +184,8 @@ const id = `der-${base.nombre}`;
     padding: 2.75rem 0.5rem 0.5rem;
   }
 
-  .der svg {
+  .der svg,
+  .der__repo :global(svg) {
     display: block;
     max-width: none;
     margin: 0 auto;

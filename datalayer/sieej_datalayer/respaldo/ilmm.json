@@ -1,0 +1,75 @@
+{
+  "nombre": "ilmm",
+  "corte": null,
+  "tablas": [
+    {
+      "nombre": "stg_ilmm",
+      "descripcion": "Registro de indicadores del mercado laboral por municipio, año y tipo de estimador: población económicamente activa, tasa de ocupación y porcentaje de ocupación informal.",
+      "filas": null
+    },
+    {
+      "nombre": "cat_ilmm_estimador",
+      "descripcion": "Tipos de estimador: Valor, Error estándar, Límites de confianza, CV.",
+      "filas": 4
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "vw_ilmm",
+      "descripcion": "Desnormalización de `stg_ilmm` con nombre de municipio y entidad resueltos vía FDW a `cvegeo`, y descripción del estimador resuelta desde `cat_ilmm_estimador`.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "fecha",
+          "tipo": "date"
+        },
+        {
+          "posicion": 3,
+          "nombre": "clave_municipio",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "municipio",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 5,
+          "nombre": "entidad",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 6,
+          "nombre": "estimador_id",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 7,
+          "nombre": "estimador",
+          "tipo": "varchar(60)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "pob_econo_activa",
+          "tipo": "numeric(12,4)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "ocupados",
+          "tipo": "numeric(12,4)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "informales",
+          "tipo": "numeric(12,4)"
+        }
+      ]
+    }
+  ],
+  "der_svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" viewBox=\"0 0 720.0 420.0\" style=\"font-family: system-ui, -apple-system, sans-serif;\">\n  <defs>\n    <pattern id=\"erd-dots\" width=\"24\" height=\"24\" patternUnits=\"userSpaceOnUse\">\n      <circle cx=\"1\" cy=\"1\" r=\"0.8\" fill=\"#d1d5db\" />\n    </pattern>\n    <marker id=\"arr\" markerWidth=\"10\" markerHeight=\"7\" refX=\"9\" refY=\"3.5\" orient=\"auto\">\n      <polygon points=\"0 0, 10 3.5, 0 7\" fill=\"#c4cad4\" />\n    </marker>\n  </defs>\n  <rect width=\"100%\" height=\"100%\" fill=\"#f9fafb\" />\n  <rect width=\"100%\" height=\"100%\" fill=\"url(#erd-dots)\" />\n  <!-- Relación: cat_ilmm_estimador → stg_ilmm -->\n  <g class=\"erd-rel\" data-from=\"cat_ilmm_estimador\" data-to=\"stg_ilmm\">\n    <path d=\"M 218.0 165.0 C 288.0 165.0 270.0 165.0 340.0 165.0\" fill=\"none\" stroke=\"transparent\" stroke-width=\"18\"/>\n    <path d=\"M 218.0 165.0 C 288.0 165.0 270.0 165.0 340.0 165.0\" fill=\"none\" stroke=\"#c4cad4\" stroke-width=\"1.5\" marker-end=\"url(#arr)\"/>\n    <text x=\"238.0\" y=\"153.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">1</text>\n    <text x=\"320.0\" y=\"153.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">N</text>\n  </g>\n  <!-- cvegeo_municipalities (FDW) — referencia sin FK formal -->\n  <g class=\"erd-rel\" data-from=\"cvegeo_municipalities\" data-to=\"stg_ilmm\">\n    <path d=\"M 500.0 330.0 C 500.0 260.0 500.0 230.0 558.0 230.0\" fill=\"none\" stroke=\"transparent\" stroke-width=\"18\"/>\n    <path d=\"M 500.0 330.0 C 500.0 260.0 500.0 230.0 558.0 230.0\" fill=\"none\" stroke=\"#c4cad4\" stroke-width=\"1.5\" marker-end=\"url(#arr)\"/>\n    <text x=\"480.0\" y=\"318.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">1</text>\n    <text x=\"538.0\" y=\"218.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">N</text>\n  </g>\n  <!-- cat_ilmm_estimador -->\n  <g class=\"erd-node\" data-table=\"cat_ilmm_estimador\" transform=\"translate(0.0, 120.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"90\" fill=\"rgba(0,0,0,0.06)\"/>\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"90\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\"/>\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#5C2472\"/>\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#5C2472\"/>\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">CatIlmmEstimador</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">descripcion</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">string</text>\n  </g>\n  <!-- stg_ilmm -->\n  <g class=\"erd-node\" data-table=\"stg_ilmm\" transform=\"translate(340.0, 60.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"237\" fill=\"rgba(0,0,0,0.06)\"/>\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"237\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\"/>\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#065f46\"/>\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#065f46\"/>\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">StgIlmm</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">clave_municipio</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">varchar(5)</text>\n    <line x1=\"10\" y1=\"84\" x2=\"208\" y2=\"84\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"95.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">fecha</text>\n    <text x=\"210\" y=\"95.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#1d4ed8\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">date</text>\n    <line x1=\"10\" y1=\"105\" x2=\"208\" y2=\"105\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"116.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9a3412\" font-weight=\"400\" dominant-baseline=\"middle\">estimador_id</text>\n    <text x=\"210\" y=\"116.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#c2410c\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">FK</text>\n    <line x1=\"10\" y1=\"126\" x2=\"208\" y2=\"126\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"137.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">pob_econo_activa</text>\n    <text x=\"210\" y=\"137.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">numeric?</text>\n    <line x1=\"10\" y1=\"147\" x2=\"208\" y2=\"147\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"158.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">ocupados</text>\n    <text x=\"210\" y=\"158.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">numeric?</text>\n    <line x1=\"10\" y1=\"168\" x2=\"208\" y2=\"168\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"179.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">informales</text>\n    <text x=\"210\" y=\"179.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">numeric?</text>\n  </g>\n  <!-- cvegeo_municipalities (FDW) -->\n  <g class=\"erd-node\" data-table=\"cvegeo_municipalities\" transform=\"translate(282.0, 330.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"69\" fill=\"rgba(0,0,0,0.06)\"/>\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"69\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\"/>\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#2563eb\"/>\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#2563eb\"/>\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">cvegeo_municipalities</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">municipio_id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n  </g>\n</svg>"
+}

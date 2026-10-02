@@ -23,6 +23,7 @@ from .models import (
     Pipeline,
     Vista,
 )
+from .respaldo import cargar_respaldo
 
 _PREFIJOS_DAG = ("etl_", "dag_", "pipeline_")
 # Sufijos que nombran la etapa, no el pipeline: etl_denue_update es la etapa
@@ -352,7 +353,11 @@ def construir_paginas(
     for nombre, p in inventario.pipelines.items():
         doc = documentos.get(nombre)
         base = vivas.get(nombre)
-        if base is not None:
+        origen, corte = ("bd", None) if base is not None else (None, None)
+        if base is None and (respaldo := cargar_respaldo(nombre)):
+            base, corte = respaldo
+            origen = "respaldo"
+        elif base is not None:
             base = base.model_copy(deep=True)
             base.vistas = vistas.get(nombre, base.vistas)
             if doc:
@@ -366,6 +371,8 @@ def construir_paginas(
             clasificacion=p.clasificacion,
             documento=doc,
             base=base,
+            origen_base=origen,
+            corte_respaldo=corte,
             etapas=p.etapas,
         )
     return paginas

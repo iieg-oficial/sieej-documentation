@@ -1,0 +1,315 @@
+{
+  "nombre": "denue",
+  "corte": "29 de mayo de 2026",
+  "tablas": [
+    {
+      "nombre": "stg_establecimientos",
+      "descripcion": "Tabla de hechos de establecimientos económicos: nombre, razón social, clasificación SCIAN, rango de personal, geolocalización y fecha de alta.",
+      "filas": 14901162
+    },
+    {
+      "nombre": "cat_actualizaciones",
+      "descripcion": "Catálogo de actualizaciones (fecha del corte).",
+      "filas": 18
+    },
+    {
+      "nombre": "cat_localidades",
+      "descripcion": "Catálogo de localidades.",
+      "filas": 7754
+    },
+    {
+      "nombre": "cat_sectores",
+      "descripcion": "Catálogo de sectores SCIAN.",
+      "filas": 20
+    },
+    {
+      "nombre": "cat_subsectores",
+      "descripcion": "Catálogo de subsectores SCIAN.",
+      "filas": 89
+    },
+    {
+      "nombre": "cat_ramas",
+      "descripcion": "Catálogo de ramas SCIAN.",
+      "filas": 283
+    },
+    {
+      "nombre": "cat_subramas",
+      "descripcion": "Catálogo de subramas SCIAN.",
+      "filas": 530
+    },
+    {
+      "nombre": "cat_clases_actividad",
+      "descripcion": "Catálogo de clases de actividad SCIAN.",
+      "filas": 1009
+    },
+    {
+      "nombre": "cat_rangos_personal",
+      "descripcion": "Catálogo de rangos de personal ocupado.",
+      "filas": 7
+    },
+    {
+      "nombre": "cat_tipos_establecimientos",
+      "descripcion": "Catálogo de tipos de establecimiento.",
+      "filas": 2
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "v_establecimientos",
+      "descripcion": "Vista desnormalizada nacional de establecimientos.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "fecha_actualizacion",
+          "tipo": "date"
+        },
+        {
+          "posicion": 3,
+          "nombre": "nombre_establecimiento",
+          "tipo": "text"
+        },
+        {
+          "posicion": 4,
+          "nombre": "razon_social",
+          "tipo": "text"
+        },
+        {
+          "posicion": 5,
+          "nombre": "latitud",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 6,
+          "nombre": "longitud",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 7,
+          "nombre": "fecha_alta",
+          "tipo": "date"
+        },
+        {
+          "posicion": 8,
+          "nombre": "nombre_asentamiento",
+          "tipo": "text"
+        },
+        {
+          "posicion": 9,
+          "nombre": "ageb",
+          "tipo": "text"
+        },
+        {
+          "posicion": 10,
+          "nombre": "entidad",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 11,
+          "nombre": "municipio",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 12,
+          "nombre": "localidad_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 13,
+          "nombre": "localidad",
+          "tipo": "text"
+        },
+        {
+          "posicion": 14,
+          "nombre": "sector_codigo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 15,
+          "nombre": "sector",
+          "tipo": "text"
+        },
+        {
+          "posicion": 16,
+          "nombre": "subsector_codigo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 17,
+          "nombre": "subsector",
+          "tipo": "text"
+        },
+        {
+          "posicion": 18,
+          "nombre": "rama_codigo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 19,
+          "nombre": "rama",
+          "tipo": "text"
+        },
+        {
+          "posicion": 20,
+          "nombre": "subrama_codigo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 21,
+          "nombre": "subrama",
+          "tipo": "text"
+        },
+        {
+          "posicion": 22,
+          "nombre": "clase_actividad_codigo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 23,
+          "nombre": "clase_actividad",
+          "tipo": "text"
+        },
+        {
+          "posicion": 24,
+          "nombre": "rango_personal",
+          "tipo": "text"
+        },
+        {
+          "posicion": 25,
+          "nombre": "tipo_establecimiento",
+          "tipo": "text"
+        }
+      ]
+    },
+    {
+      "nombre": "v_establecimientos_jalisco",
+      "descripcion": "Vista desnormalizada filtrada a Jalisco.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "fecha_actualizacion",
+          "tipo": "date"
+        },
+        {
+          "posicion": 3,
+          "nombre": "nombre_establecimiento",
+          "tipo": "text"
+        },
+        {
+          "posicion": 4,
+          "nombre": "razon_social",
+          "tipo": "text"
+        },
+        {
+          "posicion": 5,
+          "nombre": "latitud",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 6,
+          "nombre": "longitud",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 7,
+          "nombre": "fecha_alta",
+          "tipo": "date"
+        },
+        {
+          "posicion": 8,
+          "nombre": "nombre_asentamiento",
+          "tipo": "text"
+        },
+        {
+          "posicion": 9,
+          "nombre": "ageb",
+          "tipo": "text"
+        },
+        {
+          "posicion": 10,
+          "nombre": "municipio",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 11,
+          "nombre": "localidad_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 12,
+          "nombre": "localidad",
+          "tipo": "text"
+        },
+        {
+          "posicion": 13,
+          "nombre": "sector_codigo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 14,
+          "nombre": "sector",
+          "tipo": "text"
+        },
+        {
+          "posicion": 15,
+          "nombre": "subsector_codigo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 16,
+          "nombre": "subsector",
+          "tipo": "text"
+        },
+        {
+          "posicion": 17,
+          "nombre": "rama_codigo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 18,
+          "nombre": "rama",
+          "tipo": "text"
+        },
+        {
+          "posicion": 19,
+          "nombre": "subrama_codigo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 20,
+          "nombre": "subrama",
+          "tipo": "text"
+        },
+        {
+          "posicion": 21,
+          "nombre": "clase_actividad_codigo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 22,
+          "nombre": "clase_actividad",
+          "tipo": "text"
+        },
+        {
+          "posicion": 23,
+          "nombre": "rango_personal",
+          "tipo": "text"
+        },
+        {
+          "posicion": 24,
+          "nombre": "tipo_establecimiento",
+          "tipo": "text"
+        }
+      ]
+    }
+  ]
+}

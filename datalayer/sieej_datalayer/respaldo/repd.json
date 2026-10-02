@@ -1,0 +1,169 @@
+{
+  "nombre": "repd",
+  "corte": "29 de mayo de 2026",
+  "tablas": [
+    {
+      "nombre": "stg_repd_case_current",
+      "descripcion": "Versión vigente de cada caso de persona desaparecida (FEB como identificador único).",
+      "filas": 37627
+    },
+    {
+      "nombre": "stg_repd_case_history",
+      "descripcion": "Historial de versiones de cada caso (SCD Tipo 2).",
+      "filas": 37627
+    },
+    {
+      "nombre": "stg_repd_cat_sex",
+      "descripcion": "Catálogo de sexo.",
+      "filas": 2
+    },
+    {
+      "nombre": "stg_repd_cat_nationality",
+      "descripcion": "Catálogo de nacionalidad.",
+      "filas": 43
+    },
+    {
+      "nombre": "stg_repd_cat_age_range",
+      "descripcion": "Catálogo de rangos de edad.",
+      "filas": 21
+    },
+    {
+      "nombre": "stg_repd_cat_status",
+      "descripcion": "Catálogo de estatus del caso.",
+      "filas": 3
+    },
+    {
+      "nombre": "stg_repd_cat_location_condition",
+      "descripcion": "Catálogo de condición de localización.",
+      "filas": 2
+    },
+    {
+      "nombre": "stg_repd_cat_location_classification",
+      "descripcion": "Catálogo de clasificación de localización.",
+      "filas": 3
+    },
+    {
+      "nombre": "stg_repd_cat_closure_type",
+      "descripcion": "Catálogo de tipo de cierre.",
+      "filas": 4
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "stg_repd_case_current_vw",
+      "descripcion": "Vista analítica que resuelve catálogos y municipios sobre los casos vigentes.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "feb",
+          "tipo": "varchar(64)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "sex",
+          "tipo": "varchar(60)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "nationality",
+          "tipo": "varchar(100)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "age_range",
+          "tipo": "varchar(50)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "report_date",
+          "tipo": "date"
+        },
+        {
+          "posicion": 7,
+          "nombre": "disappearance_date",
+          "tipo": "date"
+        },
+        {
+          "posicion": 8,
+          "nombre": "disappearance_state_name",
+          "tipo": "varchar(100)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "disappearance_municipality",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 10,
+          "nombre": "status",
+          "tipo": "varchar(100)"
+        },
+        {
+          "posicion": 11,
+          "nombre": "location_date",
+          "tipo": "date"
+        },
+        {
+          "posicion": 12,
+          "nombre": "location_condition",
+          "tipo": "varchar(60)"
+        },
+        {
+          "posicion": 13,
+          "nombre": "location_classification",
+          "tipo": "varchar(100)"
+        },
+        {
+          "posicion": 14,
+          "nombre": "location_state_name",
+          "tipo": "varchar(100)"
+        },
+        {
+          "posicion": 15,
+          "nombre": "location_municipality",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 16,
+          "nombre": "closure_date",
+          "tipo": "date"
+        },
+        {
+          "posicion": 17,
+          "nombre": "closure_type",
+          "tipo": "varchar(100)"
+        },
+        {
+          "posicion": 18,
+          "nombre": "linked_feb",
+          "tipo": "varchar(64)"
+        },
+        {
+          "posicion": 19,
+          "nombre": "has_investigation_folder",
+          "tipo": "boolean"
+        },
+        {
+          "posicion": 20,
+          "nombre": "current_version",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 21,
+          "nombre": "created_at",
+          "tipo": "timestamp"
+        },
+        {
+          "posicion": 22,
+          "nombre": "updated_at",
+          "tipo": "timestamp"
+        }
+      ]
+    }
+  ]
+}

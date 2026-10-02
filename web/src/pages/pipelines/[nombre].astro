@@ -21,6 +21,11 @@ interface Props {
 
 const { pagina, anterior, siguiente } = Astro.props;
 const { documento: doc, base } = pagina;
+const notaRespaldo =
+  pagina.origen_base === "respaldo"
+    ? [`Esta base no está en la BD consultada. Tablas y vistas vienen del documento técnico del pipeline, con cifras de producción al ${pagina.corte_respaldo ?? "último corte disponible"}.`]
+    : [];
+const conDiagrama = Boolean(pagina.der_svg) || Boolean(base?.tablas.some((t) => t.columnas.length > 0));
 const titulo = tituloDe(pagina);
 
 const CLASIFICACION: Record<string, string> = {
@@ -53,7 +58,7 @@ const secciones = [
   vistas.length ? { href: "#vistas", texto: "Vistas" } : null,
   pagina.etapas.length ? { href: "#ejecucion", texto: "Ejecución" } : null,
   doc?.variables.length ? { href: "#variables", texto: "Variables de entorno" } : null,
-  tablas.length ? { href: "#diagrama", texto: "Diagrama entidad-relación" } : null,
+  conDiagrama ? { href: "#diagrama", texto: "Diagrama entidad-relación" } : null,
 ].filter((s): s is { href: string; texto: string } => s !== null);
 
 const otros = paginas.map((p) => ({
@@ -134,7 +139,10 @@ const otros = paginas.map((p) => ({
       {
         tablas.length > 0 && (
           <section id="tablas" class="tarjeta">
-            <h2 class="titulo-tarjeta">Tablas</h2>
+            <h2 class="titulo-tarjeta">
+              Tablas
+              {notaRespaldo.length > 0 && <Info textos={notaRespaldo} etiqueta="Origen de las tablas" />}
+            </h2>
             <div class="tabla-envoltura">
               <table>
                 <thead>
@@ -159,13 +167,16 @@ const otros = paginas.map((p) => ({
       {
         vistas.length > 0 && base && (
           <section id="vistas" class="tarjeta">
-            <h2 class="titulo-tarjeta">Vistas</h2>
+            <h2 class="titulo-tarjeta">
+              Vistas
+              {notaRespaldo.length > 0 && <Info textos={notaRespaldo} etiqueta="Origen de las vistas" />}
+            </h2>
             <div class="pila pila--corta">
               {vistas.map((v) => (
                 <details class="vista">
                   <summary>
                     <code>{v.nombre}</code>
-                    <span class="vista__meta">{v.tipo === "MATERIALIZED VIEW" ? "Materializada" : "Vista"} · {v.columnas.length} columnas · {numero(v.registros)} registros</span>
+                    <span class="vista__meta">{v.tipo === "MATERIALIZED VIEW" ? "Materializada" : "Vista"} · {v.columnas.length} columnas{typeof v.registros === "number" && ` · ${numero(v.registros)} registros`}</span>
                   </summary>
                   {v.descripcion && <p set:html={enLinea(v.descripcion)} />}
                   <div class="tabla-envoltura">
@@ -230,10 +241,10 @@ const otros = paginas.map((p) => ({
       }
 
       {
-        base && tablas.length > 0 && (
+        conDiagrama && (
           <section id="diagrama" class="tarjeta">
             <h2 class="titulo-tarjeta">Diagrama entidad-relación</h2>
-            <DiagramaER base={base} />
+            <DiagramaER base={base ?? { nombre: pagina.nombre, tablas: [], relaciones: [], vistas: [] }} svg={pagina.der_svg} />
           </section>
         )
       }

@@ -26,6 +26,9 @@ sieej-datalayer = "sieej_datalayer.__main__:main"
 [tool.setuptools.packages.find]
 include = ["sieej_datalayer*"]
 
+[tool.setuptools.package-data]
+sieej_datalayer = ["respaldo/*.json"]
+
 [tool.ruff]
 line-length = 100
 

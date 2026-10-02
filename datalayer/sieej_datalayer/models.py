@@ -182,4 +182,10 @@ class PaginaPipeline(BaseModel):
     clasificacion: ClasificacionPipeline = ClasificacionPipeline.SIN_VERIFICAR
     documento: DocumentoPipeline | None = None
     base: BaseDeDatos | None = None
+    # "bd" cuando la base se leyó en vivo; "respaldo" cuando la BD consultada no
+    # la tiene y se toma la copia de los documentos técnicos (ver respaldo/).
+    origen_base: str | None = None
+    corte_respaldo: str | None = None
+    # erd.svg del pipeline en ETL-SIEEJ, solo cuando no hay relaciones en vivo.
+    der_svg: str | None = None
     etapas: list[Dag] = Field(default_factory=list)

@@ -225,4 +225,8 @@ def test_la_pagina_de_un_pipeline_junta_readme_bd_y_dags():
     assert denue.base.relaciones[0].ref_tabla == "cat_sector"
     assert denue.base.vistas[0].descripcion == "Establecimientos de Jalisco"
     assert [e.dag_id for e in denue.etapas] == ["etl_denue"]
-    assert paginas["conapo"].base is None
+    assert denue.origen_base == "bd"
+    conapo = paginas["conapo"]
+    assert conapo.origen_base == "respaldo"
+    assert conapo.corte_respaldo
+    assert conapo.base.tablas and conapo.base.vistas

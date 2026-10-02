@@ -1,0 +1,771 @@
+{
+  "nombre": "enec",
+  "corte": "27 de agosto de 2026",
+  "tablas": [
+    {
+      "nombre": "stg_enec_entidad",
+      "descripcion": "Encuesta Nacional de Empresas Constructoras (ENEC) del INEGI, Serie 2018: desglose por ENTIDAD FEDERATIVA, mensual desde enero de 2018. Solo cubre el sector 23 (construcción); el desglose por actividad vive en stg_enec_nacional. Publica valores absolutos, no índices. Grano: un registro por periodo y entidad. Las filas del agregado nacional que trae la fuente (CVEGEO 00) se excluyen a propósito: son idénticas a las de stg_enec_nacional con actividad 23.",
+      "filas": 3333
+    },
+    {
+      "nombre": "stg_enec_nacional",
+      "descripcion": "Encuesta Nacional de Empresas Constructoras (ENEC) del INEGI, Serie 2018: TOTAL NACIONAL con desglose por actividad de la construcción, mensual desde enero de 2018. Publica valores absolutos, no índices. Grano: un registro por periodo y actividad. El desglose por entidad federativa vive en stg_enec_entidad, que solo cubre el sector 23.",
+      "filas": 404
+    },
+    {
+      "nombre": "cat_actividad",
+      "descripcion": "Catálogo de las actividades de la construcción bajo estudio en la ENEC. A diferencia de EMEC, EMS y EMIM, el ZIP de la ENEC NO incluye carpeta de catálogos: este se deriva del campo DESCRIPCION_ACTIVIDAD que la fuente trae en línea con los datos del conjunto nacional. Cuatro entradas: 23 construcción, 236 edificación, 237 construcción de obras de ingeniería civil y 238 trabajos especializados para la construcción.",
+      "filas": 4
+    },
+    {
+      "nombre": "cat_estatus",
+      "descripcion": "Catálogo del estatus de los datos publicados en la ENEC. Según el diccionario de datos del INEGI el estatus puede ser: Cifras Definitivas, Cifras Revisadas o Cifras Preliminares. Un periodo se publica primero como preliminar y el INEGI lo reemplaza en ediciones posteriores.",
+      "filas": 3
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "vw_enec_entidad",
+      "descripcion": "Vista desnormalizada del desglose por entidad federativa de la Encuesta Nacional de Empresas Constructoras (ENEC) del INEGI, Serie 2018, mensual desde enero de 2018. Cubre solo el sector 23 (construcción). Incluye la clave 33, Obra en el extranjero, que no es una entidad federativa pero sí forma parte del total nacional; se etiqueta con un CASE porque no cruza contra cvegeo_states.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "fecha",
+          "tipo": "date"
+        },
+        {
+          "posicion": 2,
+          "nombre": "entidad_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 3,
+          "nombre": "entidad",
+          "tipo": "character varying"
+        },
+        {
+          "posicion": 4,
+          "nombre": "dias_trabajados",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 5,
+          "nombre": "per_ocu_tot",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 6,
+          "nombre": "per_ocu_dependiente",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 7,
+          "nombre": "per_ocu_obreros",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 8,
+          "nombre": "per_ocu_administrativos",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 9,
+          "nombre": "per_ocu_no_remunerados",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 10,
+          "nombre": "per_ocu_subcontratado",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 11,
+          "nombre": "horas_tot",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 12,
+          "nombre": "horas_dependiente",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 13,
+          "nombre": "horas_obreros",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 14,
+          "nombre": "horas_administrativos",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 15,
+          "nombre": "horas_no_remunerados",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 16,
+          "nombre": "horas_subcontratado",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 17,
+          "nombre": "remuneraciones_tot",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 18,
+          "nombre": "salarios_obreros",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 19,
+          "nombre": "sueldos_administrativos",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 20,
+          "nombre": "prestaciones",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 21,
+          "nombre": "remuneracion_media_persona",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 22,
+          "nombre": "remuneracion_media_hora",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 23,
+          "nombre": "remuneracion_media_salarios",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 24,
+          "nombre": "salario_medio_obreros",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 25,
+          "nombre": "sueldo_medio_administrativos",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 26,
+          "nombre": "gastos_tot",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 27,
+          "nombre": "gasto_materiales_contratista",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 28,
+          "nombre": "gasto_materiales_subcontratista",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 29,
+          "nombre": "gasto_suministro_personal",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 30,
+          "nombre": "gasto_subcontratistas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 31,
+          "nombre": "gastos_otros",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 32,
+          "nombre": "consumo_materiales_contratista",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 33,
+          "nombre": "consumo_materiales_subcontratista",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 34,
+          "nombre": "ingresos_tot",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 35,
+          "nombre": "ingresos_contratista",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 36,
+          "nombre": "ingresos_subcontratista",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 37,
+          "nombre": "ingresos_administracion",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 38,
+          "nombre": "ingresos_otros",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 39,
+          "nombre": "valor_produccion",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 40,
+          "nombre": "valor_produccion_edificacion",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 41,
+          "nombre": "valor_produccion_agua_riego",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 42,
+          "nombre": "valor_produccion_electricidad",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 43,
+          "nombre": "valor_produccion_transporte",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 44,
+          "nombre": "valor_produccion_petroleo",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 45,
+          "nombre": "valor_produccion_otras",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 46,
+          "nombre": "valor_produccion_publico",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 47,
+          "nombre": "valor_produccion_privado",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 48,
+          "nombre": "estatus",
+          "tipo": "text"
+        },
+        {
+          "posicion": 49,
+          "nombre": "fecha_actualizacion",
+          "tipo": "date"
+        }
+      ]
+    },
+    {
+      "nombre": "vw_enec_jalisco",
+      "descripcion": "Misma información que vw_enec_entidad, acotada a Jalisco (clave de entidad 14). La entidad se omite de las columnas porque es constante.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "fecha",
+          "tipo": "date"
+        },
+        {
+          "posicion": 2,
+          "nombre": "dias_trabajados",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 3,
+          "nombre": "per_ocu_tot",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 4,
+          "nombre": "per_ocu_dependiente",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 5,
+          "nombre": "per_ocu_obreros",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 6,
+          "nombre": "per_ocu_administrativos",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 7,
+          "nombre": "per_ocu_no_remunerados",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 8,
+          "nombre": "per_ocu_subcontratado",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 9,
+          "nombre": "horas_tot",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 10,
+          "nombre": "horas_dependiente",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 11,
+          "nombre": "horas_obreros",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 12,
+          "nombre": "horas_administrativos",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 13,
+          "nombre": "horas_no_remunerados",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 14,
+          "nombre": "horas_subcontratado",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 15,
+          "nombre": "remuneraciones_tot",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 16,
+          "nombre": "salarios_obreros",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 17,
+          "nombre": "sueldos_administrativos",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 18,
+          "nombre": "prestaciones",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 19,
+          "nombre": "remuneracion_media_persona",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 20,
+          "nombre": "remuneracion_media_hora",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 21,
+          "nombre": "remuneracion_media_salarios",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 22,
+          "nombre": "salario_medio_obreros",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 23,
+          "nombre": "sueldo_medio_administrativos",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 24,
+          "nombre": "gastos_tot",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 25,
+          "nombre": "gasto_materiales_contratista",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 26,
+          "nombre": "gasto_materiales_subcontratista",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 27,
+          "nombre": "gasto_suministro_personal",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 28,
+          "nombre": "gasto_subcontratistas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 29,
+          "nombre": "gastos_otros",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 30,
+          "nombre": "consumo_materiales_contratista",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 31,
+          "nombre": "consumo_materiales_subcontratista",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 32,
+          "nombre": "ingresos_tot",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 33,
+          "nombre": "ingresos_contratista",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 34,
+          "nombre": "ingresos_subcontratista",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 35,
+          "nombre": "ingresos_administracion",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 36,
+          "nombre": "ingresos_otros",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 37,
+          "nombre": "valor_produccion",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 38,
+          "nombre": "valor_produccion_edificacion",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 39,
+          "nombre": "valor_produccion_agua_riego",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 40,
+          "nombre": "valor_produccion_electricidad",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 41,
+          "nombre": "valor_produccion_transporte",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 42,
+          "nombre": "valor_produccion_petroleo",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 43,
+          "nombre": "valor_produccion_otras",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 44,
+          "nombre": "valor_produccion_publico",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 45,
+          "nombre": "valor_produccion_privado",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 46,
+          "nombre": "estatus",
+          "tipo": "text"
+        },
+        {
+          "posicion": 47,
+          "nombre": "fecha_actualizacion",
+          "tipo": "date"
+        }
+      ]
+    },
+    {
+      "nombre": "vw_enec_nacional",
+      "descripcion": "Vista desnormalizada del total nacional de la Encuesta Nacional de Empresas Constructoras (ENEC) del INEGI, Serie 2018, con desglose por actividad de la construcción y periodicidad mensual desde enero de 2018. Publica valores absolutos, no índices.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "fecha",
+          "tipo": "date"
+        },
+        {
+          "posicion": 2,
+          "nombre": "codigo_actividad",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 3,
+          "nombre": "actividad_descripcion",
+          "tipo": "text"
+        },
+        {
+          "posicion": 4,
+          "nombre": "dias_trabajados",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 5,
+          "nombre": "per_ocu_tot",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 6,
+          "nombre": "per_ocu_dependiente",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 7,
+          "nombre": "per_ocu_obreros",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 8,
+          "nombre": "per_ocu_administrativos",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 9,
+          "nombre": "per_ocu_no_remunerados",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 10,
+          "nombre": "per_ocu_subcontratado",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 11,
+          "nombre": "horas_tot",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 12,
+          "nombre": "horas_dependiente",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 13,
+          "nombre": "horas_obreros",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 14,
+          "nombre": "horas_administrativos",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 15,
+          "nombre": "horas_no_remunerados",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 16,
+          "nombre": "horas_subcontratado",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 17,
+          "nombre": "remuneraciones_tot",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 18,
+          "nombre": "salarios_obreros",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 19,
+          "nombre": "sueldos_administrativos",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 20,
+          "nombre": "prestaciones",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 21,
+          "nombre": "remuneracion_media_persona",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 22,
+          "nombre": "remuneracion_media_hora",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 23,
+          "nombre": "remuneracion_media_salarios",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 24,
+          "nombre": "salario_medio_obreros",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 25,
+          "nombre": "sueldo_medio_administrativos",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 26,
+          "nombre": "gastos_tot",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 27,
+          "nombre": "gasto_materiales_contratista",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 28,
+          "nombre": "gasto_materiales_subcontratista",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 29,
+          "nombre": "gasto_suministro_personal",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 30,
+          "nombre": "gasto_subcontratistas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 31,
+          "nombre": "gastos_otros",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 32,
+          "nombre": "consumo_materiales_contratista",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 33,
+          "nombre": "consumo_materiales_subcontratista",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 34,
+          "nombre": "ingresos_tot",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 35,
+          "nombre": "ingresos_contratista",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 36,
+          "nombre": "ingresos_subcontratista",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 37,
+          "nombre": "ingresos_administracion",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 38,
+          "nombre": "ingresos_otros",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 39,
+          "nombre": "valor_produccion",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 40,
+          "nombre": "valor_produccion_edificacion",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 41,
+          "nombre": "valor_produccion_agua_riego",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 42,
+          "nombre": "valor_produccion_electricidad",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 43,
+          "nombre": "valor_produccion_transporte",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 44,
+          "nombre": "valor_produccion_petroleo",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 45,
+          "nombre": "valor_produccion_otras",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 46,
+          "nombre": "valor_produccion_publico",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 47,
+          "nombre": "valor_produccion_privado",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 48,
+          "nombre": "estatus",
+          "tipo": "text"
+        },
+        {
+          "posicion": 49,
+          "nombre": "fecha_actualizacion",
+          "tipo": "date"
+        }
+      ]
+    }
+  ]
+}

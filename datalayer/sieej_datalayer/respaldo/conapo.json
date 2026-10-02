@@ -1,0 +1,371 @@
+{
+  "nombre": "conapo",
+  "corte": "22 de junio de 2026",
+  "tablas": [
+    {
+      "nombre": "stg_poblacion_mitad_anio",
+      "descripcion": "Población por municipio, sexo y año, desagregada en grupos quinquenales de edad (0–4, 5–9, …, 85+).",
+      "filas": 12750
+    },
+    {
+      "nombre": "stg_grandes_grupos_edad",
+      "descripcion": "Población por municipio, sexo y año en grandes grupos de edad: infancia (0–11), juventud (12–29), adultos (30–59) y adultos mayores (60+).",
+      "filas": 12750
+    },
+    {
+      "nombre": "stg_indicadores_demograficos",
+      "descripcion": "Indicadores demográficos por municipio y año: índices de envejecimiento, razones de dependencia, edad mediana, razón hombres-mujeres y porcentaje respecto a la entidad.",
+      "filas": 6375
+    },
+    {
+      "nombre": "cat_sexo",
+      "descripcion": "Catálogo de sexo: HOMBRES y MUJERES.",
+      "filas": 2
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "view_poblacion_mitad_anio",
+      "descripcion": "Desnormalización de `stg_poblacion_mitad_anio` con nombres de municipio y entidad resueltos vía FDW a `cvegeo`. Filtra por Jalisco (`cve_ent = 14`).",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "municipio",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 3,
+          "nombre": "entidad",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 4,
+          "nombre": "sexo",
+          "tipo": "varchar(10)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "anio",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 6,
+          "nombre": "pob_00_04",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 7,
+          "nombre": "pob_05_09",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 8,
+          "nombre": "pob_10_14",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 9,
+          "nombre": "pob_15_19",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 10,
+          "nombre": "pob_20_24",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 11,
+          "nombre": "pob_25_29",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 12,
+          "nombre": "pob_30_34",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 13,
+          "nombre": "pob_35_39",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 14,
+          "nombre": "pob_40_44",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 15,
+          "nombre": "pob_45_49",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 16,
+          "nombre": "pob_50_54",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 17,
+          "nombre": "pob_55_59",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 18,
+          "nombre": "pob_60_64",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 19,
+          "nombre": "pob_65_69",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 20,
+          "nombre": "pob_70_74",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 21,
+          "nombre": "pob_75_79",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 22,
+          "nombre": "pob_80_84",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 23,
+          "nombre": "pob_85_mm",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 24,
+          "nombre": "pob_total",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 25,
+          "nombre": "fecha_actualizacion",
+          "tipo": "date"
+        }
+      ]
+    },
+    {
+      "nombre": "view_grandes_grupos_edad",
+      "descripcion": "Desnormalización de `stg_grandes_grupos_edad` con nombres geográficos resueltos. Filtra por Jalisco.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "municipio",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 3,
+          "nombre": "entidad",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 4,
+          "nombre": "sexo",
+          "tipo": "varchar(10)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "anio",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 6,
+          "nombre": "pob_00_11",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 7,
+          "nombre": "pob_12_29",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 8,
+          "nombre": "pob_30_59",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 9,
+          "nombre": "pob_60_mm",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 10,
+          "nombre": "pob_total",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 11,
+          "nombre": "fecha_actualizacion",
+          "tipo": "date"
+        }
+      ]
+    },
+    {
+      "nombre": "view_indicadores_demograficos",
+      "descripcion": "Desnormalización de `stg_indicadores_demograficos` con nombres de municipio y entidad. Filtra por Jalisco.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "municipio",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 3,
+          "nombre": "entidad",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 4,
+          "nombre": "anio",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 5,
+          "nombre": "hom_mit_ano",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 6,
+          "nombre": "muj_mit_ano",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 7,
+          "nombre": "pob_mit_mun",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 8,
+          "nombre": "muj_00_14",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 9,
+          "nombre": "hom_00_14",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 10,
+          "nombre": "pob_00_14",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 11,
+          "nombre": "muj_15_64",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 12,
+          "nombre": "hom_15_64",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 13,
+          "nombre": "pob_15_64",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 14,
+          "nombre": "muj_60_mas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 15,
+          "nombre": "hom_60_mas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 16,
+          "nombre": "pob_60_mas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 17,
+          "nombre": "muj_65_mas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 18,
+          "nombre": "hom_65_mas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 19,
+          "nombre": "pob_65_mas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 20,
+          "nombre": "pob_mit_ent",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 21,
+          "nombre": "edad_med",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 22,
+          "nombre": "por_mun",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 23,
+          "nombre": "ind_env_60",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 24,
+          "nombre": "ind_env_65",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 25,
+          "nombre": "rhm",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 26,
+          "nombre": "raz_dep_adu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 27,
+          "nombre": "raz_dep_inf",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 28,
+          "nombre": "raz_dep",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 29,
+          "nombre": "fecha_actualizacion",
+          "tipo": "date"
+        }
+      ]
+    }
+  ]
+}

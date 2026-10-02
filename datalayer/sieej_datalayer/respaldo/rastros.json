@@ -1,0 +1,150 @@
+{
+  "nombre": "rastros",
+  "corte": "27 de agosto de 2026",
+  "tablas": [
+    {
+      "nombre": "stg_rastros",
+      "descripcion": "Estadística de Sacrificio de Ganado en Rastros Municipales (ESGRM) del INEGI, información mensual desde 2008. Reporta la producción de carne en canal destinada al consumo humano que aportan los rastros administrados por los gobiernos municipales del país. La cobertura geográfica de la fuente es ESTATAL: el nombre \"rastros municipales\" describe al administrador del establecimiento, no al nivel de desglose publicado. Grano: un registro por periodo, entidad federativa y especie ganadera.",
+      "filas": 27528
+    },
+    {
+      "nombre": "cat_especies_ganaderas",
+      "descripcion": "Catálogo de especies ganaderas sacrificadas en rastros municipales. Clasificación de los animales que agrupa a los individuos con rasgos comunes entre sí dentro de una misma categoría.",
+      "filas": 4
+    },
+    {
+      "nombre": "cat_estatus",
+      "descripcion": "Catálogo del estatus de disponibilidad de una cifra en la ESGRM. Valores posibles según el diccionario de datos del INEGI: Disponible (cumple el principio de confidencialidad de la LSNIEG), No disponible (la información no se genera o está en proceso), No aplicable (cruces conceptuales incompatibles o cálculos no procedentes), No significativo (número distinto de cero que por redondeo se expresaría como tal) y Confidencial (no publicable por el principio de confidencialidad de la LSNIEG).",
+      "filas": 2
+    },
+    {
+      "nombre": "cat_tipo_cifra",
+      "descripcion": "Catálogo del estatus de las cifras conforme a los Lineamientos de Cambios a la información divulgada en las publicaciones estadísticas y geográficas del INEGI.",
+      "filas": 2
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "vw_rastros",
+      "descripcion": "Vista desnormalizada de la Estadística de Sacrificio de Ganado en Rastros Municipales (ESGRM) del INEGI para las 32 entidades federativas, con periodicidad mensual desde 2008.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "fecha",
+          "tipo": "date"
+        },
+        {
+          "posicion": 2,
+          "nombre": "entidad",
+          "tipo": "character varying"
+        },
+        {
+          "posicion": 3,
+          "nombre": "especie_ganadera",
+          "tipo": "text"
+        },
+        {
+          "posicion": 4,
+          "nombre": "numero_cabezas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 5,
+          "nombre": "estatus_cabeza",
+          "tipo": "text"
+        },
+        {
+          "posicion": 6,
+          "nombre": "produccion_carne",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 7,
+          "nombre": "estatus_produccion",
+          "tipo": "text"
+        },
+        {
+          "posicion": 8,
+          "nombre": "vproduccion",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 9,
+          "nombre": "estatus_vproduccion",
+          "tipo": "text"
+        },
+        {
+          "posicion": 10,
+          "nombre": "tipo_cifra",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "fecha_actualizacion",
+          "tipo": "date"
+        }
+      ]
+    },
+    {
+      "nombre": "vw_rastros_jalisco",
+      "descripcion": "Misma información que vw_rastros, acotada a Jalisco (clave de entidad 14).",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "fecha",
+          "tipo": "date"
+        },
+        {
+          "posicion": 2,
+          "nombre": "entidad",
+          "tipo": "character varying"
+        },
+        {
+          "posicion": 3,
+          "nombre": "especie_ganadera",
+          "tipo": "text"
+        },
+        {
+          "posicion": 4,
+          "nombre": "numero_cabezas",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 5,
+          "nombre": "estatus_cabeza",
+          "tipo": "text"
+        },
+        {
+          "posicion": 6,
+          "nombre": "produccion_carne",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 7,
+          "nombre": "estatus_produccion",
+          "tipo": "text"
+        },
+        {
+          "posicion": 8,
+          "nombre": "vproduccion",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 9,
+          "nombre": "estatus_vproduccion",
+          "tipo": "text"
+        },
+        {
+          "posicion": 10,
+          "nombre": "tipo_cifra",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "fecha_actualizacion",
+          "tipo": "date"
+        }
+      ]
+    }
+  ]
+}

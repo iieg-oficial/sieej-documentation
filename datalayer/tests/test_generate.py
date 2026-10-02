@@ -28,7 +28,7 @@ def test_sin_fuentes_vivas_se_escriben_los_json_y_una_pagina_por_pipeline(tmp_pa
 
     pagina = _leer(settings, "pipelines/denue.json")
     assert pagina["documento"]["alcance_vistas"]
-    assert pagina["base"] is None
+    assert pagina["origen_base"] == "respaldo"
 
     numeralia = _leer(settings, "numeralia.json")
     assert numeralia["airflow"] == {}
@@ -115,3 +115,20 @@ def test_airflow_caido_conserva_las_cifras_de_la_numeralia(tmp_path):
     acciones = escribir(settings, resultados)
     assert acciones["numeralia.json"] == "escrito_con_airflow_previo"
     assert _leer(settings, "numeralia.json")["airflow"] == {"dags_total": 56}
+
+
+def test_las_etapas_heredadas_sobreviven_a_varias_corridas_sin_airflow(tmp_path):
+    settings = _settings(tmp_path)
+    resultados = generar(settings)
+    previo = resultados["inventario.json"].model_dump(mode="json")
+    previo["fuentes"]["airflow"]["estado"] = "ok"
+    previo["pipelines"]["denue"]["etapas"] = [{"dag_id": "etl_denue_update"}]
+    destino = Path(settings.data_dir) / "inventario.json"
+    destino.parent.mkdir(parents=True)
+    destino.write_text(json.dumps(previo), encoding="utf-8")
+
+    generar_y_escribir(settings)
+    generar_y_escribir(settings)
+    inventario = _leer(settings, "inventario.json")
+    assert inventario["fuentes"]["airflow"]["estado"] == "sin_configurar"
+    assert inventario["pipelines"]["denue"]["etapas"][0]["dag_id"] == "etl_denue_update"

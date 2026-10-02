@@ -1,0 +1,4669 @@
+{
+  "nombre": "censo_economico",
+  "corte": "29 de mayo de 2026",
+  "tablas": [
+    {
+      "nombre": "stg_economico_nacional_2019",
+      "descripcion": "Indicadores económicos nacionales del Censo 2019.",
+      "filas": 7293
+    },
+    {
+      "nombre": "stg_economico_estatal_2019",
+      "descripcion": "Indicadores económicos por entidad del Censo 2019.",
+      "filas": 40431
+    },
+    {
+      "nombre": "stg_economico_municipal_2019",
+      "descripcion": "Indicadores económicos municipales del Censo 2019.",
+      "filas": 341267
+    },
+    {
+      "nombre": "stg_economico_nacional_2024",
+      "descripcion": "Indicadores económicos nacionales del Censo 2024.",
+      "filas": 7370
+    },
+    {
+      "nombre": "stg_economico_estatal_2024",
+      "descripcion": "Indicadores económicos por entidad del Censo 2024.",
+      "filas": 40970
+    },
+    {
+      "nombre": "stg_economico_municipal_2024",
+      "descripcion": "Indicadores económicos municipales del Censo 2024.",
+      "filas": 352223
+    },
+    {
+      "nombre": "cat_actividades_economicas",
+      "descripcion": "Catálogo de actividades económicas SCIAN.",
+      "filas": 3782
+    },
+    {
+      "nombre": "cat_censos",
+      "descripcion": "Catálogo de censos (2019, 2024).",
+      "filas": 2
+    },
+    {
+      "nombre": "cat_clasificadores_codigos",
+      "descripcion": "Catálogo de clasificadores y códigos.",
+      "filas": 6
+    },
+    {
+      "nombre": "cat_estratos",
+      "descripcion": "Catálogo de estratos de personal.",
+      "filas": 6
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "vw_economico_estatal_2019",
+      "descripcion": "Vista desnormalizada estatal del Censo 2019.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "censo_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 3,
+          "nombre": "actividad_economica_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 4,
+          "nombre": "estrato_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 5,
+          "nombre": "cve_ent",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 6,
+          "nombre": "prod_bruta_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 7,
+          "nombre": "part_bienes_elab_gen_ext_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 8,
+          "nombre": "part_imatmpp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 9,
+          "nombre": "part_act_fijos_producidos_uso_propio_pb",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 10,
+          "nombre": "part_var_exist_prod_proceso_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 11,
+          "nombre": "part_mar_rev_merc_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 12,
+          "nombre": "part_serv_prof_cient_tec_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 13,
+          "nombre": "part_ingr_abmi_produccion",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 14,
+          "nombre": "part_otros_comp_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 15,
+          "nombre": "consu_intermedio_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 16,
+          "nombre": "valor_agregado_censal_bruto_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 17,
+          "nombre": "part_ssen_tr",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 18,
+          "nombre": "part_salarios_ppvs_tr",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 19,
+          "nombre": "part_sueldos_pers_acd_tr",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 20,
+          "nombre": "pers_dependiente_pers_ocup_tot_porcentaje",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 21,
+          "nombre": "pnr_perasonal_ocupado_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 22,
+          "nombre": "pnr_po_dependiente",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 23,
+          "nombre": "prest_soc_util_rep_tot_rem",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 24,
+          "nombre": "part_urt_tr",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 25,
+          "nombre": "part_mt_pers_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 26,
+          "nombre": "part_mt_po_produccion_ventas_servicios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 27,
+          "nombre": "part_mt_po_acd",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 28,
+          "nombre": "prest_soc_tot_rem",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 29,
+          "nombre": "part_prestaciones_sociales_utilidades_sueldos_salarios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 30,
+          "nombre": "part_mt_pfotn",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 31,
+          "nombre": "tot_prestaciones_ss",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 32,
+          "nombre": "part_mt_pcpor",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 33,
+          "nombre": "part_mt_phcs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 34,
+          "nombre": "remuneracion_media_per_ocupada_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 35,
+          "nombre": "salario_pers_operativo_anual",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 36,
+          "nombre": "sueldo_pers_administrativo_anual",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 37,
+          "nombre": "pagos_promedio_per_suministrada",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 38,
+          "nombre": "pagos_promedio_pers_comisiones_u_honorarios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 39,
+          "nombre": "part_remuneraciones_gcbs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 40,
+          "nombre": "per_no_dep_pers_ocup_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 41,
+          "nombre": "indem_liqui_remu_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 42,
+          "nombre": "remuneracion_media_per_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 43,
+          "nombre": "horas_dia_trab_prom_pers_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 44,
+          "nombre": "horas_dia_trab_prom_pers_no_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 45,
+          "nombre": "horas_dia_trab_prom_ppvs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 46,
+          "nombre": "horas_dia_trab_prom_empleados_administrativos_control",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 47,
+          "nombre": "horas_dia_trab_prom_pers_comisiones_honorarios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 48,
+          "nombre": "valor_agregado_censal_bruto_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 49,
+          "nombre": "part_consu_intermedio_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 50,
+          "nombre": "va_promedio_per_ocupada",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 51,
+          "nombre": "pbt_pers_ocupado_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 52,
+          "nombre": "part_mpms_gastos_consu_bienes",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 53,
+          "nombre": "part_mcs_gcbs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 54,
+          "nombre": "inversion_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 55,
+          "nombre": "part_cae_gcbs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 56,
+          "nombre": "inversion_ti_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 57,
+          "nombre": "part_gastos_consu_otros_bienes_servicios_gastos_consu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 58,
+          "nombre": "inversion_tot_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 59,
+          "nombre": "part_ivm_ti_suministro_bienes",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 60,
+          "nombre": "inversion_tot_valor_agregado_censal_bruto",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 61,
+          "nombre": "part_servi_prof_cient",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 62,
+          "nombre": "part_otros_isbs_ti",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 63,
+          "nombre": "form_brut_cap_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 64,
+          "nombre": "inversion_tot_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 65,
+          "nombre": "part_venta_productos_elaborados_generados_o_extraidos_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 66,
+          "nombre": "part_ingr_abmi_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 67,
+          "nombre": "part_imatmpp_2",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 68,
+          "nombre": "part_mep_tot_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 69,
+          "nombre": "part_cif_tot_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 70,
+          "nombre": "part_et_tot_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 71,
+          "nombre": "part_ecp_tot_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 72,
+          "nombre": "margen_bruto_operacion",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 73,
+          "nombre": "ing_princ_por_sum_bienes",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 74,
+          "nombre": "gp_gcbs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 75,
+          "nombre": "gp_ip",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 76,
+          "nombre": "part_meo_otros_act_fijos_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 77,
+          "nombre": "valor_act_fijos_per_ocupada",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 78,
+          "nombre": "maqui_equip_prod_a_prod_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 79,
+          "nombre": "acti_fijo_brut_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 80,
+          "nombre": "forma_brut_cap_fijo_acervo_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 81,
+          "nombre": "produccion_act_fijos_uso_propio_compras_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 82,
+          "nombre": "otros_isbs_ti_suministro",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 83,
+          "nombre": "gastos_no_derivados_actividad_gcbs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 84,
+          "nombre": "ingr_no_derivados_actividad_isbs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 85,
+          "nombre": "valor_promedio_maquinaria_equipo_per_ocupada_anuales",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 86,
+          "nombre": "ip_respecto_gp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 87,
+          "nombre": "porcentaje_ip_ti_actividad_financieros",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 88,
+          "nombre": "isbs_per_ocupada",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 89,
+          "nombre": "mar_por_rev_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 90,
+          "nombre": "part_depreciacion_valor_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 91,
+          "nombre": "tasa_rentabilidad_promedio",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 92,
+          "nombre": "gastos_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 93,
+          "nombre": "salario_promedio_diarios_per_operativa",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 94,
+          "nombre": "sueldo_promedio_diario_per_administrativa",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 95,
+          "nombre": "va_tot_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 96,
+          "nombre": "part_muje_pers_ocupado_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 97,
+          "nombre": "ingr_tot_general_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 98,
+          "nombre": "pers_dep_razon_social",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 99,
+          "nombre": "pers_dep_razon_social_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 100,
+          "nombre": "pers_dep_razon_social_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 101,
+          "nombre": "horas_pers_dep_razon_social_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 102,
+          "nombre": "pers_ocupado_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 103,
+          "nombre": "pers_ocupado_tot_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 104,
+          "nombre": "pers_ocupado_tot_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 105,
+          "nombre": "horas_pers_ocupado_tot_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 106,
+          "nombre": "pers_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 107,
+          "nombre": "pers_remu_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 108,
+          "nombre": "pers_remu_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 109,
+          "nombre": "horas_pers_remu_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 110,
+          "nombre": "pers_no_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 111,
+          "nombre": "pers_no_remu_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 112,
+          "nombre": "pers_no_remu_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 113,
+          "nombre": "horas_pers_no_remu_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 114,
+          "nombre": "pers_prod_ventas_servicios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 115,
+          "nombre": "pers_prod_ventas_servicios_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 116,
+          "nombre": "pers_prod_ventas_servicios_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 117,
+          "nombre": "horas_pers_prod_ventas_servicios_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 118,
+          "nombre": "pers_admin_contable_direccion",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 119,
+          "nombre": "pers_admin_contable_direccion_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 120,
+          "nombre": "pers_admin_contable_direccion_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 121,
+          "nombre": "horas_pers_admin_contable_direccion_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 122,
+          "nombre": "pers_no_dep_razon_social",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 123,
+          "nombre": "pers_no_dep_razon_social_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 124,
+          "nombre": "pers_no_dep_razon_social_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 125,
+          "nombre": "horas_pers_no_dep_razon_social_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 126,
+          "nombre": "pers_contratado_otra_razon_social",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 127,
+          "nombre": "pers_contratado_otra_razon_social_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 128,
+          "nombre": "pers_contratado_otra_razon_social_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 129,
+          "nombre": "horas_pers_contratado_otra_razon_social_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 130,
+          "nombre": "pers_honorarios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 131,
+          "nombre": "pers_honorarios_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 132,
+          "nombre": "pers_honorarios_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 133,
+          "nombre": "horas_pers_honorarios_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 134,
+          "nombre": "remuneraciones_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 135,
+          "nombre": "salarios_pers_prod_ventas_servicios_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 136,
+          "nombre": "sueldos_pers_admin_contable_direccion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 137,
+          "nombre": "contribuciones_seguridad_social_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 138,
+          "nombre": "otras_prestaciones_sociales_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 139,
+          "nombre": "utilidades_repartidas_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 140,
+          "nombre": "indemnizacion_liquidacion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 141,
+          "nombre": "gastos_consu_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 142,
+          "nombre": "mercancias_compradas_reventa_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 143,
+          "nombre": "materiales_servicios_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 144,
+          "nombre": "materias_primas_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 145,
+          "nombre": "combustibles_lubricantes_energeticos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 146,
+          "nombre": "renta_alquiler_bienes_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 147,
+          "nombre": "servicios_profesionales_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 148,
+          "nombre": "maquila_servicios_produccion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 149,
+          "nombre": "otros_bienes_servicios_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 150,
+          "nombre": "fletes_productos_vendidos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 151,
+          "nombre": "papeleria_oficina_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 152,
+          "nombre": "energia_electrica_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 153,
+          "nombre": "pagos_pers_subcontratado_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 154,
+          "nombre": "honorarios_comisiones_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 155,
+          "nombre": "publicidad_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 156,
+          "nombre": "servicios_comunicacion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 157,
+          "nombre": "envases_empaques_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 158,
+          "nombre": "reparaciones_refacciones_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 159,
+          "nombre": "consu_agua_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 160,
+          "nombre": "ingr_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 161,
+          "nombre": "ingr_reventa_mercancias_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 162,
+          "nombre": "ingr_servicios_profesionales_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 163,
+          "nombre": "ingr_venta_productos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 164,
+          "nombre": "ingr_alquiler_bienes_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 165,
+          "nombre": "otros_ingr_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 166,
+          "nombre": "otros_componentes_prod_bruta_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 167,
+          "nombre": "ingr_maquila_terceros_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 168,
+          "nombre": "valor_productos_elaborados_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 169,
+          "nombre": "act_fijos_uso_propio_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 170,
+          "nombre": "invent_inic_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 171,
+          "nombre": "invent_final_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 172,
+          "nombre": "var_exis_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 173,
+          "nombre": "invent_inic_proceso_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 174,
+          "nombre": "invent_final_proceso_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 175,
+          "nombre": "var_invent_proceso_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 176,
+          "nombre": "invent_inic_reventa_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 177,
+          "nombre": "invent_final_reventa_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 178,
+          "nombre": "acervo_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 179,
+          "nombre": "depreciacion_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 180,
+          "nombre": "compra_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 181,
+          "nombre": "ventas_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 182,
+          "nombre": "acervo_maquinaria_equipo_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 183,
+          "nombre": "acervo_bienes_inmuebles_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 184,
+          "nombre": "acervo_unidades_transporte_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 185,
+          "nombre": "acervo_equipo_computo_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 186,
+          "nombre": "acervo_mobiliario_oficina_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 187,
+          "nombre": "unidades_economicas",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 188,
+          "nombre": "nom_ent",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 189,
+          "nombre": "actividad_codigo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 190,
+          "nombre": "actividad",
+          "tipo": "text"
+        },
+        {
+          "posicion": 191,
+          "nombre": "estrato_codigo",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 192,
+          "nombre": "estrato",
+          "tipo": "text"
+        }
+      ]
+    },
+    {
+      "nombre": "vw_economico_estatal_2024",
+      "descripcion": "Vista desnormalizada estatal del Censo 2024.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "censo_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 3,
+          "nombre": "actividad_economica_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 4,
+          "nombre": "estrato_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 5,
+          "nombre": "cve_ent",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 6,
+          "nombre": "sector",
+          "tipo": "text"
+        },
+        {
+          "posicion": 7,
+          "nombre": "subsector",
+          "tipo": "text"
+        },
+        {
+          "posicion": 8,
+          "nombre": "rama",
+          "tipo": "text"
+        },
+        {
+          "posicion": 9,
+          "nombre": "subrama",
+          "tipo": "text"
+        },
+        {
+          "posicion": 10,
+          "nombre": "clase",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "unidades_economicas",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 12,
+          "nombre": "pers_ocupado_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 13,
+          "nombre": "pers_ocupado_tot_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 14,
+          "nombre": "pers_ocupado_tot_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 15,
+          "nombre": "horas_pers_ocupado_tot_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 16,
+          "nombre": "pers_dep_razon_social",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 17,
+          "nombre": "pers_dep_razon_social_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 18,
+          "nombre": "pers_dep_razon_social_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 19,
+          "nombre": "horas_pers_dep_razon_social_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 20,
+          "nombre": "pers_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 21,
+          "nombre": "pers_remu_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 22,
+          "nombre": "pers_remu_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 23,
+          "nombre": "horas_pers_remu_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 24,
+          "nombre": "pers_no_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 25,
+          "nombre": "pers_no_remu_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 26,
+          "nombre": "pers_no_remu_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 27,
+          "nombre": "horas_pers_no_remu_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 28,
+          "nombre": "pers_prod_ventas_servicios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 29,
+          "nombre": "pers_prod_ventas_servicios_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 30,
+          "nombre": "pers_prod_ventas_servicios_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 31,
+          "nombre": "horas_pers_prod_ventas_servicios_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 32,
+          "nombre": "pers_admin_contable_direccion",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 33,
+          "nombre": "pers_admin_contable_direccion_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 34,
+          "nombre": "pers_admin_contable_direccion_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 35,
+          "nombre": "horas_pers_admin_contable_direccion_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 36,
+          "nombre": "pers_no_dep_razon_social",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 37,
+          "nombre": "pers_no_dep_razon_social_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 38,
+          "nombre": "pers_no_dep_razon_social_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 39,
+          "nombre": "horas_pers_no_dep_razon_social_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 40,
+          "nombre": "pers_contratado_otra_razon_social",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 41,
+          "nombre": "pers_contratado_otra_razon_social_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 42,
+          "nombre": "pers_contratado_otra_razon_social_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 43,
+          "nombre": "horas_pers_contratado_otra_razon_social_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 44,
+          "nombre": "pers_honorarios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 45,
+          "nombre": "pers_honorarios_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 46,
+          "nombre": "pers_honorarios_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 47,
+          "nombre": "horas_pers_honorarios_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 48,
+          "nombre": "remuneraciones_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 49,
+          "nombre": "salarios_pers_prod_ventas_servicios_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 50,
+          "nombre": "sueldos_pers_admin_contable_direccion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 51,
+          "nombre": "contribuciones_seguridad_social_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 52,
+          "nombre": "otras_prestaciones_sociales_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 53,
+          "nombre": "utilidades_repartidas_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 54,
+          "nombre": "indemnizacion_liquidacion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 55,
+          "nombre": "gastos_consu_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 56,
+          "nombre": "mercancias_compradas_reventa_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 57,
+          "nombre": "materiales_servicios_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 58,
+          "nombre": "materias_primas_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 59,
+          "nombre": "combustibles_lubricantes_energeticos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 60,
+          "nombre": "renta_alquiler_bienes_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 61,
+          "nombre": "servicios_profesionales_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 62,
+          "nombre": "maquila_servicios_produccion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 63,
+          "nombre": "otros_bienes_servicios_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 64,
+          "nombre": "fletes_productos_vendidos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 65,
+          "nombre": "papeleria_oficina_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 66,
+          "nombre": "energia_electrica_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 67,
+          "nombre": "pagos_pers_subcontratado_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 68,
+          "nombre": "honorarios_comisiones_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 69,
+          "nombre": "publicidad_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 70,
+          "nombre": "servicios_comunicacion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 71,
+          "nombre": "envases_empaques_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 72,
+          "nombre": "reparaciones_refacciones_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 73,
+          "nombre": "consu_agua_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 74,
+          "nombre": "ingr_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 75,
+          "nombre": "ingr_reventa_mercancias_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 76,
+          "nombre": "ingr_servicios_profesionales_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 77,
+          "nombre": "ingr_venta_productos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 78,
+          "nombre": "ingr_alquiler_bienes_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 79,
+          "nombre": "otros_ingr_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 80,
+          "nombre": "otros_componentes_prod_bruta_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 81,
+          "nombre": "ingr_maquila_terceros_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 82,
+          "nombre": "prod_bruta_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 83,
+          "nombre": "consu_intermedio_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 84,
+          "nombre": "valor_agregado_censal_bruto_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 85,
+          "nombre": "inversion_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 86,
+          "nombre": "form_brut_cap_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 87,
+          "nombre": "mar_por_rev_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 88,
+          "nombre": "gastos_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 89,
+          "nombre": "ingr_tot_general_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 90,
+          "nombre": "valor_productos_elaborados_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 91,
+          "nombre": "act_fijos_uso_propio_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 92,
+          "nombre": "invent_inic_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 93,
+          "nombre": "invent_final_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 94,
+          "nombre": "var_exis_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 95,
+          "nombre": "invent_inic_proceso_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 96,
+          "nombre": "invent_final_proceso_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 97,
+          "nombre": "var_invent_proceso_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 98,
+          "nombre": "invent_inic_reventa_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 99,
+          "nombre": "invent_final_reventa_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 100,
+          "nombre": "acervo_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 101,
+          "nombre": "depreciacion_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 102,
+          "nombre": "compra_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 103,
+          "nombre": "ventas_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 104,
+          "nombre": "acervo_maquinaria_equipo_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 105,
+          "nombre": "acervo_bienes_inmuebles_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 106,
+          "nombre": "acervo_unidades_transporte_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 107,
+          "nombre": "acervo_equipo_computo_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 108,
+          "nombre": "acervo_mobiliario_oficina_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 109,
+          "nombre": "nom_ent",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 110,
+          "nombre": "actividad_codigo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 111,
+          "nombre": "actividad",
+          "tipo": "text"
+        },
+        {
+          "posicion": 112,
+          "nombre": "estrato_codigo",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 113,
+          "nombre": "estrato",
+          "tipo": "text"
+        }
+      ]
+    },
+    {
+      "nombre": "vw_economico_municipal_2019",
+      "descripcion": "Vista desnormalizada municipal del Censo 2019.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "censo_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 3,
+          "nombre": "actividad_economica_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 4,
+          "nombre": "estrato_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 5,
+          "nombre": "cve_ent",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 6,
+          "nombre": "cve_mun",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 7,
+          "nombre": "prod_bruta_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 8,
+          "nombre": "part_bienes_elab_gen_ext_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 9,
+          "nombre": "part_imatmpp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 10,
+          "nombre": "part_act_fijos_producidos_uso_propio_pb",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 11,
+          "nombre": "part_var_exist_prod_proceso_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 12,
+          "nombre": "part_mar_rev_merc_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 13,
+          "nombre": "part_serv_prof_cient_tec_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 14,
+          "nombre": "part_ingr_abmi_produccion",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 15,
+          "nombre": "part_otros_comp_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 16,
+          "nombre": "consu_intermedio_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 17,
+          "nombre": "valor_agregado_censal_bruto_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 18,
+          "nombre": "part_ssen_tr",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 19,
+          "nombre": "part_salarios_ppvs_tr",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 20,
+          "nombre": "part_sueldos_pers_acd_tr",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 21,
+          "nombre": "pers_dependiente_pers_ocup_tot_porcentaje",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 22,
+          "nombre": "pnr_perasonal_ocupado_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 23,
+          "nombre": "pnr_po_dependiente",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 24,
+          "nombre": "prest_soc_util_rep_tot_rem",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 25,
+          "nombre": "part_urt_tr",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 26,
+          "nombre": "part_mt_pers_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 27,
+          "nombre": "part_mt_po_produccion_ventas_servicios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 28,
+          "nombre": "part_mt_po_acd",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 29,
+          "nombre": "prest_soc_tot_rem",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 30,
+          "nombre": "part_prestaciones_sociales_utilidades_sueldos_salarios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 31,
+          "nombre": "part_mt_pfotn",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 32,
+          "nombre": "tot_prestaciones_ss",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 33,
+          "nombre": "part_mt_pcpor",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 34,
+          "nombre": "part_mt_phcs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 35,
+          "nombre": "remuneracion_media_per_ocupada_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 36,
+          "nombre": "salario_pers_operativo_anual",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 37,
+          "nombre": "sueldo_pers_administrativo_anual",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 38,
+          "nombre": "pagos_promedio_per_suministrada",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 39,
+          "nombre": "pagos_promedio_pers_comisiones_u_honorarios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 40,
+          "nombre": "part_remuneraciones_gcbs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 41,
+          "nombre": "per_no_dep_pers_ocup_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 42,
+          "nombre": "indem_liqui_remu_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 43,
+          "nombre": "remuneracion_media_per_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 44,
+          "nombre": "horas_dia_trab_prom_pers_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 45,
+          "nombre": "horas_dia_trab_prom_pers_no_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 46,
+          "nombre": "horas_dia_trab_prom_ppvs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 47,
+          "nombre": "horas_dia_trab_prom_empleados_administrativos_control",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 48,
+          "nombre": "horas_dia_trab_prom_pers_comisiones_honorarios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 49,
+          "nombre": "valor_agregado_censal_bruto_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 50,
+          "nombre": "part_consu_intermedio_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 51,
+          "nombre": "va_promedio_per_ocupada",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 52,
+          "nombre": "pbt_pers_ocupado_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 53,
+          "nombre": "part_mpms_gastos_consu_bienes",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 54,
+          "nombre": "part_mcs_gcbs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 55,
+          "nombre": "inversion_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 56,
+          "nombre": "part_cae_gcbs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 57,
+          "nombre": "inversion_ti_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 58,
+          "nombre": "part_gastos_consu_otros_bienes_servicios_gastos_consu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 59,
+          "nombre": "inversion_tot_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 60,
+          "nombre": "part_ivm_ti_suministro_bienes",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 61,
+          "nombre": "inversion_tot_valor_agregado_censal_bruto",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 62,
+          "nombre": "part_servi_prof_cient",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 63,
+          "nombre": "part_otros_isbs_ti",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 64,
+          "nombre": "form_brut_cap_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 65,
+          "nombre": "inversion_tot_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 66,
+          "nombre": "part_venta_productos_elaborados_generados_o_extraidos_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 67,
+          "nombre": "part_ingr_abmi_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 68,
+          "nombre": "part_imatmpp_2",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 69,
+          "nombre": "part_mep_tot_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 70,
+          "nombre": "part_cif_tot_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 71,
+          "nombre": "part_et_tot_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 72,
+          "nombre": "part_ecp_tot_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 73,
+          "nombre": "margen_bruto_operacion",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 74,
+          "nombre": "ing_princ_por_sum_bienes",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 75,
+          "nombre": "gp_gcbs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 76,
+          "nombre": "gp_ip",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 77,
+          "nombre": "part_meo_otros_act_fijos_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 78,
+          "nombre": "valor_act_fijos_per_ocupada",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 79,
+          "nombre": "maqui_equip_prod_a_prod_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 80,
+          "nombre": "acti_fijo_brut_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 81,
+          "nombre": "forma_brut_cap_fijo_acervo_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 82,
+          "nombre": "produccion_act_fijos_uso_propio_compras_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 83,
+          "nombre": "otros_isbs_ti_suministro",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 84,
+          "nombre": "gastos_no_derivados_actividad_gcbs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 85,
+          "nombre": "ingr_no_derivados_actividad_isbs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 86,
+          "nombre": "valor_promedio_maquinaria_equipo_per_ocupada_anuales",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 87,
+          "nombre": "ip_respecto_gp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 88,
+          "nombre": "porcentaje_ip_ti_actividad_financieros",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 89,
+          "nombre": "isbs_per_ocupada",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 90,
+          "nombre": "mar_por_rev_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 91,
+          "nombre": "part_depreciacion_valor_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 92,
+          "nombre": "tasa_rentabilidad_promedio",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 93,
+          "nombre": "gastos_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 94,
+          "nombre": "salario_promedio_diarios_per_operativa",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 95,
+          "nombre": "sueldo_promedio_diario_per_administrativa",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 96,
+          "nombre": "va_tot_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 97,
+          "nombre": "part_muje_pers_ocupado_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 98,
+          "nombre": "ingr_tot_general_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 99,
+          "nombre": "pers_dep_razon_social",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 100,
+          "nombre": "pers_dep_razon_social_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 101,
+          "nombre": "pers_dep_razon_social_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 102,
+          "nombre": "horas_pers_dep_razon_social_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 103,
+          "nombre": "pers_ocupado_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 104,
+          "nombre": "pers_ocupado_tot_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 105,
+          "nombre": "pers_ocupado_tot_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 106,
+          "nombre": "horas_pers_ocupado_tot_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 107,
+          "nombre": "pers_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 108,
+          "nombre": "pers_remu_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 109,
+          "nombre": "pers_remu_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 110,
+          "nombre": "horas_pers_remu_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 111,
+          "nombre": "pers_no_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 112,
+          "nombre": "pers_no_remu_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 113,
+          "nombre": "pers_no_remu_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 114,
+          "nombre": "horas_pers_no_remu_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 115,
+          "nombre": "pers_prod_ventas_servicios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 116,
+          "nombre": "pers_prod_ventas_servicios_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 117,
+          "nombre": "pers_prod_ventas_servicios_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 118,
+          "nombre": "horas_pers_prod_ventas_servicios_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 119,
+          "nombre": "pers_admin_contable_direccion",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 120,
+          "nombre": "pers_admin_contable_direccion_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 121,
+          "nombre": "pers_admin_contable_direccion_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 122,
+          "nombre": "horas_pers_admin_contable_direccion_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 123,
+          "nombre": "pers_no_dep_razon_social",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 124,
+          "nombre": "pers_no_dep_razon_social_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 125,
+          "nombre": "pers_no_dep_razon_social_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 126,
+          "nombre": "horas_pers_no_dep_razon_social_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 127,
+          "nombre": "pers_contratado_otra_razon_social",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 128,
+          "nombre": "pers_contratado_otra_razon_social_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 129,
+          "nombre": "pers_contratado_otra_razon_social_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 130,
+          "nombre": "horas_pers_contratado_otra_razon_social_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 131,
+          "nombre": "pers_honorarios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 132,
+          "nombre": "pers_honorarios_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 133,
+          "nombre": "pers_honorarios_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 134,
+          "nombre": "horas_pers_honorarios_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 135,
+          "nombre": "remuneraciones_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 136,
+          "nombre": "salarios_pers_prod_ventas_servicios_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 137,
+          "nombre": "sueldos_pers_admin_contable_direccion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 138,
+          "nombre": "contribuciones_seguridad_social_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 139,
+          "nombre": "otras_prestaciones_sociales_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 140,
+          "nombre": "utilidades_repartidas_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 141,
+          "nombre": "indemnizacion_liquidacion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 142,
+          "nombre": "gastos_consu_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 143,
+          "nombre": "mercancias_compradas_reventa_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 144,
+          "nombre": "materiales_servicios_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 145,
+          "nombre": "materias_primas_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 146,
+          "nombre": "combustibles_lubricantes_energeticos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 147,
+          "nombre": "renta_alquiler_bienes_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 148,
+          "nombre": "servicios_profesionales_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 149,
+          "nombre": "maquila_servicios_produccion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 150,
+          "nombre": "otros_bienes_servicios_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 151,
+          "nombre": "fletes_productos_vendidos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 152,
+          "nombre": "papeleria_oficina_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 153,
+          "nombre": "energia_electrica_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 154,
+          "nombre": "pagos_pers_subcontratado_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 155,
+          "nombre": "honorarios_comisiones_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 156,
+          "nombre": "publicidad_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 157,
+          "nombre": "servicios_comunicacion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 158,
+          "nombre": "envases_empaques_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 159,
+          "nombre": "reparaciones_refacciones_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 160,
+          "nombre": "consu_agua_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 161,
+          "nombre": "ingr_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 162,
+          "nombre": "ingr_reventa_mercancias_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 163,
+          "nombre": "ingr_servicios_profesionales_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 164,
+          "nombre": "ingr_venta_productos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 165,
+          "nombre": "ingr_alquiler_bienes_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 166,
+          "nombre": "otros_ingr_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 167,
+          "nombre": "otros_componentes_prod_bruta_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 168,
+          "nombre": "ingr_maquila_terceros_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 169,
+          "nombre": "valor_productos_elaborados_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 170,
+          "nombre": "act_fijos_uso_propio_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 171,
+          "nombre": "invent_inic_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 172,
+          "nombre": "invent_final_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 173,
+          "nombre": "var_exis_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 174,
+          "nombre": "invent_inic_proceso_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 175,
+          "nombre": "invent_final_proceso_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 176,
+          "nombre": "var_invent_proceso_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 177,
+          "nombre": "invent_inic_reventa_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 178,
+          "nombre": "invent_final_reventa_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 179,
+          "nombre": "acervo_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 180,
+          "nombre": "depreciacion_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 181,
+          "nombre": "compra_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 182,
+          "nombre": "ventas_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 183,
+          "nombre": "acervo_maquinaria_equipo_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 184,
+          "nombre": "acervo_bienes_inmuebles_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 185,
+          "nombre": "acervo_unidades_transporte_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 186,
+          "nombre": "acervo_equipo_computo_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 187,
+          "nombre": "acervo_mobiliario_oficina_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 188,
+          "nombre": "unidades_economicas",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 189,
+          "nombre": "municipio",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 190,
+          "nombre": "nom_ent",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 191,
+          "nombre": "actividad_codigo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 192,
+          "nombre": "actividad",
+          "tipo": "text"
+        },
+        {
+          "posicion": 193,
+          "nombre": "estrato_codigo",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 194,
+          "nombre": "estrato",
+          "tipo": "text"
+        }
+      ]
+    },
+    {
+      "nombre": "vw_economico_municipal_2024",
+      "descripcion": "Vista desnormalizada municipal del Censo 2024.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "censo_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 3,
+          "nombre": "actividad_economica_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 4,
+          "nombre": "estrato_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 5,
+          "nombre": "cve_ent",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 6,
+          "nombre": "cve_mun",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 7,
+          "nombre": "sector",
+          "tipo": "text"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subsector",
+          "tipo": "text"
+        },
+        {
+          "posicion": 9,
+          "nombre": "rama",
+          "tipo": "text"
+        },
+        {
+          "posicion": 10,
+          "nombre": "subrama",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "clase",
+          "tipo": "text"
+        },
+        {
+          "posicion": 12,
+          "nombre": "unidades_economicas",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 13,
+          "nombre": "pers_ocupado_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 14,
+          "nombre": "pers_ocupado_tot_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 15,
+          "nombre": "pers_ocupado_tot_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 16,
+          "nombre": "horas_pers_ocupado_tot_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 17,
+          "nombre": "pers_dep_razon_social",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 18,
+          "nombre": "pers_dep_razon_social_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 19,
+          "nombre": "pers_dep_razon_social_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 20,
+          "nombre": "horas_pers_dep_razon_social_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 21,
+          "nombre": "pers_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 22,
+          "nombre": "pers_remu_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 23,
+          "nombre": "pers_remu_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 24,
+          "nombre": "horas_pers_remu_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 25,
+          "nombre": "pers_no_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 26,
+          "nombre": "pers_no_remu_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 27,
+          "nombre": "pers_no_remu_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 28,
+          "nombre": "horas_pers_no_remu_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 29,
+          "nombre": "pers_prod_ventas_servicios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 30,
+          "nombre": "pers_prod_ventas_servicios_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 31,
+          "nombre": "pers_prod_ventas_servicios_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 32,
+          "nombre": "horas_pers_prod_ventas_servicios_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 33,
+          "nombre": "pers_admin_contable_direccion",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 34,
+          "nombre": "pers_admin_contable_direccion_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 35,
+          "nombre": "pers_admin_contable_direccion_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 36,
+          "nombre": "horas_pers_admin_contable_direccion_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 37,
+          "nombre": "pers_no_dep_razon_social",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 38,
+          "nombre": "pers_no_dep_razon_social_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 39,
+          "nombre": "pers_no_dep_razon_social_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 40,
+          "nombre": "horas_pers_no_dep_razon_social_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 41,
+          "nombre": "pers_contratado_otra_razon_social",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 42,
+          "nombre": "pers_contratado_otra_razon_social_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 43,
+          "nombre": "pers_contratado_otra_razon_social_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 44,
+          "nombre": "horas_pers_contratado_otra_razon_social_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 45,
+          "nombre": "pers_honorarios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 46,
+          "nombre": "pers_honorarios_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 47,
+          "nombre": "pers_honorarios_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 48,
+          "nombre": "horas_pers_honorarios_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 49,
+          "nombre": "remuneraciones_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 50,
+          "nombre": "salarios_pers_prod_ventas_servicios_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 51,
+          "nombre": "sueldos_pers_admin_contable_direccion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 52,
+          "nombre": "contribuciones_seguridad_social_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 53,
+          "nombre": "otras_prestaciones_sociales_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 54,
+          "nombre": "utilidades_repartidas_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 55,
+          "nombre": "indemnizacion_liquidacion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 56,
+          "nombre": "gastos_consu_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 57,
+          "nombre": "mercancias_compradas_reventa_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 58,
+          "nombre": "materiales_servicios_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 59,
+          "nombre": "materias_primas_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 60,
+          "nombre": "combustibles_lubricantes_energeticos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 61,
+          "nombre": "renta_alquiler_bienes_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 62,
+          "nombre": "servicios_profesionales_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 63,
+          "nombre": "maquila_servicios_produccion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 64,
+          "nombre": "otros_bienes_servicios_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 65,
+          "nombre": "fletes_productos_vendidos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 66,
+          "nombre": "papeleria_oficina_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 67,
+          "nombre": "energia_electrica_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 68,
+          "nombre": "pagos_pers_subcontratado_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 69,
+          "nombre": "honorarios_comisiones_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 70,
+          "nombre": "publicidad_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 71,
+          "nombre": "servicios_comunicacion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 72,
+          "nombre": "envases_empaques_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 73,
+          "nombre": "reparaciones_refacciones_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 74,
+          "nombre": "consu_agua_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 75,
+          "nombre": "ingr_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 76,
+          "nombre": "ingr_reventa_mercancias_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 77,
+          "nombre": "ingr_servicios_profesionales_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 78,
+          "nombre": "ingr_venta_productos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 79,
+          "nombre": "ingr_alquiler_bienes_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 80,
+          "nombre": "otros_ingr_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 81,
+          "nombre": "otros_componentes_prod_bruta_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 82,
+          "nombre": "ingr_maquila_terceros_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 83,
+          "nombre": "prod_bruta_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 84,
+          "nombre": "consu_intermedio_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 85,
+          "nombre": "valor_agregado_censal_bruto_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 86,
+          "nombre": "inversion_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 87,
+          "nombre": "form_brut_cap_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 88,
+          "nombre": "mar_por_rev_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 89,
+          "nombre": "gastos_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 90,
+          "nombre": "ingr_tot_general_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 91,
+          "nombre": "valor_productos_elaborados_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 92,
+          "nombre": "act_fijos_uso_propio_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 93,
+          "nombre": "invent_inic_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 94,
+          "nombre": "invent_final_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 95,
+          "nombre": "var_exis_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 96,
+          "nombre": "invent_inic_proceso_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 97,
+          "nombre": "invent_final_proceso_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 98,
+          "nombre": "var_invent_proceso_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 99,
+          "nombre": "invent_inic_reventa_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 100,
+          "nombre": "invent_final_reventa_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 101,
+          "nombre": "acervo_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 102,
+          "nombre": "depreciacion_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 103,
+          "nombre": "compra_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 104,
+          "nombre": "ventas_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 105,
+          "nombre": "acervo_maquinaria_equipo_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 106,
+          "nombre": "acervo_bienes_inmuebles_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 107,
+          "nombre": "acervo_unidades_transporte_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 108,
+          "nombre": "acervo_equipo_computo_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 109,
+          "nombre": "acervo_mobiliario_oficina_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 110,
+          "nombre": "municipio",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 111,
+          "nombre": "nom_ent",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 112,
+          "nombre": "actividad_codigo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 113,
+          "nombre": "actividad",
+          "tipo": "text"
+        },
+        {
+          "posicion": 114,
+          "nombre": "estrato_codigo",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 115,
+          "nombre": "estrato",
+          "tipo": "text"
+        }
+      ]
+    },
+    {
+      "nombre": "vw_economico_nacional_2019",
+      "descripcion": "Vista desnormalizada nacional del Censo 2019.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "censo_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 3,
+          "nombre": "actividad_economica_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 4,
+          "nombre": "estrato_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 5,
+          "nombre": "prod_bruta_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 6,
+          "nombre": "part_bienes_elab_gen_ext_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 7,
+          "nombre": "part_imatmpp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 8,
+          "nombre": "part_act_fijos_producidos_uso_propio_pb",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 9,
+          "nombre": "part_var_exist_prod_proceso_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 10,
+          "nombre": "part_mar_rev_merc_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 11,
+          "nombre": "part_serv_prof_cient_tec_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 12,
+          "nombre": "part_ingr_abmi_produccion",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 13,
+          "nombre": "part_otros_comp_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 14,
+          "nombre": "consu_intermedio_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 15,
+          "nombre": "valor_agregado_censal_bruto_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 16,
+          "nombre": "part_ssen_tr",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 17,
+          "nombre": "part_salarios_ppvs_tr",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 18,
+          "nombre": "part_sueldos_pers_acd_tr",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 19,
+          "nombre": "pers_dependiente_pers_ocup_tot_porcentaje",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 20,
+          "nombre": "pnr_perasonal_ocupado_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 21,
+          "nombre": "pnr_po_dependiente",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 22,
+          "nombre": "prest_soc_util_rep_tot_rem",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 23,
+          "nombre": "part_urt_tr",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 24,
+          "nombre": "part_mt_pers_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 25,
+          "nombre": "part_mt_po_produccion_ventas_servicios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 26,
+          "nombre": "part_mt_po_acd",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 27,
+          "nombre": "prest_soc_tot_rem",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 28,
+          "nombre": "part_prestaciones_sociales_utilidades_sueldos_salarios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 29,
+          "nombre": "part_mt_pfotn",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 30,
+          "nombre": "tot_prestaciones_ss",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 31,
+          "nombre": "part_mt_pcpor",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 32,
+          "nombre": "part_mt_phcs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 33,
+          "nombre": "remuneracion_media_per_ocupada_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 34,
+          "nombre": "salario_pers_operativo_anual",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 35,
+          "nombre": "sueldo_pers_administrativo_anual",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 36,
+          "nombre": "pagos_promedio_per_suministrada",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 37,
+          "nombre": "pagos_promedio_pers_comisiones_u_honorarios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 38,
+          "nombre": "part_remuneraciones_gcbs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 39,
+          "nombre": "per_no_dep_pers_ocup_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 40,
+          "nombre": "indem_liqui_remu_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 41,
+          "nombre": "remuneracion_media_per_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 42,
+          "nombre": "horas_dia_trab_prom_pers_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 43,
+          "nombre": "horas_dia_trab_prom_pers_no_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 44,
+          "nombre": "horas_dia_trab_prom_ppvs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 45,
+          "nombre": "horas_dia_trab_prom_empleados_administrativos_control",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 46,
+          "nombre": "horas_dia_trab_prom_pers_comisiones_honorarios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 47,
+          "nombre": "valor_agregado_censal_bruto_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 48,
+          "nombre": "part_consu_intermedio_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 49,
+          "nombre": "va_promedio_per_ocupada",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 50,
+          "nombre": "pbt_pers_ocupado_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 51,
+          "nombre": "part_mpms_gastos_consu_bienes",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 52,
+          "nombre": "part_mcs_gcbs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 53,
+          "nombre": "inversion_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 54,
+          "nombre": "part_cae_gcbs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 55,
+          "nombre": "inversion_ti_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 56,
+          "nombre": "part_gastos_consu_otros_bienes_servicios_gastos_consu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 57,
+          "nombre": "inversion_tot_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 58,
+          "nombre": "part_ivm_ti_suministro_bienes",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 59,
+          "nombre": "inversion_tot_valor_agregado_censal_bruto",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 60,
+          "nombre": "part_servi_prof_cient",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 61,
+          "nombre": "part_otros_isbs_ti",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 62,
+          "nombre": "form_brut_cap_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 63,
+          "nombre": "inversion_tot_pbt",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 64,
+          "nombre": "part_venta_productos_elaborados_generados_o_extraidos_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 65,
+          "nombre": "part_ingr_abmi_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 66,
+          "nombre": "part_imatmpp_2",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 67,
+          "nombre": "part_mep_tot_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 68,
+          "nombre": "part_cif_tot_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 69,
+          "nombre": "part_et_tot_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 70,
+          "nombre": "part_ecp_tot_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 71,
+          "nombre": "margen_bruto_operacion",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 72,
+          "nombre": "ing_princ_por_sum_bienes",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 73,
+          "nombre": "gp_gcbs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 74,
+          "nombre": "gp_ip",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 75,
+          "nombre": "part_meo_otros_act_fijos_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 76,
+          "nombre": "valor_act_fijos_per_ocupada",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 77,
+          "nombre": "maqui_equip_prod_a_prod_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 78,
+          "nombre": "acti_fijo_brut_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 79,
+          "nombre": "forma_brut_cap_fijo_acervo_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 80,
+          "nombre": "produccion_act_fijos_uso_propio_compras_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 81,
+          "nombre": "otros_isbs_ti_suministro",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 82,
+          "nombre": "gastos_no_derivados_actividad_gcbs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 83,
+          "nombre": "ingr_no_derivados_actividad_isbs",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 84,
+          "nombre": "valor_promedio_maquinaria_equipo_per_ocupada_anuales",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 85,
+          "nombre": "ip_respecto_gp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 86,
+          "nombre": "porcentaje_ip_ti_actividad_financieros",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 87,
+          "nombre": "isbs_per_ocupada",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 88,
+          "nombre": "mar_por_rev_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 89,
+          "nombre": "part_depreciacion_valor_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 90,
+          "nombre": "tasa_rentabilidad_promedio",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 91,
+          "nombre": "gastos_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 92,
+          "nombre": "salario_promedio_diarios_per_operativa",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 93,
+          "nombre": "sueldo_promedio_diario_per_administrativa",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 94,
+          "nombre": "va_tot_act_fijos",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 95,
+          "nombre": "part_muje_pers_ocupado_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 96,
+          "nombre": "ingr_tot_general_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 97,
+          "nombre": "pers_dep_razon_social",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 98,
+          "nombre": "pers_dep_razon_social_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 99,
+          "nombre": "pers_dep_razon_social_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 100,
+          "nombre": "horas_pers_dep_razon_social_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 101,
+          "nombre": "pers_ocupado_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 102,
+          "nombre": "pers_ocupado_tot_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 103,
+          "nombre": "pers_ocupado_tot_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 104,
+          "nombre": "horas_pers_ocupado_tot_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 105,
+          "nombre": "pers_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 106,
+          "nombre": "pers_remu_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 107,
+          "nombre": "pers_remu_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 108,
+          "nombre": "horas_pers_remu_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 109,
+          "nombre": "pers_no_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 110,
+          "nombre": "pers_no_remu_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 111,
+          "nombre": "pers_no_remu_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 112,
+          "nombre": "horas_pers_no_remu_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 113,
+          "nombre": "pers_prod_ventas_servicios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 114,
+          "nombre": "pers_prod_ventas_servicios_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 115,
+          "nombre": "pers_prod_ventas_servicios_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 116,
+          "nombre": "horas_pers_prod_ventas_servicios_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 117,
+          "nombre": "pers_admin_contable_direccion",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 118,
+          "nombre": "pers_admin_contable_direccion_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 119,
+          "nombre": "pers_admin_contable_direccion_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 120,
+          "nombre": "horas_pers_admin_contable_direccion_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 121,
+          "nombre": "pers_no_dep_razon_social",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 122,
+          "nombre": "pers_no_dep_razon_social_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 123,
+          "nombre": "pers_no_dep_razon_social_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 124,
+          "nombre": "horas_pers_no_dep_razon_social_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 125,
+          "nombre": "pers_contratado_otra_razon_social",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 126,
+          "nombre": "pers_contratado_otra_razon_social_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 127,
+          "nombre": "pers_contratado_otra_razon_social_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 128,
+          "nombre": "horas_pers_contratado_otra_razon_social_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 129,
+          "nombre": "pers_honorarios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 130,
+          "nombre": "pers_honorarios_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 131,
+          "nombre": "pers_honorarios_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 132,
+          "nombre": "horas_pers_honorarios_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 133,
+          "nombre": "remuneraciones_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 134,
+          "nombre": "salarios_pers_prod_ventas_servicios_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 135,
+          "nombre": "sueldos_pers_admin_contable_direccion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 136,
+          "nombre": "contribuciones_seguridad_social_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 137,
+          "nombre": "otras_prestaciones_sociales_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 138,
+          "nombre": "utilidades_repartidas_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 139,
+          "nombre": "indemnizacion_liquidacion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 140,
+          "nombre": "gastos_consu_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 141,
+          "nombre": "mercancias_compradas_reventa_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 142,
+          "nombre": "materiales_servicios_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 143,
+          "nombre": "materias_primas_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 144,
+          "nombre": "combustibles_lubricantes_energeticos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 145,
+          "nombre": "renta_alquiler_bienes_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 146,
+          "nombre": "servicios_profesionales_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 147,
+          "nombre": "maquila_servicios_produccion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 148,
+          "nombre": "otros_bienes_servicios_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 149,
+          "nombre": "fletes_productos_vendidos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 150,
+          "nombre": "papeleria_oficina_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 151,
+          "nombre": "energia_electrica_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 152,
+          "nombre": "pagos_pers_subcontratado_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 153,
+          "nombre": "honorarios_comisiones_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 154,
+          "nombre": "publicidad_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 155,
+          "nombre": "servicios_comunicacion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 156,
+          "nombre": "envases_empaques_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 157,
+          "nombre": "reparaciones_refacciones_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 158,
+          "nombre": "consu_agua_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 159,
+          "nombre": "ingr_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 160,
+          "nombre": "ingr_reventa_mercancias_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 161,
+          "nombre": "ingr_servicios_profesionales_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 162,
+          "nombre": "ingr_venta_productos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 163,
+          "nombre": "ingr_alquiler_bienes_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 164,
+          "nombre": "otros_ingr_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 165,
+          "nombre": "otros_componentes_prod_bruta_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 166,
+          "nombre": "ingr_maquila_terceros_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 167,
+          "nombre": "valor_productos_elaborados_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 168,
+          "nombre": "act_fijos_uso_propio_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 169,
+          "nombre": "invent_inic_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 170,
+          "nombre": "invent_final_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 171,
+          "nombre": "var_exis_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 172,
+          "nombre": "invent_inic_proceso_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 173,
+          "nombre": "invent_final_proceso_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 174,
+          "nombre": "var_invent_proceso_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 175,
+          "nombre": "invent_inic_reventa_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 176,
+          "nombre": "invent_final_reventa_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 177,
+          "nombre": "acervo_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 178,
+          "nombre": "depreciacion_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 179,
+          "nombre": "compra_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 180,
+          "nombre": "ventas_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 181,
+          "nombre": "acervo_maquinaria_equipo_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 182,
+          "nombre": "acervo_bienes_inmuebles_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 183,
+          "nombre": "acervo_unidades_transporte_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 184,
+          "nombre": "acervo_equipo_computo_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 185,
+          "nombre": "acervo_mobiliario_oficina_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 186,
+          "nombre": "unidades_economicas",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 187,
+          "nombre": "actividad_codigo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 188,
+          "nombre": "actividad",
+          "tipo": "text"
+        },
+        {
+          "posicion": 189,
+          "nombre": "estrato_codigo",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 190,
+          "nombre": "estrato",
+          "tipo": "text"
+        }
+      ]
+    },
+    {
+      "nombre": "vw_economico_nacional_2024",
+      "descripcion": "Vista desnormalizada nacional del Censo 2024.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "censo_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 3,
+          "nombre": "actividad_economica_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 4,
+          "nombre": "estrato_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 5,
+          "nombre": "sector",
+          "tipo": "text"
+        },
+        {
+          "posicion": 6,
+          "nombre": "subsector",
+          "tipo": "text"
+        },
+        {
+          "posicion": 7,
+          "nombre": "rama",
+          "tipo": "text"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subrama",
+          "tipo": "text"
+        },
+        {
+          "posicion": 9,
+          "nombre": "clase",
+          "tipo": "text"
+        },
+        {
+          "posicion": 10,
+          "nombre": "unidades_economicas",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 11,
+          "nombre": "pers_ocupado_tot",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 12,
+          "nombre": "pers_ocupado_tot_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 13,
+          "nombre": "pers_ocupado_tot_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 14,
+          "nombre": "horas_pers_ocupado_tot_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 15,
+          "nombre": "pers_dep_razon_social",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 16,
+          "nombre": "pers_dep_razon_social_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 17,
+          "nombre": "pers_dep_razon_social_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 18,
+          "nombre": "horas_pers_dep_razon_social_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 19,
+          "nombre": "pers_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 20,
+          "nombre": "pers_remu_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 21,
+          "nombre": "pers_remu_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 22,
+          "nombre": "horas_pers_remu_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 23,
+          "nombre": "pers_no_remu",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 24,
+          "nombre": "pers_no_remu_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 25,
+          "nombre": "pers_no_remu_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 26,
+          "nombre": "horas_pers_no_remu_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 27,
+          "nombre": "pers_prod_ventas_servicios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 28,
+          "nombre": "pers_prod_ventas_servicios_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 29,
+          "nombre": "pers_prod_ventas_servicios_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 30,
+          "nombre": "horas_pers_prod_ventas_servicios_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 31,
+          "nombre": "pers_admin_contable_direccion",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 32,
+          "nombre": "pers_admin_contable_direccion_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 33,
+          "nombre": "pers_admin_contable_direccion_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 34,
+          "nombre": "horas_pers_admin_contable_direccion_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 35,
+          "nombre": "pers_no_dep_razon_social",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 36,
+          "nombre": "pers_no_dep_razon_social_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 37,
+          "nombre": "pers_no_dep_razon_social_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 38,
+          "nombre": "horas_pers_no_dep_razon_social_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 39,
+          "nombre": "pers_contratado_otra_razon_social",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 40,
+          "nombre": "pers_contratado_otra_razon_social_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 41,
+          "nombre": "pers_contratado_otra_razon_social_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 42,
+          "nombre": "horas_pers_contratado_otra_razon_social_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 43,
+          "nombre": "pers_honorarios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 44,
+          "nombre": "pers_honorarios_h",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 45,
+          "nombre": "pers_honorarios_m",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 46,
+          "nombre": "horas_pers_honorarios_mh",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 47,
+          "nombre": "remuneraciones_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 48,
+          "nombre": "salarios_pers_prod_ventas_servicios_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 49,
+          "nombre": "sueldos_pers_admin_contable_direccion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 50,
+          "nombre": "contribuciones_seguridad_social_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 51,
+          "nombre": "otras_prestaciones_sociales_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 52,
+          "nombre": "utilidades_repartidas_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 53,
+          "nombre": "indemnizacion_liquidacion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 54,
+          "nombre": "gastos_consu_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 55,
+          "nombre": "mercancias_compradas_reventa_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 56,
+          "nombre": "materiales_servicios_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 57,
+          "nombre": "materias_primas_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 58,
+          "nombre": "combustibles_lubricantes_energeticos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 59,
+          "nombre": "renta_alquiler_bienes_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 60,
+          "nombre": "servicios_profesionales_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 61,
+          "nombre": "maquila_servicios_produccion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 62,
+          "nombre": "otros_bienes_servicios_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 63,
+          "nombre": "fletes_productos_vendidos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 64,
+          "nombre": "papeleria_oficina_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 65,
+          "nombre": "energia_electrica_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 66,
+          "nombre": "pagos_pers_subcontratado_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 67,
+          "nombre": "honorarios_comisiones_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 68,
+          "nombre": "publicidad_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 69,
+          "nombre": "servicios_comunicacion_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 70,
+          "nombre": "envases_empaques_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 71,
+          "nombre": "reparaciones_refacciones_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 72,
+          "nombre": "consu_agua_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 73,
+          "nombre": "ingr_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 74,
+          "nombre": "ingr_reventa_mercancias_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 75,
+          "nombre": "ingr_servicios_profesionales_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 76,
+          "nombre": "ingr_venta_productos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 77,
+          "nombre": "ingr_alquiler_bienes_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 78,
+          "nombre": "otros_ingr_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 79,
+          "nombre": "otros_componentes_prod_bruta_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 80,
+          "nombre": "ingr_maquila_terceros_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 81,
+          "nombre": "prod_bruta_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 82,
+          "nombre": "consu_intermedio_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 83,
+          "nombre": "valor_agregado_censal_bruto_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 84,
+          "nombre": "inversion_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 85,
+          "nombre": "form_brut_cap_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 86,
+          "nombre": "mar_por_rev_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 87,
+          "nombre": "gastos_tot_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 88,
+          "nombre": "ingr_tot_general_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 89,
+          "nombre": "valor_productos_elaborados_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 90,
+          "nombre": "act_fijos_uso_propio_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 91,
+          "nombre": "invent_inic_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 92,
+          "nombre": "invent_final_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 93,
+          "nombre": "var_exis_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 94,
+          "nombre": "invent_inic_proceso_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 95,
+          "nombre": "invent_final_proceso_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 96,
+          "nombre": "var_invent_proceso_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 97,
+          "nombre": "invent_inic_reventa_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 98,
+          "nombre": "invent_final_reventa_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 99,
+          "nombre": "acervo_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 100,
+          "nombre": "depreciacion_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 101,
+          "nombre": "compra_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 102,
+          "nombre": "ventas_act_fijos_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 103,
+          "nombre": "acervo_maquinaria_equipo_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 104,
+          "nombre": "acervo_bienes_inmuebles_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 105,
+          "nombre": "acervo_unidades_transporte_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 106,
+          "nombre": "acervo_equipo_computo_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 107,
+          "nombre": "acervo_mobiliario_oficina_mdp",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 108,
+          "nombre": "actividad_codigo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 109,
+          "nombre": "actividad",
+          "tipo": "text"
+        },
+        {
+          "posicion": 110,
+          "nombre": "estrato_codigo",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 111,
+          "nombre": "estrato",
+          "tipo": "text"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,166 @@
+{
+  "nombre": "censo_poblacion",
+  "corte": "29 de mayo de 2026",
+  "tablas": [
+    {
+      "nombre": "poblacion",
+      "descripcion": "Tabla principal de población por municipio y localidad: total, mujeres, hombres y viviendas habitadas, con fuente (año censal).",
+      "filas": 21419
+    },
+    {
+      "nombre": "localidades",
+      "descripcion": "Catálogo de localidades de Jalisco.",
+      "filas": 12686
+    },
+    {
+      "nombre": "fuentes",
+      "descripcion": "Catálogo de fuentes (censo 2010, 2015, 2020).",
+      "filas": 3
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "view_inegi_2010",
+      "descripcion": "Vista de población del levantamiento 2010.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "entidad_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "entidad",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 3,
+          "nombre": "municipio_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 4,
+          "nombre": "municipio",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 5,
+          "nombre": "localidad",
+          "tipo": "text"
+        },
+        {
+          "posicion": 6,
+          "nombre": "total",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 7,
+          "nombre": "total_hombres",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 8,
+          "nombre": "total_mujeres",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 9,
+          "nombre": "viviendas_habitadas",
+          "tipo": "integer"
+        }
+      ]
+    },
+    {
+      "nombre": "view_inegi_2015",
+      "descripcion": "Vista de población de la Encuesta Intercensal 2015.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "entidad_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "entidad",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 3,
+          "nombre": "municipio_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 4,
+          "nombre": "municipio",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 5,
+          "nombre": "total",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 6,
+          "nombre": "total_hombres",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 7,
+          "nombre": "total_mujeres",
+          "tipo": "integer"
+        }
+      ]
+    },
+    {
+      "nombre": "view_inegi_2020",
+      "descripcion": "Vista de población del levantamiento 2020.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "entidad_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "entidad",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 3,
+          "nombre": "municipio_id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 4,
+          "nombre": "municipio",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 5,
+          "nombre": "localidad",
+          "tipo": "text"
+        },
+        {
+          "posicion": 6,
+          "nombre": "total",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 7,
+          "nombre": "total_hombres",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 8,
+          "nombre": "total_mujeres",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 9,
+          "nombre": "viviendas_habitadas",
+          "tipo": "integer"
+        }
+      ]
+    }
+  ]
+}

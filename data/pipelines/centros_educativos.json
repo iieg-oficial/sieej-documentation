@@ -1,5 +1,5 @@
 {
-  "generado": "2026-10-01T22:28:45.442028Z",
+  "generado": "2026-10-02T16:34:57.255182Z",
   "datos_obsoletos": false,
   "fuentes": {
     "airflow": {
@@ -10,12 +10,12 @@
     "bd": {
       "estado": "ok",
       "detalle": "29 bases de datos",
-      "consultado_en": "2026-10-01T22:31:33.681752Z"
+      "consultado_en": "2026-10-02T16:37:44.412777Z"
     },
     "readme": {
       "estado": "ok",
-      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
-      "consultado_en": "2026-10-01T22:28:45.465079Z"
+      "detalle": "35 README de ETL-SIEEJ @ 9b0ddc3",
+      "consultado_en": "2026-10-02T16:34:57.283811Z"
     }
   },
   "nombre": "centros_educativos",
@@ -66,8 +66,317 @@
     ],
     "descripcion_tablas": {},
     "alcance_vistas": {},
-    "commit": null
+    "commit": "9b0ddc3"
   },
-  "base": null,
+  "base": {
+    "nombre": "centros_educativos",
+    "es_infraestructura": false,
+    "vistas": [
+      {
+        "esquema": "public",
+        "nombre": "v_centros_educativos",
+        "tipo": "VIEW",
+        "descripcion": "Vista desnormalizada de centros educativos con catálogos y geografía resueltos.",
+        "registros": null,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "clave_centro_trabajo",
+            "tipo": "varchar(20)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "nombre_centro_trabajo",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "turno",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "tipo_educativo",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "nivel_educativo",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "servicio_educativo",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "tipo_control",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "tipo_sostenimiento",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "entidad",
+            "tipo": "varchar",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "municipio",
+            "tipo": "varchar",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "clave_localidad",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 13,
+            "nombre": "localidad",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 14,
+            "nombre": "domicilio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 15,
+            "nombre": "numero_exterior",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 16,
+            "nombre": "codigo_postal",
+            "tipo": "varchar(10)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 17,
+            "nombre": "entre_calle",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 18,
+            "nombre": "y_calle",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 19,
+            "nombre": "calle_posterior",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 20,
+            "nombre": "colonia",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 21,
+            "nombre": "total_alumnos_hombres",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 22,
+            "nombre": "total_alumnas_mujeres",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 23,
+            "nombre": "total_docentes_hombres",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 24,
+            "nombre": "total_docentes_mujeres",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 25,
+            "nombre": "aulas_en_uso",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 26,
+            "nombre": "aulas_existentes",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 27,
+            "nombre": "latitud",
+            "tipo": "float8",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 28,
+            "nombre": "longitud",
+            "tipo": "float8",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": null,
+        "en_docs": true,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      }
+    ],
+    "tablas": [
+      {
+        "nombre": "centros",
+        "descripcion": "Tabla principal de centros de trabajo educativos (CCT) con tipo, nivel, control, domicilio, geolocalización y estadísticas de alumnos/docentes.",
+        "filas": 267368,
+        "columnas": []
+      },
+      {
+        "nombre": "colonias",
+        "descripcion": "Catálogo de colonias.",
+        "filas": 37319,
+        "columnas": []
+      },
+      {
+        "nombre": "domicilios",
+        "descripcion": "Catálogo de domicilios.",
+        "filas": 78765,
+        "columnas": []
+      },
+      {
+        "nombre": "localidades",
+        "descripcion": "Catálogo de localidades.",
+        "filas": 48041,
+        "columnas": []
+      },
+      {
+        "nombre": "niveles_educativos",
+        "descripcion": "Catálogo de niveles educativos.",
+        "filas": 9,
+        "columnas": []
+      },
+      {
+        "nombre": "servicios_educativos",
+        "descripcion": "Catálogo de servicios educativos.",
+        "filas": 14,
+        "columnas": []
+      },
+      {
+        "nombre": "tipos_controles",
+        "descripcion": "Catálogo de tipo de control (público/privado).",
+        "filas": 2,
+        "columnas": []
+      },
+      {
+        "nombre": "tipos_educativos",
+        "descripcion": "Catálogo de tipos educativos.",
+        "filas": 6,
+        "columnas": []
+      },
+      {
+        "nombre": "tipos_sostenimiento",
+        "descripcion": "Catálogo de tipos de sostenimiento.",
+        "filas": 6,
+        "columnas": []
+      },
+      {
+        "nombre": "turnos",
+        "descripcion": "Catálogo de turnos escolares.",
+        "filas": 5,
+        "columnas": []
+      }
+    ],
+    "relaciones": []
+  },
+  "origen_base": "respaldo",
+  "corte_respaldo": "29 de mayo de 2026",
+  "der_svg": "<svg viewBox=\"0 0 934.0 984.0\" width=\"934.0\" xmlns=\"http://www.w3.org/2000/svg\" style=\"font-family: system-ui, -apple-system, sans-serif;\">\n  <defs>\n    <pattern id=\"erd-dots\" width=\"24\" height=\"24\" patternUnits=\"userSpaceOnUse\">\n      <circle cx=\"1\" cy=\"1\" r=\"0.8\" fill=\"#d1d5db\" />\n    </pattern>\n    <marker id=\"arr\" markerWidth=\"10\" markerHeight=\"7\" refX=\"9\" refY=\"3.5\" orient=\"auto\">\n      <polygon points=\"0 0, 10 3.5, 0 7\" fill=\"#c4cad4\" />\n    </marker>\n    <marker id=\"arr-hi\" markerWidth=\"10\" markerHeight=\"7\" refX=\"9\" refY=\"3.5\" orient=\"auto\">\n      <polygon points=\"0 0, 10 3.5, 0 7\" fill=\"#FF8300\" />\n    </marker>\n  </defs>\n  <rect width=\"100%\" height=\"100%\" fill=\"#f9fafb\" />\n  <rect width=\"100%\" height=\"100%\" fill=\"url(#erd-dots)\" />\n  <g class=\"erd-rel\" data-from=\"turnos\" data-to=\"centros\">\n    <path d=\"M 278.0 112.0 C 348.0 112.0 288.0 214.0 358.0 214.0\" fill=\"none\" stroke=\"transparent\" stroke-width=\"18\" />\n    <path class=\"erd-edge\" d=\"M 278.0 112.0 C 348.0 112.0 288.0 214.0 358.0 214.0\" fill=\"none\" stroke=\"#c4cad4\" stroke-width=\"1.5\" marker-end=\"url(#arr)\" />\n    <text x=\"298.0\" y=\"100.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">1</text>\n    <text x=\"338.0\" y=\"202.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">N</text>\n  </g>\n  <g class=\"erd-rel\" data-from=\"tipos_educativos\" data-to=\"centros\">\n    <path d=\"M 656.0 112.0 C 586.0 112.0 646.0 235.0 576.0 235.0\" fill=\"none\" stroke=\"transparent\" stroke-width=\"18\" />\n    <path class=\"erd-edge\" d=\"M 656.0 112.0 C 586.0 112.0 646.0 235.0 576.0 235.0\" fill=\"none\" stroke=\"#c4cad4\" stroke-width=\"1.5\" marker-end=\"url(#arr)\" />\n    <text x=\"636.0\" y=\"100.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">1</text>\n    <text x=\"596.0\" y=\"223.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">N</text>\n  </g>\n  <g class=\"erd-rel\" data-from=\"niveles_educativos\" data-to=\"centros\">\n    <path d=\"M 278.0 222.0 C 348.0 222.0 288.0 256.0 358.0 256.0\" fill=\"none\" stroke=\"transparent\" stroke-width=\"18\" />\n    <path class=\"erd-edge\" d=\"M 278.0 222.0 C 348.0 222.0 288.0 256.0 358.0 256.0\" fill=\"none\" stroke=\"#c4cad4\" stroke-width=\"1.5\" marker-end=\"url(#arr)\" />\n    <text x=\"298.0\" y=\"210.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">1</text>\n    <text x=\"338.0\" y=\"244.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">N</text>\n  </g>\n  <g class=\"erd-rel\" data-from=\"servicios_educativos\" data-to=\"centros\">\n    <path d=\"M 278.0 332.0 C 348.0 332.0 288.0 277.0 358.0 277.0\" fill=\"none\" stroke=\"transparent\" stroke-width=\"18\" />\n    <path class=\"erd-edge\" d=\"M 278.0 332.0 C 348.0 332.0 288.0 277.0 358.0 277.0\" fill=\"none\" stroke=\"#c4cad4\" stroke-width=\"1.5\" marker-end=\"url(#arr)\" />\n    <text x=\"298.0\" y=\"320.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">1</text>\n    <text x=\"338.0\" y=\"265.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">N</text>\n  </g>\n  <g class=\"erd-rel\" data-from=\"tipos_controles\" data-to=\"centros\">\n    <path d=\"M 278.0 442.0 C 348.0 442.0 288.0 298.0 358.0 298.0\" fill=\"none\" stroke=\"transparent\" stroke-width=\"18\" />\n    <path class=\"erd-edge\" d=\"M 278.0 442.0 C 348.0 442.0 288.0 298.0 358.0 298.0\" fill=\"none\" stroke=\"#c4cad4\" stroke-width=\"1.5\" marker-end=\"url(#arr)\" />\n    <text x=\"298.0\" y=\"430.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">1</text>\n    <text x=\"338.0\" y=\"286.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">N</text>\n  </g>\n  <g class=\"erd-rel\" data-from=\"tipos_sostenimiento\" data-to=\"centros\">\n    <path d=\"M 278.0 552.0 C 348.0 552.0 288.0 319.0 358.0 319.0\" fill=\"none\" stroke=\"transparent\" stroke-width=\"18\" />\n    <path class=\"erd-edge\" d=\"M 278.0 552.0 C 348.0 552.0 288.0 319.0 358.0 319.0\" fill=\"none\" stroke=\"#c4cad4\" stroke-width=\"1.5\" marker-end=\"url(#arr)\" />\n    <text x=\"298.0\" y=\"540.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">1</text>\n    <text x=\"338.0\" y=\"307.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">N</text>\n  </g>\n  <g class=\"erd-rel\" data-from=\"localidades\" data-to=\"centros\">\n    <path d=\"M 656.0 222.0 C 586.0 222.0 646.0 382.0 576.0 382.0\" fill=\"none\" stroke=\"transparent\" stroke-width=\"18\" />\n    <path class=\"erd-edge\" d=\"M 656.0 222.0 C 586.0 222.0 646.0 382.0 576.0 382.0\" fill=\"none\" stroke=\"#c4cad4\" stroke-width=\"1.5\" marker-end=\"url(#arr)\" />\n    <text x=\"636.0\" y=\"210.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">1</text>\n    <text x=\"596.0\" y=\"370.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">N</text>\n  </g>\n  <g class=\"erd-rel\" data-from=\"domicilios\" data-to=\"centros\">\n    <path d=\"M 656.0 416.0 C 586.0 416.0 646.0 403.0 576.0 403.0\" fill=\"none\" stroke=\"transparent\" stroke-width=\"18\" />\n    <path class=\"erd-edge\" d=\"M 656.0 416.0 C 586.0 416.0 646.0 403.0 576.0 403.0\" fill=\"none\" stroke=\"#c4cad4\" stroke-width=\"1.5\" marker-end=\"url(#arr)\" />\n    <text x=\"636.0\" y=\"404.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">1</text>\n    <text x=\"596.0\" y=\"391.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">N</text>\n  </g>\n  <g class=\"erd-rel\" data-from=\"colonias\" data-to=\"centros\">\n    <path d=\"M 656.0 631.0 C 586.0 631.0 646.0 424.0 576.0 424.0\" fill=\"none\" stroke=\"transparent\" stroke-width=\"18\" />\n    <path class=\"erd-edge\" d=\"M 656.0 631.0 C 586.0 631.0 646.0 424.0 576.0 424.0\" fill=\"none\" stroke=\"#c4cad4\" stroke-width=\"1.5\" marker-end=\"url(#arr)\" />\n    <text x=\"636.0\" y=\"619.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">1</text>\n    <text x=\"596.0\" y=\"412.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">N</text>\n  </g>\n  <g class=\"erd-rel\" data-from=\"localidades\" data-to=\"colonias\">\n    <path d=\"M 874.0 222.0 C 944.0 222.0 944.0 673.0 874.0 673.0\" fill=\"none\" stroke=\"transparent\" stroke-width=\"18\" />\n    <path class=\"erd-edge\" d=\"M 874.0 222.0 C 944.0 222.0 944.0 673.0 874.0 673.0\" fill=\"none\" stroke=\"#c4cad4\" stroke-width=\"1.5\" marker-end=\"url(#arr)\" />\n    <text x=\"894.0\" y=\"210.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">1</text>\n    <text x=\"894.0\" y=\"661.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">N</text>\n  </g>\n  <g class=\"erd-node\" data-table=\"centros\" transform=\"translate(358.0, 120.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"510\" fill=\"rgba(0,0,0,0.06)\" />\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"510\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\" />\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#5C2472\" />\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#5C2472\" />\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">Centros</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">clave_centro_trabajo</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">nombre_centro_trabajo</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9ca3af\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">text</text>\n    <line x1=\"10\" y1=\"84\" x2=\"208\" y2=\"84\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"95.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9a3412\" font-weight=\"400\" dominant-baseline=\"middle\">turno_id</text>\n    <text x=\"210\" y=\"95.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#c2410c\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">FK</text>\n    <line x1=\"10\" y1=\"105\" x2=\"208\" y2=\"105\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"116.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9a3412\" font-weight=\"400\" dominant-baseline=\"middle\">tipos_educativos_id</text>\n    <text x=\"210\" y=\"116.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#c2410c\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">FK</text>\n    <line x1=\"10\" y1=\"126\" x2=\"208\" y2=\"126\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"137.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9a3412\" font-weight=\"400\" dominant-baseline=\"middle\">nivel_educativo_id</text>\n    <text x=\"210\" y=\"137.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#c2410c\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">FK</text>\n    <line x1=\"10\" y1=\"147\" x2=\"208\" y2=\"147\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"158.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9a3412\" font-weight=\"400\" dominant-baseline=\"middle\">servicio_educativo_id</text>\n    <text x=\"210\" y=\"158.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#c2410c\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">FK</text>\n    <line x1=\"10\" y1=\"168\" x2=\"208\" y2=\"168\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"179.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9a3412\" font-weight=\"400\" dominant-baseline=\"middle\">tipo_control_id</text>\n    <text x=\"210\" y=\"179.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#c2410c\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">FK</text>\n    <line x1=\"10\" y1=\"189\" x2=\"208\" y2=\"189\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"200.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9a3412\" font-weight=\"400\" dominant-baseline=\"middle\">tipo_sostenimiento_id</text>\n    <text x=\"210\" y=\"200.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#c2410c\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">FK</text>\n    <line x1=\"10\" y1=\"210\" x2=\"208\" y2=\"210\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"221.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">entidad_id</text>\n    <text x=\"210\" y=\"221.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int?</text>\n    <line x1=\"10\" y1=\"231\" x2=\"208\" y2=\"231\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"242.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">municipio_id</text>\n    <text x=\"210\" y=\"242.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int?</text>\n    <line x1=\"10\" y1=\"252\" x2=\"208\" y2=\"252\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"263.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9a3412\" font-weight=\"400\" dominant-baseline=\"middle\">localidades_id</text>\n    <text x=\"210\" y=\"263.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#c2410c\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">FK</text>\n    <line x1=\"10\" y1=\"273\" x2=\"208\" y2=\"273\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"284.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9a3412\" font-weight=\"400\" dominant-baseline=\"middle\">domicilios_id</text>\n    <text x=\"210\" y=\"284.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#c2410c\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">FK</text>\n    <line x1=\"10\" y1=\"294\" x2=\"208\" y2=\"294\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"305.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9a3412\" font-weight=\"400\" dominant-baseline=\"middle\">colonias_id</text>\n    <text x=\"210\" y=\"305.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#c2410c\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">FK</text>\n    <line x1=\"10\" y1=\"315\" x2=\"208\" y2=\"315\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"326.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">total_alumnos_hombres</text>\n    <text x=\"210\" y=\"326.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int?</text>\n    <line x1=\"10\" y1=\"336\" x2=\"208\" y2=\"336\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"347.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">total_alumnas_mujeres</text>\n    <text x=\"210\" y=\"347.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int?</text>\n    <line x1=\"10\" y1=\"357\" x2=\"208\" y2=\"357\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"368.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">total_docentes_hombres</text>\n    <text x=\"210\" y=\"368.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int?</text>\n    <line x1=\"10\" y1=\"378\" x2=\"208\" y2=\"378\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"389.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">total_docentes_mujeres</text>\n    <text x=\"210\" y=\"389.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int?</text>\n    <line x1=\"10\" y1=\"399\" x2=\"208\" y2=\"399\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"410.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">aulas_en_uso</text>\n    <text x=\"210\" y=\"410.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int?</text>\n    <line x1=\"10\" y1=\"420\" x2=\"208\" y2=\"420\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"431.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">aulas_existentes</text>\n    <text x=\"210\" y=\"431.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int?</text>\n    <line x1=\"10\" y1=\"441\" x2=\"208\" y2=\"441\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"452.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">latitud</text>\n    <text x=\"210\" y=\"452.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">float?</text>\n    <line x1=\"10\" y1=\"462\" x2=\"208\" y2=\"462\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"473.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">longitud</text>\n    <text x=\"210\" y=\"473.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">float?</text>\n    <line x1=\"10\" y1=\"483\" x2=\"208\" y2=\"483\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"494.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">fecha_actualizacion</text>\n    <text x=\"210\" y=\"494.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#1d4ed8\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">date</text>\n  </g>\n  <g class=\"erd-node\" data-table=\"colonias\" transform=\"translate(656.0, 579.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"111\" fill=\"rgba(0,0,0,0.06)\" />\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"111\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\" />\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#5C2472\" />\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#5C2472\" />\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">Colonias</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">colonia</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9ca3af\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">text</text>\n    <line x1=\"10\" y1=\"84\" x2=\"208\" y2=\"84\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"95.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9a3412\" font-weight=\"400\" dominant-baseline=\"middle\">localidad_id</text>\n    <text x=\"210\" y=\"95.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#c2410c\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">FK</text>\n  </g>\n  <g class=\"erd-node\" data-table=\"cvegeo_municipalities\" transform=\"translate(60.0, 750.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"174\" fill=\"rgba(0,0,0,0.06)\" />\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"174\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\" />\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#2563eb\" />\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#2563eb\" />\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">cvegeo_municipalities</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">cvegeo</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int?</text>\n    <line x1=\"10\" y1=\"84\" x2=\"208\" y2=\"84\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"95.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">cve_ent</text>\n    <text x=\"210\" y=\"95.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int?</text>\n    <line x1=\"10\" y1=\"105\" x2=\"208\" y2=\"105\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"116.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">cve_mun</text>\n    <text x=\"210\" y=\"116.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int?</text>\n    <line x1=\"10\" y1=\"126\" x2=\"208\" y2=\"126\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"137.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">nomgeo</text>\n    <text x=\"210\" y=\"137.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">string?</text>\n    <line x1=\"10\" y1=\"147\" x2=\"208\" y2=\"147\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"158.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">nom_ent</text>\n    <text x=\"210\" y=\"158.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">string?</text>\n  </g>\n  <g class=\"erd-node\" data-table=\"cvegeo_states\" transform=\"translate(358.0, 750.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"111\" fill=\"rgba(0,0,0,0.06)\" />\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"111\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\" />\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#2563eb\" />\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#2563eb\" />\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">cvegeo_states</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">cve_ent</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int?</text>\n    <line x1=\"10\" y1=\"84\" x2=\"208\" y2=\"84\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"95.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">nom_ent</text>\n    <text x=\"210\" y=\"95.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">string?</text>\n  </g>\n  <g class=\"erd-node\" data-table=\"domicilios\" transform=\"translate(656.0, 364.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"195\" fill=\"rgba(0,0,0,0.06)\" />\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"195\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\" />\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#5C2472\" />\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#5C2472\" />\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">Domicilios</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">domicilio</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9ca3af\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">text</text>\n    <line x1=\"10\" y1=\"84\" x2=\"208\" y2=\"84\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"95.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">numero_exterior</text>\n    <text x=\"210\" y=\"95.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9ca3af\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">text?</text>\n    <line x1=\"10\" y1=\"105\" x2=\"208\" y2=\"105\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"116.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">codigo_postal</text>\n    <text x=\"210\" y=\"116.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">string?</text>\n    <line x1=\"10\" y1=\"126\" x2=\"208\" y2=\"126\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"137.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">entre_calle</text>\n    <text x=\"210\" y=\"137.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9ca3af\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">text?</text>\n    <line x1=\"10\" y1=\"147\" x2=\"208\" y2=\"147\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"158.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">y_calle</text>\n    <text x=\"210\" y=\"158.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9ca3af\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">text?</text>\n    <line x1=\"10\" y1=\"168\" x2=\"208\" y2=\"168\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"179.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">calle_posterior</text>\n    <text x=\"210\" y=\"179.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9ca3af\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">text?</text>\n  </g>\n  <g class=\"erd-node\" data-table=\"localidades\" transform=\"translate(656.0, 170.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"174\" fill=\"rgba(0,0,0,0.06)\" />\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"174\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\" />\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#5C2472\" />\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#5C2472\" />\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">Localidades</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">cve_geo_id</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int</text>\n    <line x1=\"10\" y1=\"84\" x2=\"208\" y2=\"84\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"95.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">clave_localidad</text>\n    <text x=\"210\" y=\"95.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int</text>\n    <line x1=\"10\" y1=\"105\" x2=\"208\" y2=\"105\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"116.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">municipio_id</text>\n    <text x=\"210\" y=\"116.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int</text>\n    <line x1=\"10\" y1=\"126\" x2=\"208\" y2=\"126\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"137.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">entidad_id</text>\n    <text x=\"210\" y=\"137.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int</text>\n    <line x1=\"10\" y1=\"147\" x2=\"208\" y2=\"147\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"158.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">localidad</text>\n    <text x=\"210\" y=\"158.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9ca3af\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">text?</text>\n  </g>\n  <g class=\"erd-node\" data-table=\"niveles_educativos\" transform=\"translate(60.0, 170.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"90\" fill=\"rgba(0,0,0,0.06)\" />\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"90\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\" />\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#5C2472\" />\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#5C2472\" />\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">NivelesEducativos</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">nivel_educativo</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9ca3af\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">text</text>\n  </g>\n  <g class=\"erd-node\" data-table=\"servicios_educativos\" transform=\"translate(60.0, 280.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"90\" fill=\"rgba(0,0,0,0.06)\" />\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"90\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\" />\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#5C2472\" />\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#5C2472\" />\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">ServiciosEducativos</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">servicio_educativo</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9ca3af\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">text</text>\n  </g>\n  <g class=\"erd-node\" data-table=\"tipos_controles\" transform=\"translate(60.0, 390.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"90\" fill=\"rgba(0,0,0,0.06)\" />\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"90\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\" />\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#5C2472\" />\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#5C2472\" />\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">TiposControles</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">tipo_control</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9ca3af\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">text</text>\n  </g>\n  <g class=\"erd-node\" data-table=\"tipos_educativos\" transform=\"translate(656.0, 60.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"90\" fill=\"rgba(0,0,0,0.06)\" />\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"90\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\" />\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#5C2472\" />\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#5C2472\" />\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">TiposEducativos</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">tipo_educativo</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9ca3af\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">text</text>\n  </g>\n  <g class=\"erd-node\" data-table=\"tipos_sostenimiento\" transform=\"translate(60.0, 500.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"90\" fill=\"rgba(0,0,0,0.06)\" />\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"90\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\" />\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#5C2472\" />\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#5C2472\" />\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">TiposSostenimiento</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">tipo_sostenimiento</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9ca3af\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">text</text>\n  </g>\n  <g class=\"erd-node\" data-table=\"turnos\" transform=\"translate(60.0, 60.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"90\" fill=\"rgba(0,0,0,0.06)\" />\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"90\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\" />\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#5C2472\" />\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#5C2472\" />\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">Turnos</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">turno</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9ca3af\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">text</text>\n  </g>\n</svg>",
   "etapas": []
 }

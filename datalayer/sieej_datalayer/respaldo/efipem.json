@@ -1,0 +1,119 @@
+{
+  "nombre": "efipem",
+  "corte": "29 de mayo de 2026",
+  "tablas": [
+    {
+      "nombre": "stg_efipem_finanzas_trimestral",
+      "descripcion": "Tabla principal de finanzas públicas municipales (ingresos, egresos y deuda) por año, municipio, tema, clasificador y concepto.",
+      "filas": 19584
+    },
+    {
+      "nombre": "stg_efipem_cat_tema",
+      "descripcion": "Catálogo de temas (Ingresos, Egresos, Deuda).",
+      "filas": 2
+    },
+    {
+      "nombre": "stg_efipem_cat_clasificador",
+      "descripcion": "Catálogo de clasificadores presupuestarios.",
+      "filas": 3
+    },
+    {
+      "nombre": "stg_efipem_cat_concepto",
+      "descripcion": "Catálogo de conceptos presupuestarios.",
+      "filas": 51
+    },
+    {
+      "nombre": "stg_efipem_cat_estatus",
+      "descripcion": "Catálogo de estatus de la cifra.",
+      "filas": 1
+    },
+    {
+      "nombre": "stg_efipem_cat_trimestre",
+      "descripcion": "Catálogo de trimestres.",
+      "filas": 4
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "v_efipem",
+      "descripcion": "Vista desnormalizada de finanzas públicas municipales con catálogos resueltos.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "anio",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 3,
+          "nombre": "trimestre",
+          "tipo": "varchar(10)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "cve_ent",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 5,
+          "nombre": "entidad",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 6,
+          "nombre": "tema",
+          "tipo": "varchar(50)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "clasificador",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "concepto",
+          "tipo": "varchar(255)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "valor",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 10,
+          "nombre": "estatus",
+          "tipo": "varchar(50)"
+        },
+        {
+          "posicion": 11,
+          "nombre": "row_hash",
+          "tipo": "varchar(64)"
+        },
+        {
+          "posicion": 12,
+          "nombre": "valid_from",
+          "tipo": "timestamp"
+        },
+        {
+          "posicion": 13,
+          "nombre": "valid_to",
+          "tipo": "timestamp"
+        },
+        {
+          "posicion": 14,
+          "nombre": "is_current",
+          "tipo": "boolean"
+        },
+        {
+          "posicion": 15,
+          "nombre": "created_at",
+          "tipo": "timestamp"
+        }
+      ]
+    }
+  ]
+}

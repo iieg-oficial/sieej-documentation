@@ -1,0 +1,803 @@
+{
+  "nombre": "defunciones",
+  "corte": "27 de agosto de 2026",
+  "tablas": [
+    {
+      "nombre": "stg_defunciones",
+      "descripcion": "Registro de defunciones (DGIS), filtrado a residentes de Jalisco.",
+      "filas": 353005
+    },
+    {
+      "nombre": "cat_accidental_violenta",
+      "descripcion": "Catálogo de accidental violenta (fuente: DGIS defunciones).",
+      "filas": 3
+    },
+    {
+      "nombre": "cat_afromexicano",
+      "descripcion": "Catálogo de afromexicano (fuente: DGIS defunciones).",
+      "filas": 4
+    },
+    {
+      "nombre": "cat_anio",
+      "descripcion": "Catálogo de anio (fuente: DGIS defunciones).",
+      "filas": 132
+    },
+    {
+      "nombre": "cat_area_urbana_rural",
+      "descripcion": "Catálogo de area urbana rural (fuente: DGIS defunciones).",
+      "filas": 3
+    },
+    {
+      "nombre": "cat_asistencia_medica",
+      "descripcion": "Catálogo de asistencia medica (fuente: DGIS defunciones).",
+      "filas": 3
+    },
+    {
+      "nombre": "cat_capitulo_grupo",
+      "descripcion": "Clasificación CIE-10 capítulo/grupo (id surrogate sobre cap+gpo).",
+      "filas": 250
+    },
+    {
+      "nombre": "cat_causa_defuncion",
+      "descripcion": "Catálogo de causa defuncion (código alfanumérico CIE con id surrogate).",
+      "filas": 10073
+    },
+    {
+      "nombre": "cat_certificante",
+      "descripcion": "Catálogo de certificante (fuente: DGIS defunciones).",
+      "filas": 7
+    },
+    {
+      "nombre": "cat_cirugia",
+      "descripcion": "Catálogo de cirugia (fuente: DGIS defunciones).",
+      "filas": 4
+    },
+    {
+      "nombre": "cat_codigo_adicional",
+      "descripcion": "Catálogo de codigo adicional (código alfanumérico CIE con id surrogate).",
+      "filas": 1373
+    },
+    {
+      "nombre": "cat_complicaron_embarazo",
+      "descripcion": "Catálogo de complicaron embarazo (fuente: DGIS defunciones).",
+      "filas": 4
+    },
+    {
+      "nombre": "cat_condicion_actividad",
+      "descripcion": "Catálogo de condicion actividad (fuente: DGIS defunciones).",
+      "filas": 4
+    },
+    {
+      "nombre": "cat_condicion_embarazo",
+      "descripcion": "Catálogo de condicion embarazo (fuente: DGIS defunciones).",
+      "filas": 7
+    },
+    {
+      "nombre": "cat_condicion_indigena",
+      "descripcion": "Catálogo de condicion indigena (fuente: DGIS defunciones).",
+      "filas": 4
+    },
+    {
+      "nombre": "cat_derecho_habiencia",
+      "descripcion": "Catálogo versionado por edición de derecho habiencia (códigos cambian de significado entre años).",
+      "filas": 63
+    },
+    {
+      "nombre": "cat_dia",
+      "descripcion": "Catálogo de dia (fuente: DGIS defunciones).",
+      "filas": 32
+    },
+    {
+      "nombre": "cat_donador",
+      "descripcion": "Catálogo de donador (fuente: DGIS defunciones).",
+      "filas": 4
+    },
+    {
+      "nombre": "cat_edad",
+      "descripcion": "Catálogo de edad (fuente: DGIS defunciones).",
+      "filas": 188
+    },
+    {
+      "nombre": "cat_edad_agrupada",
+      "descripcion": "Catálogo de edad agrupada (fuente: DGIS defunciones).",
+      "filas": 30
+    },
+    {
+      "nombre": "cat_edad_gestacional",
+      "descripcion": "Catálogo de edad gestacional (fuente: DGIS defunciones).",
+      "filas": 23
+    },
+    {
+      "nombre": "cat_edicion",
+      "descripcion": "Dimensión de edición (año de publicación DGIS).",
+      "filas": 6
+    },
+    {
+      "nombre": "cat_entidad_pais",
+      "descripcion": "Catálogo combinado de entidades federativas mexicanas y países (fuente: paises.csv de DGIS), usado para resolver el lugar de nacimiento.",
+      "filas": 258
+    },
+    {
+      "nombre": "cat_escolaridad",
+      "descripcion": "Catálogo de escolaridad (fuente: DGIS defunciones).",
+      "filas": 12
+    },
+    {
+      "nombre": "cat_estado_civil",
+      "descripcion": "Catálogo de estado civil (fuente: DGIS defunciones).",
+      "filas": 8
+    },
+    {
+      "nombre": "cat_grupo_lista_mexicana",
+      "descripcion": "Catálogo de grupo lista mexicana (código alfanumérico CIE con id surrogate).",
+      "filas": 59
+    },
+    {
+      "nombre": "cat_hora",
+      "descripcion": "Catálogo de hora (fuente: DGIS defunciones).",
+      "filas": 25
+    },
+    {
+      "nombre": "cat_lengua_indigena",
+      "descripcion": "Catálogo de lengua indigena (fuente: DGIS defunciones).",
+      "filas": 4
+    },
+    {
+      "nombre": "cat_lenguas",
+      "descripcion": "Catálogo de lenguas (fuente: DGIS defunciones).",
+      "filas": 73
+    },
+    {
+      "nombre": "cat_lista_cie",
+      "descripcion": "Catálogo de lista cie (fuente: DGIS defunciones).",
+      "filas": 103
+    },
+    {
+      "nombre": "cat_lista_mexicana",
+      "descripcion": "Catálogo de lista mexicana (código alfanumérico CIE con id surrogate).",
+      "filas": 417
+    },
+    {
+      "nombre": "cat_localidades",
+      "descripcion": "Catálogo versionado de localidades (fuente: entidad_municipio_localidad_<edicion>.csv de DGIS), incluye códigos sentinela (88/99 entidad, 999 municipio, 7777/9999 localidad).",
+      "filas": 178094
+    },
+    {
+      "nombre": "cat_lugar_ocurrencia",
+      "descripcion": "Catálogo de lugar ocurrencia (fuente: DGIS defunciones).",
+      "filas": 11
+    },
+    {
+      "nombre": "cat_mes",
+      "descripcion": "Catálogo de mes (fuente: DGIS defunciones).",
+      "filas": 13
+    },
+    {
+      "nombre": "cat_minuto",
+      "descripcion": "Catálogo de minuto (fuente: DGIS defunciones).",
+      "filas": 61
+    },
+    {
+      "nombre": "cat_muerte_encefalica",
+      "descripcion": "Catálogo de muerte encefalica (fuente: DGIS defunciones).",
+      "filas": 4
+    },
+    {
+      "nombre": "cat_nacionalidad",
+      "descripcion": "Catálogo de nacionalidad (fuente: DGIS defunciones).",
+      "filas": 3
+    },
+    {
+      "nombre": "cat_necropsia",
+      "descripcion": "Catálogo de necropsia (fuente: DGIS defunciones).",
+      "filas": 3
+    },
+    {
+      "nombre": "cat_ocupacion",
+      "descripcion": "Catálogo versionado por edición de ocupacion (códigos cambian de significado entre años).",
+      "filas": 213
+    },
+    {
+      "nombre": "cat_ocurrio_trabajo",
+      "descripcion": "Catálogo de ocurrio trabajo (fuente: DGIS defunciones).",
+      "filas": 4
+    },
+    {
+      "nombre": "cat_origen",
+      "descripcion": "Catálogo de origen (fuente: DGIS defunciones).",
+      "filas": 258
+    },
+    {
+      "nombre": "cat_parentesco_agresor",
+      "descripcion": "Catálogo de parentesco agresor (fuente: DGIS defunciones).",
+      "filas": 75
+    },
+    {
+      "nombre": "cat_peso_producto",
+      "descripcion": "Catálogo de peso producto (código alfanumérico CIE con id surrogate).",
+      "filas": 3
+    },
+    {
+      "nombre": "cat_presunta_defuncion_violenta",
+      "descripcion": "Catálogo versionado por edición de presunta defuncion violenta (códigos cambian de significado entre años).",
+      "filas": 36
+    },
+    {
+      "nombre": "cat_razon_materna",
+      "descripcion": "Catálogo de razon materna (fuente: DGIS defunciones).",
+      "filas": 2
+    },
+    {
+      "nombre": "cat_relacion_con_embarazo",
+      "descripcion": "Catálogo de relacion con embarazo (fuente: DGIS defunciones).",
+      "filas": 4
+    },
+    {
+      "nombre": "cat_sexo",
+      "descripcion": "Catálogo de sexo (fuente: DGIS defunciones).",
+      "filas": 3
+    },
+    {
+      "nombre": "cat_sitio_ocurrencia",
+      "descripcion": "Catálogo de sitio ocurrencia (fuente: DGIS defunciones).",
+      "filas": 14
+    },
+    {
+      "nombre": "cat_tamano_localidad",
+      "descripcion": "Catálogo de tamano localidad (fuente: DGIS defunciones).",
+      "filas": 18
+    },
+    {
+      "nombre": "cat_uso_necropsia",
+      "descripcion": "Catálogo de uso necropsia (fuente: DGIS defunciones).",
+      "filas": 4
+    },
+    {
+      "nombre": "cat_violencia_familiar",
+      "descripcion": "Catálogo de violencia familiar (fuente: DGIS defunciones).",
+      "filas": 4
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "vw_defunciones",
+      "descripcion": "Defunciones de residentes de Jalisco con todos los catálogos resueltos a su descripción. La geografía (entidad, municipio y localidad de registro, residencia, ocurrencia y ocurrencia de la lesión) se resuelve contra cat_localidades, que conserva los códigos sentinela (no aplica / no especificado). Las claves cvegeo se mantienen solo para mapas.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "entidad_registro",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "municipio_regis",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "tamanio_loc_regis",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "localidad_regis",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "tamanio_loc_resid",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 7,
+          "nombre": "localidad_resid",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "tamanio_loc_ocurr",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "localidad_ocurr",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "causa_defuncion",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 11,
+          "nombre": "cod_adicional",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 12,
+          "nombre": "lista_mex",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 13,
+          "nombre": "sexo",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 14,
+          "nombre": "entidad_nac",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 15,
+          "nombre": "afromex",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 16,
+          "nombre": "cond_indigena",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 17,
+          "nombre": "lengua_indigena",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 18,
+          "nombre": "lenguas",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 19,
+          "nombre": "nacionalid",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 20,
+          "nombre": "origen",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 21,
+          "nombre": "edad",
+          "tipo": "character varying(30)"
+        },
+        {
+          "posicion": 22,
+          "nombre": "edad_gestacional",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 23,
+          "nombre": "gramos",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 24,
+          "nombre": "dia_ocurr",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 25,
+          "nombre": "mes_ocurr",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 26,
+          "nombre": "anio_ocurr",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 27,
+          "nombre": "dia_registro",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 28,
+          "nombre": "mes_registro",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 29,
+          "nombre": "anio_registro",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 30,
+          "nombre": "dia_nacimiento",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 31,
+          "nombre": "mes_nacimiento",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 32,
+          "nombre": "anio_nacimiento",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 33,
+          "nombre": "condicion_act",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 34,
+          "nombre": "ocupacion",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 35,
+          "nombre": "escolaridad",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 36,
+          "nombre": "edo_civil",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 37,
+          "nombre": "tipo_defuncion",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 38,
+          "nombre": "ocurr_trab",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 39,
+          "nombre": "lugar_ocurr",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 40,
+          "nombre": "parentesco_agre",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 41,
+          "nombre": "violencia_familiar",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 42,
+          "nombre": "asist_medica",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 43,
+          "nombre": "cirugia",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 44,
+          "nombre": "accidental_vio",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 45,
+          "nombre": "necropsia",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 46,
+          "nombre": "uso_necropsia",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 47,
+          "nombre": "encefalica",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 48,
+          "nombre": "donador",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 49,
+          "nombre": "sitio_ocur",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 50,
+          "nombre": "certificante",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 51,
+          "nombre": "derecho_hab",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 52,
+          "nombre": "embarazo",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 53,
+          "nombre": "rel_emba",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 54,
+          "nombre": "horas",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 55,
+          "nombre": "minutos",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 56,
+          "nombre": "capitulo",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 57,
+          "nombre": "grupo",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 58,
+          "nombre": "capitulo_grupo",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 59,
+          "nombre": "lista_cie",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 60,
+          "nombre": "gr_lismex",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 61,
+          "nombre": "area_urbana",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 62,
+          "nombre": "edad_agrupada",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 63,
+          "nombre": "complicaron",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 64,
+          "nombre": "dia_certificacion",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 65,
+          "nombre": "mes_certificacion",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 66,
+          "nombre": "anio_certificacion",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 67,
+          "nombre": "maternas",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 68,
+          "nombre": "entidad_ocules",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 69,
+          "nombre": "municipio_ocules",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 70,
+          "nombre": "localidad_ocules",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 71,
+          "nombre": "razon_m",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 72,
+          "nombre": "municipio_resid",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 73,
+          "nombre": "entidad_resid",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 74,
+          "nombre": "cvegeo_resid",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 75,
+          "nombre": "municipio_ocurr",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 76,
+          "nombre": "entidad_ocurr",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 77,
+          "nombre": "cvegeo_ocurr",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 78,
+          "nombre": "edicion",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 79,
+          "nombre": "fecha_actualizacion",
+          "tipo": "date"
+        }
+      ]
+    },
+    {
+      "nombre": "vw_defunciones_municipio",
+      "descripcion": "Conteo de defunciones por municipio de residencia, año, sexo y edad agrupada, base para tasas de mortalidad y mapas.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "cvegeo",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "municipio",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "anio_registro",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "sexo",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "edad_agrupada",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "defunciones",
+          "tipo": "bigint"
+        }
+      ]
+    },
+    {
+      "nombre": "vw_defunciones_principales_causas",
+      "descripcion": "Conteo de defunciones por municipio de residencia, año, causa (lista de tabulación CIE) y sexo, para tablas de principales causas de muerte.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "cvegeo",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "municipio",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "anio_registro",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "lista_cie",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "sexo",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "defunciones",
+          "tipo": "bigint"
+        }
+      ]
+    },
+    {
+      "nombre": "vw_mortalidad_infantil",
+      "descripcion": "Defunciones de menores de un año (edad_agrupada = 1), por municipio de residencia, año, sexo y causa.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "cvegeo",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "municipio",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "anio_registro",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "sexo",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "causa_defuncion",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "defunciones_infantiles",
+          "tipo": "bigint"
+        }
+      ]
+    },
+    {
+      "nombre": "vw_mortalidad_materna",
+      "descripcion": "Defunciones que contribuyen al cálculo de la razón de mortalidad materna (razon_m = 1), por municipio de residencia, año y causa.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "cvegeo",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "municipio",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "anio_registro",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "causa_defuncion",
+          "tipo": "character varying(255)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "defunciones_maternas",
+          "tipo": "bigint"
+        }
+      ]
+    }
+  ]
+}

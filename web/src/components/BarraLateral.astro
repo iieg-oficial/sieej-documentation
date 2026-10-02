@@ -57,6 +57,11 @@ const { secciones, tituloSecciones = "En esta página", otros, tituloOtros } = A
     gap: 0.25rem;
     max-height: calc(100vh - var(--alto-encabezado) - 2 * var(--respiro-ancla));
     overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .barra__fija::-webkit-scrollbar {
+    display: none;
   }
 
   .barra__titulo {

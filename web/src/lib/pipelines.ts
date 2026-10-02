@@ -23,6 +23,9 @@ export type Pagina = {
     relaciones: { tabla: string; columnas: string[]; ref_tabla: string; ref_columnas: string[] }[];
     vistas: { esquema: string; nombre: string; tipo: string; descripcion: string | null; registros: number | null; columnas: { posicion: number; nombre: string; tipo: string; nullable: boolean; descripcion: string | null }[] }[];
   } | null;
+  origen_base: "bd" | "respaldo" | null;
+  corte_respaldo: string | null;
+  der_svg: string | null;
   etapas: Etapa[];
   generado: string;
   fuentes: Record<string, { estado: string; consultado_en: string | null }>;

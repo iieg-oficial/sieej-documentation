@@ -144,6 +144,8 @@ class Pipeline(BaseModel):
     bd_existe: bool | None = None
     vistas_en_bd: int | None = None
     clasificacion: ClasificacionPipeline = ClasificacionPipeline.SIN_VERIFICAR
+    carpeta_etl: str | None = None
+    fuentes_detectadas: list[str] = Field(default_factory=list)
 
 
 class Inventario(BaseModel):

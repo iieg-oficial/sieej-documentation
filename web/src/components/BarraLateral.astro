@@ -117,11 +117,13 @@ const { secciones, tituloSecciones = "En esta página", otros, tituloOtros } = A
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
-    padding: 0.35rem 0.75rem;
+    padding: 0.2rem 0;
     border-radius: 0.5rem;
-    color: var(--titulo);
-    font-size: var(--texto-chico);
+    color: var(--silenciado);
+    font-size: 0.75rem;
     font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     cursor: pointer;
     list-style: none;
   }
@@ -145,7 +147,7 @@ const { secciones, tituloSecciones = "En esta página", otros, tituloOtros } = A
   }
 
   .barra__otros summary:hover {
-    background: var(--brand-suave);
+    color: var(--brand);
   }
 
   .barra__lista--otros {

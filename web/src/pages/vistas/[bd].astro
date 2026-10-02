@@ -49,7 +49,7 @@ const TIPO_INSIGNIA: Record<string, string> = {
   titulo={`${base.nombre} — Estructura de vistas — SIEEJ`}
   descripcion={`Columnas, tipos y descripciones de las vistas de la base de datos ${base.nombre} del SIEEJ.`}
 >
-  <section class="bloque" aria-labelledby="titulo-bd">
+  <section class="bloque bloque--compacto" aria-labelledby="titulo-bd">
     <div class="contenedor">
       <div class="cabecera">
       <div class="cabecera__titulo">
@@ -179,11 +179,15 @@ const TIPO_INSIGNIA: Record<string, string> = {
     margin: 0;
   }
 
+  .bloque--compacto {
+    padding-top: 1.75rem;
+  }
+
   .cabecera {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 1.5rem 2.5rem;
-    align-items: end;
+    align-items: start;
   }
 
   .cifras {

@@ -46,14 +46,13 @@ const { objetivo, etiqueta, placeholder = "Buscar", compacto = false } = Astro.p
 <style>
   .buscador {
     position: relative;
-    max-width: 24rem;
     margin: 1.25rem 0 0;
   }
 
   .buscador svg {
     position: absolute;
-    left: 0.9rem;
-    top: 0.7rem;
+    left: 1rem;
+    top: 0.82rem;
     width: 1.1rem;
     height: 1.1rem;
     color: var(--silenciado);
@@ -62,9 +61,9 @@ const { objetivo, etiqueta, placeholder = "Buscar", compacto = false } = Astro.p
 
   .buscador input {
     width: 100%;
-    height: 2.5rem;
-    padding: 0 1rem 0 2.6rem;
-    border: 1px solid var(--linea);
+    height: 2.75rem;
+    padding: 0 1rem 0 2.75rem;
+    border: 1px solid var(--brand);
     border-radius: 999px;
     background: var(--tarjeta);
     color: var(--tinta);
@@ -90,6 +89,7 @@ const { objetivo, etiqueta, placeholder = "Buscar", compacto = false } = Astro.p
 
   .buscador--compacto input {
     height: 2.1rem;
+    border-color: var(--linea);
     font-size: var(--texto-chico);
     padding-left: 2.3rem;
   }

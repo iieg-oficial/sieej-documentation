@@ -57,7 +57,9 @@ def armar_payload(
                 "base": pagina.base.model_dump(mode="json") if pagina.base else None,
                 "origen_base": pagina.origen_base,
                 "corte_respaldo": pagina.corte_respaldo,
-                "etapas": [e.model_dump(mode="json") for e in pagina.etapas],
+                "etapas": [
+                    e.model_dump(mode="json") for e in (pagina.etapas or (p.etapas if p else []))
+                ],
                 "der_svg": pagina.der_svg,
             }
         )
@@ -81,6 +83,7 @@ def enviar(settings: Settings, payload: dict, transport: httpx.BaseTransport | N
             base_url=settings.mariachi_url.rstrip("/"),
             timeout=settings.mariachi_timeout,
             transport=transport,
+            verify=settings.mariachi_tls_verify,
             headers={"X-API-Key": settings.mariachi_sync_key, "User-Agent": _version()},
         ) as cliente:
             respuesta = cliente.put(RUTA_SYNC, json=payload)

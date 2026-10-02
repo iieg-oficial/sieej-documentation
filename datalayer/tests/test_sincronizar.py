@@ -66,3 +66,24 @@ def test_si_mariachi_falla_el_ciclo_sigue(tmp_path, monkeypatch):
     assert acciones["inventario.json"] == "escrito"
     assert acciones["mariachi"] == "error"
     assert "503" in acciones["mariachi_detalle"]
+
+
+def test_sin_airflow_se_envian_las_etapas_heredadas_del_inventario(tmp_path, monkeypatch):
+    recibido = {}
+
+    def responder(request: httpx.Request) -> httpx.Response:
+        recibido["cuerpo"] = json.loads(request.content)
+        return httpx.Response(200, json={"estado": "parcial"})
+
+    settings = _settings(tmp_path, mariachi_url="https://portalito.iieg", mariachi_sync_key="x")
+    generar_y_escribir(settings)
+    destino = tmp_path / "data" / "inventario.json"
+    inventario = json.loads(destino.read_text())
+    inventario["fuentes"]["airflow"]["estado"] = "ok"
+    inventario["pipelines"]["denue"]["etapas"] = [{"dag_id": "etl_denue_update", "etapa": "update"}]
+    destino.write_text(json.dumps(inventario), encoding="utf-8")
+
+    _con_transporte(monkeypatch, responder)
+    generar_y_escribir(settings)
+    claves = {p["clave"]: p for p in recibido["cuerpo"]["pipelines"]}
+    assert claves["denue"]["etapas"][0]["dag_id"] == "etl_denue_update"

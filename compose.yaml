@@ -35,6 +35,7 @@ services:
       ETL_REPO_RAMA: ${ETL_REPO_RAMA:?}
       MARIACHI_URL: ${MARIACHI_URL?}
       MARIACHI_SYNC_KEY: ${MARIACHI_SYNC_KEY?}
+      MARIACHI_TLS_VERIFY: ${MARIACHI_TLS_VERIFY:?}
       SITE_URL: ${SITE_URL:?}
       REBUILD_INTERVAL_SECONDS: ${REBUILD_INTERVAL_SECONDS:?}
     volumes:
@@ -54,6 +55,7 @@ services:
     environment:
       MARIACHI_URL: ${MARIACHI_URL?}
       MARIACHI_SYNC_KEY: ${MARIACHI_SYNC_KEY?}
+      MARIACHI_TLS_VERIFY: ${MARIACHI_TLS_VERIFY:?}
     volumes:
       - type: volume
         source: datos

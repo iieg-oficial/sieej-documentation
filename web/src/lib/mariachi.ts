@@ -1,4 +1,6 @@
 const BASE = (process.env.MARIACHI_URL ?? "").replace(/\/$/, "");
+
+if (process.env.MARIACHI_TLS_VERIFY === "false") process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 const RUTA = "/api/public/sieej-documentacion";
 const REVISAR_VERSION_MS = 30_000;
 const TIEMPO_LIMITE_MS = 5_000;

@@ -41,6 +41,7 @@ class Settings(BaseSettings):
     mariachi_url: str | None = None
     mariachi_sync_key: str | None = None
     mariachi_timeout: float = 60.0
+    mariachi_tls_verify: bool = True
 
     # Salida
     data_dir: Path = Path("data")

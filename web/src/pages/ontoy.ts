@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { stat } from "node:fs/promises";
 import { join } from "node:path";
 import paquete from "../../package.json";
+import "../lib/mariachi";
 
 const DIRECTORIO = process.env.DATA_DIR ?? join(process.cwd(), "..", "data");
 const BASE = (process.env.MARIACHI_URL ?? "").replace(/\/$/, "");

@@ -1,5 +1,5 @@
 {
-  "generado": "2026-10-01T22:28:45.442028Z",
+  "generado": "2026-10-02T16:34:57.255182Z",
   "datos_obsoletos": false,
   "fuentes": {
     "airflow": {
@@ -10,12 +10,12 @@
     "bd": {
       "estado": "ok",
       "detalle": "29 bases de datos",
-      "consultado_en": "2026-10-01T22:31:33.681752Z"
+      "consultado_en": "2026-10-02T16:37:44.412777Z"
     },
     "readme": {
       "estado": "ok",
-      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
-      "consultado_en": "2026-10-01T22:28:45.465079Z"
+      "detalle": "35 README de ETL-SIEEJ @ 9b0ddc3",
+      "consultado_en": "2026-10-02T16:34:57.283811Z"
     }
   },
   "nombre": "participacion_ciudadana",
@@ -61,8 +61,71 @@
     ],
     "descripcion_tablas": {},
     "alcance_vistas": {},
-    "commit": null
+    "commit": "9b0ddc3"
   },
-  "base": null,
+  "base": {
+    "nombre": "participacion_ciudadana",
+    "es_infraestructura": false,
+    "vistas": [
+      {
+        "esquema": "public",
+        "nombre": "vw_participacion",
+        "tipo": "VIEW",
+        "descripcion": "Vista analítica de participación electoral con municipios resueltos.",
+        "registros": null,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "entidad",
+            "tipo": "varchar",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "municipio",
+            "tipo": "varchar",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "porc_participacion",
+            "tipo": "float8",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "anio",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": null,
+        "en_docs": true,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      }
+    ],
+    "tablas": [
+      {
+        "nombre": "stg_participacion",
+        "descripcion": "Tabla principal de participación electoral por municipio y año de elección.",
+        "filas": 375,
+        "columnas": []
+      }
+    ],
+    "relaciones": []
+  },
+  "origen_base": "respaldo",
+  "corte_respaldo": "29 de mayo de 2026",
+  "der_svg": "<svg viewBox=\"0 0 338.0 273.0\" width=\"338.0\" xmlns=\"http://www.w3.org/2000/svg\" style=\"font-family: system-ui, -apple-system, sans-serif;\">\n  <defs>\n    <pattern id=\"erd-dots\" width=\"24\" height=\"24\" patternUnits=\"userSpaceOnUse\">\n      <circle cx=\"1\" cy=\"1\" r=\"0.8\" fill=\"#d1d5db\" />\n    </pattern>\n    <marker id=\"arr\" markerWidth=\"10\" markerHeight=\"7\" refX=\"9\" refY=\"3.5\" orient=\"auto\">\n      <polygon points=\"0 0, 10 3.5, 0 7\" fill=\"#c4cad4\" />\n    </marker>\n    <marker id=\"arr-hi\" markerWidth=\"10\" markerHeight=\"7\" refX=\"9\" refY=\"3.5\" orient=\"auto\">\n      <polygon points=\"0 0, 10 3.5, 0 7\" fill=\"#dc2626\" />\n    </marker>\n  </defs>\n  <rect width=\"100%\" height=\"100%\" fill=\"#f9fafb\" />\n  <rect width=\"100%\" height=\"100%\" fill=\"url(#erd-dots)\" />\n  <g class=\"erd-node\" data-table=\"stg_participacion\" transform=\"translate(60.0, 60.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"153\" fill=\"rgba(0,0,0,0.06)\" />\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"153\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\" />\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#065f46\" />\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#065f46\" />\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">StgParticipacion</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">entidad_id</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int</text>\n    <line x1=\"10\" y1=\"84\" x2=\"208\" y2=\"84\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"95.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">municipio_id</text>\n    <text x=\"210\" y=\"95.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int</text>\n    <line x1=\"10\" y1=\"105\" x2=\"208\" y2=\"105\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"116.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">porc_participacion</text>\n    <text x=\"210\" y=\"116.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">float</text>\n    <line x1=\"10\" y1=\"126\" x2=\"208\" y2=\"126\" stroke=\"#f0f2f5\" stroke-width=\"1\" />\n    <text x=\"10\" y=\"137.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">anio</text>\n    <text x=\"210\" y=\"137.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int</text>\n  </g>\n</svg>",
   "etapas": []
 }

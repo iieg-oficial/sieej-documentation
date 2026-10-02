@@ -31,6 +31,7 @@ from .crosscheck import (
 from .db_introspect import consultar_bd
 from .etl_readme import leer_documentos
 from .models import EstadoFuente
+from .respaldo import svg_der
 
 ARCHIVOS = ("inventario.json", "numeralia.json", "vistas.json")
 CARPETA_PAGINAS = "pipelines"
@@ -62,6 +63,9 @@ def generar(settings: Settings, transport=None, connect=None) -> dict[str, BaseM
         "vistas.json": vistas,
     }
     for nombre, pagina in paginas.items():
+        sin_relaciones = not (pagina.base and pagina.base.relaciones)
+        if sin_relaciones and pagina.documento:
+            pagina.der_svg = svg_der(settings.etl_repo_dir, pagina.documento.carpeta, nombre)
         resultados[f"{CARPETA_PAGINAS}/{nombre}.json"] = pagina
     return resultados
 
@@ -78,8 +82,7 @@ def _fuente_degradada(nuevo: dict, previo: dict, claves: tuple[str, ...]) -> boo
 
 def _heredar_airflow(nuevo: dict, previo: dict) -> bool:
     """Con Airflow caído, toma etapas y cifras del JSON previo. True si heredó algo."""
-    ok = EstadoFuente.OK.value
-    if _estado(nuevo, "airflow") == ok or _estado(previo, "airflow") != ok:
+    if _estado(nuevo, "airflow") == EstadoFuente.OK.value:
         return False
     if "pipelines" in nuevo:
         heredo = False

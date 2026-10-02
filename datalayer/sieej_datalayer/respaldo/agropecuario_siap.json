@@ -1,0 +1,134 @@
+{
+  "nombre": "agropecuario_siap",
+  "corte": "29 de mayo de 2026",
+  "tablas": [
+    {
+      "nombre": "stg_agricola",
+      "descripcion": "Tabla de hechos de producción agrícola por año, municipio y cultivo (superficies, volumen, rendimiento, precio y valor).",
+      "filas": 789033
+    },
+    {
+      "nombre": "cat_cultivos",
+      "descripcion": "Catálogo de cultivos agrícolas.",
+      "filas": 388
+    },
+    {
+      "nombre": "cat_ctrs_apoyo_des_rural",
+      "descripcion": "Catálogo de Centros de Apoyo al Desarrollo Rural (CADER).",
+      "filas": 675
+    },
+    {
+      "nombre": "cat_distritos_des_rural",
+      "descripcion": "Catálogo de Distritos de Desarrollo Rural (DDR).",
+      "filas": 190
+    },
+    {
+      "nombre": "cat_ciclos",
+      "descripcion": "Catálogo de ciclos agrícolas (Primavera-Verano, Otoño-Invierno, Perennes).",
+      "filas": 3
+    },
+    {
+      "nombre": "cat_modalidades",
+      "descripcion": "Catálogo de modalidad hídrica (Riego, Temporal).",
+      "filas": 2
+    },
+    {
+      "nombre": "cat_unidades_medida",
+      "descripcion": "Catálogo de unidades de medida del cultivo.",
+      "filas": 6
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "view_agricola_jalisco",
+      "descripcion": "Vista desnormalizada de la producción agrícola de Jalisco con nombres de municipio, entidad y catálogos resueltos.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "anio",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 3,
+          "nombre": "municipio",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 5,
+          "nombre": "dis_des_rural",
+          "tipo": "text"
+        },
+        {
+          "posicion": 6,
+          "nombre": "ctr_apoyo_des_rural",
+          "tipo": "text"
+        },
+        {
+          "posicion": 7,
+          "nombre": "tipo_ciclo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 8,
+          "nombre": "modalidad",
+          "tipo": "text"
+        },
+        {
+          "posicion": 9,
+          "nombre": "unidad_med",
+          "tipo": "text"
+        },
+        {
+          "posicion": 10,
+          "nombre": "cultivo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 11,
+          "nombre": "sup_sembrada",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 12,
+          "nombre": "sup_cosechada",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 13,
+          "nombre": "sup_siniestrada",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 14,
+          "nombre": "volumen_produccion",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 15,
+          "nombre": "rendimiento",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 16,
+          "nombre": "precio_med_rural",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 17,
+          "nombre": "valor_produccion",
+          "tipo": "float8"
+        }
+      ]
+    }
+  ]
+}

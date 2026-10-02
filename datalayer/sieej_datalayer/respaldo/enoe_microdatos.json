@@ -1,0 +1,806 @@
+{
+  "nombre": "enoe_microdatos",
+  "corte": "27 de agosto de 2026",
+  "tablas": [
+    {
+      "nombre": "stg_enoe_microdatos",
+      "descripcion": "Tabla de staging de la Encuesta Nacional de Ocupación y Empleo (ENOE) — microdatos. Contiene registros individuales de personas a partir de los archivos SDEM, COE1 y COE2 publicados por INEGI. Filtrada a Jalisco (entidad_id=14). Fuente: https://www.inegi.org.mx/contenidos/programas/enoe/15ymas/microdatos/",
+      "filas": 1090806
+    },
+    {
+      "nombre": "cat_enoe_ocupacion",
+      "descripcion": "Catálogo de grupos de ocupación de la ENOE (c_ocu11c). Clasifica el tipo de trabajo en 12 grupos más No aplica y No especificado.",
+      "filas": 12
+    },
+    {
+      "nombre": "cat_enoe_sector",
+      "descripcion": "Catálogo de sectores económicos de la ENOE (rama_est1). Clasifica la actividad del trabajo principal: Primario, Secundario, Terciario.",
+      "filas": 5
+    },
+    {
+      "nombre": "cat_enoe_situacion_trabajo",
+      "descripcion": "Catálogo de situación en el trabajo de la ENOE (pos_ocu). Clasifica la posición ocupacional: subordinado/remunerado, empleador, cuenta propia, sin pago.",
+      "filas": 6
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "mv_enoe_microdatos",
+      "descripcion": "Vista materializada gold layer de la ENOE microdatos. Combina stg_enoe_microdatos con los catálogos de sector, ocupación y situación en el trabajo, y resuelve entidad y municipio vía FDW cvegeo. Filtrada a Jalisco (entidad_id=14). Incluye horas, ingresos, informalidad, variables COE1/COE2 y los cuatro indicadores derivados de condición de actividad.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 3,
+          "nombre": "trimestre",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "character varying"
+        },
+        {
+          "posicion": 5,
+          "nombre": "municipio",
+          "tipo": "character varying"
+        },
+        {
+          "posicion": 6,
+          "nombre": "ur",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 7,
+          "nombre": "zona",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 8,
+          "nombre": "sex",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 9,
+          "nombre": "eda",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 10,
+          "nombre": "nac_anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 11,
+          "nombre": "e_con",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 12,
+          "nombre": "niv_ins",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 13,
+          "nombre": "anios_esc",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 14,
+          "nombre": "clase1",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 15,
+          "nombre": "clase2",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 16,
+          "nombre": "clase3",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 17,
+          "nombre": "sector",
+          "tipo": "text"
+        },
+        {
+          "posicion": 18,
+          "nombre": "ocupacion",
+          "tipo": "text"
+        },
+        {
+          "posicion": 19,
+          "nombre": "situacion_trabajo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 20,
+          "nombre": "seg_soc",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 21,
+          "nombre": "rama",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 22,
+          "nombre": "scian",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 23,
+          "nombre": "ing7c",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 24,
+          "nombre": "dur9c",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 25,
+          "nombre": "emple7c",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 26,
+          "nombre": "hrsocup",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 27,
+          "nombre": "ingocup",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 28,
+          "nombre": "ing_x_hrs",
+          "tipo": "double precision"
+        },
+        {
+          "posicion": 29,
+          "nombre": "salario",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 30,
+          "nombre": "tpg_p8a",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 31,
+          "nombre": "tcco",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 32,
+          "nombre": "cp_anoc",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 33,
+          "nombre": "imssissste",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 34,
+          "nombre": "ma48me1sm",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 35,
+          "nombre": "tue_ppal",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 36,
+          "nombre": "emp_ppal",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 37,
+          "nombre": "trans_ppal",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 38,
+          "nombre": "sub_o",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 39,
+          "nombre": "mh_fil2",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 40,
+          "nombre": "mh_col",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 41,
+          "nombre": "sec_ins",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 42,
+          "nombre": "p3b",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 43,
+          "nombre": "p3i",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 44,
+          "nombre": "p10b",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 45,
+          "nombre": "es_pea",
+          "tipo": "boolean"
+        },
+        {
+          "posicion": 46,
+          "nombre": "es_ocupado",
+          "tipo": "boolean"
+        },
+        {
+          "posicion": 47,
+          "nombre": "es_desocupado",
+          "tipo": "boolean"
+        },
+        {
+          "posicion": 48,
+          "nombre": "es_informal",
+          "tipo": "boolean"
+        },
+        {
+          "posicion": 49,
+          "nombre": "fac",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 50,
+          "nombre": "fac_men",
+          "tipo": "integer"
+        }
+      ]
+    },
+    {
+      "nombre": "mv_enoe_tasas",
+      "descripcion": "Indicadores trimestrales de ocupación y empleo ENOE por municipio de Jalisco. Contiene las 11 tasas oficiales INEGI y poblaciones base, desagregadas por total y sexo. Fuente: INEGI ENOE microdatos 15 años y más. Nota: ENOE no es representativa a nivel municipio; el diseño muestral opera por cd_a (ciudad/área). Para cifras que coincidan con valores oficiales INEGI usar mv_enoe_tasas_jalisco.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "trimestre",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 3,
+          "nombre": "municipio_id",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 4,
+          "nombre": "municipio",
+          "tipo": "character varying"
+        },
+        {
+          "posicion": 5,
+          "nombre": "p15ymas",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 6,
+          "nombre": "pea",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 7,
+          "nombre": "pd",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 8,
+          "nombre": "po",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 9,
+          "nombre": "pona",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 10,
+          "nombre": "tp",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 11,
+          "nombre": "td",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 12,
+          "nombre": "topd",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 13,
+          "nombre": "tprg",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 14,
+          "nombre": "tta",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 15,
+          "nombre": "tsub",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 16,
+          "nombre": "tcco",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 17,
+          "nombre": "tosi1",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 18,
+          "nombre": "til1",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 19,
+          "nombre": "tosi2",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 20,
+          "nombre": "til2",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 21,
+          "nombre": "p15ymas_h",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 22,
+          "nombre": "p15ymas_m",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 23,
+          "nombre": "pea_h",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 24,
+          "nombre": "pea_m",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 25,
+          "nombre": "pd_h",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 26,
+          "nombre": "pd_m",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 27,
+          "nombre": "po_h",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 28,
+          "nombre": "po_m",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 29,
+          "nombre": "pona_h",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 30,
+          "nombre": "pona_m",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 31,
+          "nombre": "tp_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 32,
+          "nombre": "tp_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 33,
+          "nombre": "td_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 34,
+          "nombre": "td_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 35,
+          "nombre": "topd_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 36,
+          "nombre": "topd_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 37,
+          "nombre": "tprg_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 38,
+          "nombre": "tprg_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 39,
+          "nombre": "tta_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 40,
+          "nombre": "tta_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 41,
+          "nombre": "tsub_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 42,
+          "nombre": "tsub_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 43,
+          "nombre": "tcco_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 44,
+          "nombre": "tcco_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 45,
+          "nombre": "tosi1_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 46,
+          "nombre": "tosi1_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 47,
+          "nombre": "til1_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 48,
+          "nombre": "til1_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 49,
+          "nombre": "tosi2_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 50,
+          "nombre": "tosi2_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 51,
+          "nombre": "til2_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 52,
+          "nombre": "til2_m",
+          "tipo": "numeric"
+        }
+      ]
+    },
+    {
+      "nombre": "mv_enoe_tasas_jalisco",
+      "descripcion": "Indicadores trimestrales de ocupación y empleo ENOE a nivel estado de Jalisco. Contiene las 11 tasas oficiales INEGI y poblaciones base, desagregadas por total y sexo. Los valores replican las cifras oficiales INEGI al aplicar el criterio general: r_def=0, c_res IN (1,3), eda BETWEEN 15 AND 98, SUM(fac). Fuente: INEGI ENOE microdatos 15 años y más.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "trimestre",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 3,
+          "nombre": "p15ymas",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 4,
+          "nombre": "pea",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 5,
+          "nombre": "pd",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 6,
+          "nombre": "po",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 7,
+          "nombre": "pona",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 8,
+          "nombre": "tp",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 9,
+          "nombre": "td",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 10,
+          "nombre": "topd",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 11,
+          "nombre": "tprg",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 12,
+          "nombre": "tta",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 13,
+          "nombre": "tsub",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 14,
+          "nombre": "tcco",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 15,
+          "nombre": "tosi1",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 16,
+          "nombre": "til1",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 17,
+          "nombre": "tosi2",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 18,
+          "nombre": "til2",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 19,
+          "nombre": "p15ymas_h",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 20,
+          "nombre": "p15ymas_m",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 21,
+          "nombre": "pea_h",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 22,
+          "nombre": "pea_m",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 23,
+          "nombre": "pd_h",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 24,
+          "nombre": "pd_m",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 25,
+          "nombre": "po_h",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 26,
+          "nombre": "po_m",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 27,
+          "nombre": "pona_h",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 28,
+          "nombre": "pona_m",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 29,
+          "nombre": "tp_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 30,
+          "nombre": "tp_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 31,
+          "nombre": "td_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 32,
+          "nombre": "td_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 33,
+          "nombre": "topd_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 34,
+          "nombre": "topd_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 35,
+          "nombre": "tprg_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 36,
+          "nombre": "tprg_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 37,
+          "nombre": "tta_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 38,
+          "nombre": "tta_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 39,
+          "nombre": "tsub_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 40,
+          "nombre": "tsub_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 41,
+          "nombre": "tcco_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 42,
+          "nombre": "tcco_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 43,
+          "nombre": "tosi1_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 44,
+          "nombre": "tosi1_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 45,
+          "nombre": "til1_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 46,
+          "nombre": "til1_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 47,
+          "nombre": "tosi2_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 48,
+          "nombre": "tosi2_m",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 49,
+          "nombre": "til2_h",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 50,
+          "nombre": "til2_m",
+          "tipo": "numeric"
+        }
+      ]
+    }
+  ]
+}

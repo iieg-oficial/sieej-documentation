@@ -1,0 +1,89 @@
+{
+  "nombre": "datamexico",
+  "corte": "29 de mayo de 2026",
+  "tablas": [
+    {
+      "nombre": "flujo_comercio",
+      "descripcion": "Tabla de hechos de comercio exterior de Jalisco por país, producto (HS6), periodo y tipo de flujo, con el valor comercial en USD.",
+      "filas": 9741816
+    },
+    {
+      "nombre": "paises",
+      "descripcion": "Catálogo de países (código ISO-3).",
+      "filas": 250
+    },
+    {
+      "nombre": "periodos",
+      "descripcion": "Catálogo de periodos (año + trimestre).",
+      "filas": 80
+    },
+    {
+      "nombre": "productos",
+      "descripcion": "Catálogo de productos (código HS6).",
+      "filas": 4563
+    },
+    {
+      "nombre": "tipos_flujos_comerciales",
+      "descripcion": "Catálogo de tipo de flujo (Exportación / Importación).",
+      "filas": 2
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "v_flujo_comercio",
+      "descripcion": "Vista desnormalizada del comercio exterior con países, productos y periodos resueltos.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "codigo_pais",
+          "tipo": "varchar(3)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "nombre_pais",
+          "tipo": "text"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 5,
+          "nombre": "anio",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 6,
+          "nombre": "trimestre",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 7,
+          "nombre": "etiqueta_trimestre",
+          "tipo": "varchar(7)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "flujo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 9,
+          "nombre": "producto",
+          "tipo": "text"
+        },
+        {
+          "posicion": 10,
+          "nombre": "valor_comercio",
+          "tipo": "float8"
+        }
+      ]
+    }
+  ]
+}

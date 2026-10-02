@@ -1,0 +1,39 @@
+{
+  "nombre": "participacion_ciudadana",
+  "corte": "29 de mayo de 2026",
+  "tablas": [
+    {
+      "nombre": "stg_participacion",
+      "descripcion": "Tabla principal de participación electoral por municipio y año de elección.",
+      "filas": 375
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "vw_participacion",
+      "descripcion": "Vista analítica de participación electoral con municipios resueltos.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "entidad",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 2,
+          "nombre": "municipio",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 3,
+          "nombre": "porc_participacion",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 4,
+          "nombre": "anio",
+          "tipo": "integer"
+        }
+      ]
+    }
+  ]
+}

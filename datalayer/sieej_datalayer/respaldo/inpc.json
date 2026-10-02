@@ -1,0 +1,146 @@
+{
+  "nombre": "inpc",
+  "corte": "29 de mayo de 2026",
+  "tablas": [
+    {
+      "nombre": "inpc_ciudades",
+      "descripcion": "Serie del índice de precios por ciudad, mes y objeto del gasto.",
+      "filas": 138429
+    },
+    {
+      "nombre": "inpc_entidades",
+      "descripcion": "Serie del índice de precios por entidad, mes y objeto del gasto.",
+      "filas": 28512
+    },
+    {
+      "nombre": "inpc_nacional",
+      "descripcion": "Serie del índice de precios nacional por mes y objeto del gasto.",
+      "filas": 2835
+    },
+    {
+      "nombre": "ciudades",
+      "descripcion": "Catálogo de ciudades.",
+      "filas": 55
+    },
+    {
+      "nombre": "objetos_gasto",
+      "descripcion": "Catálogo de objetos del gasto (rubros de precios).",
+      "filas": 9
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "v_inpc_ciudades",
+      "descripcion": "Vista de la serie de precios por ciudad con catálogos resueltos.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "ciudad",
+          "tipo": "varchar(100)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "entidad",
+          "tipo": "varchar(100)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "objeto_gasto",
+          "tipo": "varchar(100)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "fecha",
+          "tipo": "date"
+        },
+        {
+          "posicion": 6,
+          "nombre": "indice_de_precios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 7,
+          "nombre": "fecha_actualizacion",
+          "tipo": "date"
+        }
+      ]
+    },
+    {
+      "nombre": "v_inpc_entidades",
+      "descripcion": "Vista de la serie de precios por entidad.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "entidad",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 3,
+          "nombre": "cve_ent",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 4,
+          "nombre": "objeto_gasto",
+          "tipo": "varchar(100)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "fecha",
+          "tipo": "date"
+        },
+        {
+          "posicion": 6,
+          "nombre": "indice_de_precios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 7,
+          "nombre": "fecha_actualizacion",
+          "tipo": "date"
+        }
+      ]
+    },
+    {
+      "nombre": "v_inpc_nacional",
+      "descripcion": "Vista de la serie de precios nacional.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "objeto_gasto",
+          "tipo": "varchar(100)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "fecha",
+          "tipo": "date"
+        },
+        {
+          "posicion": 4,
+          "nombre": "indice_de_precios",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 5,
+          "nombre": "fecha_actualizacion",
+          "tipo": "date"
+        }
+      ]
+    }
+  ]
+}

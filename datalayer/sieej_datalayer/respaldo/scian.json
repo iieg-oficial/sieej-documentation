@@ -1,0 +1,89 @@
+{
+  "nombre": "scian",
+  "corte": "27 de agosto de 2026",
+  "tablas": [
+    {
+      "nombre": "clases",
+      "descripcion": "Clases de actividad del SCIAN México 2023: quinto y último nivel del clasificador, el más desagregado. 1,086 categorías. Es el nivel con el que se codifican las unidades económicas en fuentes como el DENUE y los Censos Económicos.",
+      "filas": 1086
+    },
+    {
+      "nombre": "ramas",
+      "descripcion": "Ramas del SCIAN México 2023: tercer nivel del clasificador. 305 categorías.",
+      "filas": 305
+    },
+    {
+      "nombre": "sectores",
+      "descripcion": "Sectores del SCIAN México 2023: primer nivel del clasificador de actividades económicas del INEGI. 20 categorías.",
+      "filas": 20
+    },
+    {
+      "nombre": "subramas",
+      "descripcion": "Subramas del SCIAN México 2023: cuarto nivel del clasificador. 610 categorías.",
+      "filas": 610
+    },
+    {
+      "nombre": "subsectores",
+      "descripcion": "Subsectores del SCIAN México 2023: segundo nivel del clasificador. 94 categorías.",
+      "filas": 94
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "view_scian_estructura",
+      "descripcion": "Jerarquía completa del SCIAN México 2023 aplanada: un renglón por clase de actividad con la clave y el nombre de sus cinco niveles. 1,086 renglones.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "codigo_sector",
+          "tipo": "character varying(5)"
+        },
+        {
+          "posicion": 2,
+          "nombre": "sector",
+          "tipo": "text"
+        },
+        {
+          "posicion": 3,
+          "nombre": "codigo_subsector",
+          "tipo": "character varying(3)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "subsector",
+          "tipo": "text"
+        },
+        {
+          "posicion": 5,
+          "nombre": "codigo_rama",
+          "tipo": "character varying(4)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "rama",
+          "tipo": "text"
+        },
+        {
+          "posicion": 7,
+          "nombre": "codigo_subrama",
+          "tipo": "character varying(5)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "subrama",
+          "tipo": "text"
+        },
+        {
+          "posicion": 9,
+          "nombre": "codigo_clase",
+          "tipo": "character varying(6)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "clase",
+          "tipo": "text"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,310 @@
+{
+  "nombre": "enoe",
+  "corte": "27 de agosto de 2026",
+  "tablas": [
+    {
+      "nombre": "enoe_mujeres_22_55_2024_t4",
+      "descripcion": null,
+      "filas": 3302
+    },
+    {
+      "nombre": "stg_enoe",
+      "descripcion": "Microdatos ENOE a nivel persona para Jalisco (ent=14). Fuente: INEGI, tabla SDEM. Un registro por persona entrevistada por trimestre.",
+      "filas": 1225060
+    },
+    {
+      "nombre": "cat_estado_civil",
+      "descripcion": "Estado civil o conyugal del entrevistado (variable e_con ENOE)",
+      "filas": 7
+    },
+    {
+      "nombre": "cat_nivel_educativo",
+      "descripcion": "Nivel de instrucción del entrevistado (variable cs_p13_1 ENOE)",
+      "filas": 11
+    },
+    {
+      "nombre": "cat_ocupacion",
+      "descripcion": "Clasificación de ocupación principal en 11 grandes grupos (variable c_ocu11c ENOE)",
+      "filas": 12
+    },
+    {
+      "nombre": "cat_sector",
+      "descripcion": "Sector económico del empleo principal (variable rama_est1 ENOE): primario, secundario, terciario",
+      "filas": 5
+    },
+    {
+      "nombre": "cat_situacion_trabajo",
+      "descripcion": "Situación del empleo respecto al sector informal (variable tue_ppal ENOE). Base para el cálculo de TIL1 del INEGI",
+      "filas": 3
+    },
+    {
+      "nombre": "cat_tipo_localidad",
+      "descripcion": "Tamaño de localidad de residencia del entrevistado (variable t_loc_tri ENOE)",
+      "filas": 4
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "v_enoe_indicadores_municipio",
+      "descripcion": "Indicadores de ocupación e informalidad ENOE agregados por municipio, año y trimestre para Jalisco. Las tasas están calculadas en conteos simples (sin ponderar); los totales ponderados usan fac_tri",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 2,
+          "nombre": "trimestre",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 3,
+          "nombre": "municipio_id",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 4,
+          "nombre": "municipio",
+          "tipo": "character varying"
+        },
+        {
+          "posicion": 5,
+          "nombre": "total_personas",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 6,
+          "nombre": "poblacion_ponderada",
+          "tipo": "real"
+        },
+        {
+          "posicion": 7,
+          "nombre": "pea_total",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 8,
+          "nombre": "pea_ponderada",
+          "tipo": "real"
+        },
+        {
+          "posicion": 9,
+          "nombre": "ocupados_total",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 10,
+          "nombre": "ocupados_ponderados",
+          "tipo": "real"
+        },
+        {
+          "posicion": 11,
+          "nombre": "desocupados_total",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 12,
+          "nombre": "desocupados_ponderados",
+          "tipo": "real"
+        },
+        {
+          "posicion": 13,
+          "nombre": "informales_total",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 14,
+          "nombre": "informales_ponderados",
+          "tipo": "real"
+        },
+        {
+          "posicion": 15,
+          "nombre": "ocupados_hombres",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 16,
+          "nombre": "ocupadas_mujeres",
+          "tipo": "bigint"
+        },
+        {
+          "posicion": 17,
+          "nombre": "tasa_desocupacion",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 18,
+          "nombre": "tasa_informalidad",
+          "tipo": "numeric"
+        },
+        {
+          "posicion": 19,
+          "nombre": "ingreso_promedio",
+          "tipo": "numeric"
+        }
+      ]
+    },
+    {
+      "nombre": "v_enoe_jalisco",
+      "descripcion": "Vista de microdatos ENOE para Jalisco con catálogos decodificados. Un registro por persona entrevistada por trimestre",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 3,
+          "nombre": "trimestre",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 4,
+          "nombre": "municipio",
+          "tipo": "character varying"
+        },
+        {
+          "posicion": 5,
+          "nombre": "tipo_localidad",
+          "tipo": "text"
+        },
+        {
+          "posicion": 6,
+          "nombre": "sex",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 7,
+          "nombre": "eda",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 8,
+          "nombre": "nac_anio",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 9,
+          "nombre": "habla_lengua_indigena",
+          "tipo": "boolean"
+        },
+        {
+          "posicion": 10,
+          "nombre": "n_inf",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 11,
+          "nombre": "estado_civil",
+          "tipo": "text"
+        },
+        {
+          "posicion": 12,
+          "nombre": "nivel_educativo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 13,
+          "nombre": "cs_p13_2",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 14,
+          "nombre": "clase1",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 15,
+          "nombre": "clase2",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 16,
+          "nombre": "clase3",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 17,
+          "nombre": "dur9c",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 18,
+          "nombre": "hrsocup",
+          "tipo": "real"
+        },
+        {
+          "posicion": 19,
+          "nombre": "ingocup",
+          "tipo": "real"
+        },
+        {
+          "posicion": 20,
+          "nombre": "ma48me1sm",
+          "tipo": "real"
+        },
+        {
+          "posicion": 21,
+          "nombre": "emp_ppal",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 22,
+          "nombre": "sector",
+          "tipo": "text"
+        },
+        {
+          "posicion": 23,
+          "nombre": "ocupacion",
+          "tipo": "text"
+        },
+        {
+          "posicion": 24,
+          "nombre": "situacion_trabajo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 25,
+          "nombre": "seg_soc",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 26,
+          "nombre": "pre_asa",
+          "tipo": "smallint"
+        },
+        {
+          "posicion": 27,
+          "nombre": "fac",
+          "tipo": "real"
+        },
+        {
+          "posicion": 28,
+          "nombre": "es_pea",
+          "tipo": "boolean"
+        },
+        {
+          "posicion": 29,
+          "nombre": "es_ocupado",
+          "tipo": "boolean"
+        },
+        {
+          "posicion": 30,
+          "nombre": "es_desocupado",
+          "tipo": "boolean"
+        },
+        {
+          "posicion": 31,
+          "nombre": "es_informal",
+          "tipo": "boolean"
+        }
+      ]
+    }
+  ]
+}

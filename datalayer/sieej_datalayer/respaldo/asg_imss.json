@@ -1,0 +1,234 @@
+{
+  "nombre": "asg_imss",
+  "corte": "29 de mayo de 2026",
+  "tablas": [
+    {
+      "nombre": "stg_asg_imss",
+      "descripcion": "Tabla de hechos de registros patronales por mes con asegurados, trabajadores y masa salarial, filtrada a Jalisco.",
+      "filas": 17510616
+    },
+    {
+      "nombre": "cat_delegacion",
+      "descripcion": "Catálogo de delegaciones IMSS.",
+      "filas": 35
+    },
+    {
+      "nombre": "cat_subdelegacion",
+      "descripcion": "Catálogo de subdelegaciones IMSS.",
+      "filas": 133
+    },
+    {
+      "nombre": "cat_entidad",
+      "descripcion": "Catálogo de entidad federativa.",
+      "filas": 1
+    },
+    {
+      "nombre": "cat_municipio",
+      "descripcion": "Catálogo de municipios.",
+      "filas": 125
+    },
+    {
+      "nombre": "cat_sector_1",
+      "descripcion": "Catálogo de sector económico (1 dígito).",
+      "filas": 10
+    },
+    {
+      "nombre": "cat_sector_2",
+      "descripcion": "Catálogo de sector económico (2 dígitos).",
+      "filas": 62
+    },
+    {
+      "nombre": "cat_sector_4",
+      "descripcion": "Catálogo de sector económico (4 dígitos SCIAN).",
+      "filas": 276
+    },
+    {
+      "nombre": "cat_tamano_registro_patronal",
+      "descripcion": "Catálogo de tamaño del registro patronal.",
+      "filas": 8
+    },
+    {
+      "nombre": "cat_sexo",
+      "descripcion": "Catálogo de sexo del asegurado.",
+      "filas": 3
+    },
+    {
+      "nombre": "cat_rango_edad",
+      "descripcion": "Catálogo de rangos de edad.",
+      "filas": 15
+    },
+    {
+      "nombre": "cat_rango_salario",
+      "descripcion": "Catálogo de rangos salariales.",
+      "filas": 26
+    },
+    {
+      "nombre": "cat_rango_uma",
+      "descripcion": "Catálogo de rangos en UMA.",
+      "filas": 26
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "vw_asg_imss",
+      "descripcion": "Vista desnormalizada que resuelve catálogos y enriquece la geografía vía FDW a cvegeo.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "fecha_corte",
+          "tipo": "date"
+        },
+        {
+          "posicion": 2,
+          "nombre": "cve_delegacion",
+          "tipo": "varchar(3)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "cve_subdelegacion",
+          "tipo": "varchar(3)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "cve_entidad",
+          "tipo": "char(2)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "cve_municipio",
+          "tipo": "varchar(4)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "cvegeo",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 7,
+          "nombre": "sector_economico_1",
+          "tipo": "char(1)"
+        },
+        {
+          "posicion": 8,
+          "nombre": "sector_economico_2",
+          "tipo": "char(2)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "sector_economico_4",
+          "tipo": "char(4)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "tamano_patron",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 11,
+          "nombre": "sexo",
+          "tipo": "varchar(2)"
+        },
+        {
+          "posicion": 12,
+          "nombre": "rango_edad",
+          "tipo": "varchar(3)"
+        },
+        {
+          "posicion": 13,
+          "nombre": "rango_salario",
+          "tipo": "varchar(3)"
+        },
+        {
+          "posicion": 14,
+          "nombre": "rango_uma",
+          "tipo": "varchar(3)"
+        },
+        {
+          "posicion": 15,
+          "nombre": "asegurados",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 16,
+          "nombre": "no_trabajadores",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 17,
+          "nombre": "ta",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 18,
+          "nombre": "teu",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 19,
+          "nombre": "tec",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 20,
+          "nombre": "tpu",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 21,
+          "nombre": "tpc",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 22,
+          "nombre": "ta_sal",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 23,
+          "nombre": "teu_sal",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 24,
+          "nombre": "tec_sal",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 25,
+          "nombre": "tpu_sal",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 26,
+          "nombre": "tpc_sal",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 27,
+          "nombre": "masa_sal_ta",
+          "tipo": "numeric(18,2)"
+        },
+        {
+          "posicion": 28,
+          "nombre": "masa_sal_teu",
+          "tipo": "numeric(18,2)"
+        },
+        {
+          "posicion": 29,
+          "nombre": "masa_sal_tec",
+          "tipo": "numeric(18,2)"
+        },
+        {
+          "posicion": 30,
+          "nombre": "masa_sal_tpu",
+          "tipo": "numeric(18,2)"
+        },
+        {
+          "posicion": 31,
+          "nombre": "masa_sal_tpc",
+          "tipo": "numeric(18,2)"
+        }
+      ]
+    }
+  ]
+}

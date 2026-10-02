@@ -1,0 +1,134 @@
+{
+  "nombre": "fiscalia",
+  "corte": "29 de mayo de 2026",
+  "tablas": [
+    {
+      "nombre": "casos",
+      "descripcion": "Tabla principal de casos denunciados: delito, violencia, ubicación (municipio, colonia, calle, cruce), fecha y coordenadas.",
+      "filas": 660396
+    },
+    {
+      "nombre": "denuncias_jalisco",
+      "descripcion": "Tabla de denuncias consolidadas de Jalisco (no descrita en el README homologado).",
+      "filas": 668840
+    },
+    {
+      "nombre": "delitos",
+      "descripcion": "Catálogo de delitos.",
+      "filas": 16
+    },
+    {
+      "nombre": "bien_afectado",
+      "descripcion": "Catálogo de bienes afectados.",
+      "filas": 5
+    },
+    {
+      "nombre": "violencia",
+      "descripcion": "Catálogo de tipo de violencia.",
+      "filas": 2
+    },
+    {
+      "nombre": "zonas_geograficas",
+      "descripcion": "Catálogo de zonas geográficas de la Fiscalía.",
+      "filas": 2
+    },
+    {
+      "nombre": "colonias",
+      "descripcion": "Catálogo de colonias.",
+      "filas": 5545
+    },
+    {
+      "nombre": "calles",
+      "descripcion": "Catálogo de calles.",
+      "filas": 22029
+    },
+    {
+      "nombre": "cruces",
+      "descripcion": "Catálogo de cruces.",
+      "filas": 16772
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "delitos_vw",
+      "descripcion": "Vista analítica desnormalizada de los casos con catálogos y municipios resueltos.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "delito",
+          "tipo": "varchar(99)"
+        },
+        {
+          "posicion": 3,
+          "nombre": "bien_afectado",
+          "tipo": "varchar(200)"
+        },
+        {
+          "posicion": 4,
+          "nombre": "violencia",
+          "tipo": "varchar(15)"
+        },
+        {
+          "posicion": 5,
+          "nombre": "zona_geografica",
+          "tipo": "varchar(10)"
+        },
+        {
+          "posicion": 6,
+          "nombre": "municipio",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 7,
+          "nombre": "cvegeo",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 8,
+          "nombre": "colonia",
+          "tipo": "varchar(400)"
+        },
+        {
+          "posicion": 9,
+          "nombre": "calle",
+          "tipo": "varchar(400)"
+        },
+        {
+          "posicion": 10,
+          "nombre": "cruce",
+          "tipo": "varchar(400)"
+        },
+        {
+          "posicion": 11,
+          "nombre": "hora",
+          "tipo": "varchar(5)"
+        },
+        {
+          "posicion": 12,
+          "nombre": "longitud",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 13,
+          "nombre": "latitud",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 14,
+          "nombre": "fecha_denuncia",
+          "tipo": "date"
+        },
+        {
+          "posicion": 15,
+          "nombre": "fecha_actualizacion",
+          "tipo": "date"
+        }
+      ]
+    }
+  ]
+}

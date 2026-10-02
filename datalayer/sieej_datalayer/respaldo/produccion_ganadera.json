@@ -1,0 +1,94 @@
+{
+  "nombre": "produccion_ganadera",
+  "corte": "29 de mayo de 2026",
+  "tablas": [
+    {
+      "nombre": "stg_ganadera",
+      "descripcion": "Tabla de hechos de producción ganadera por año, municipio y especie (volumen, peso en sacrificio, precio, valor y animales sacrificados).",
+      "filas": 559457
+    },
+    {
+      "nombre": "cat_especies",
+      "descripcion": "Catálogo de especies animales.",
+      "filas": 7
+    },
+    {
+      "nombre": "cat_productos",
+      "descripcion": "Catálogo de productos ganaderos.",
+      "filas": 8
+    },
+    {
+      "nombre": "cat_distritos_des_rural",
+      "descripcion": "Catálogo de Distritos de Desarrollo Rural (DDR).",
+      "filas": 190
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "view_ganadera_jalisco",
+      "descripcion": "Vista desnormalizada de la producción ganadera de Jalisco con catálogos y claves geográficas resueltas.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "id",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 2,
+          "nombre": "anio",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 3,
+          "nombre": "municipio",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 4,
+          "nombre": "entidad",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 5,
+          "nombre": "dis_des_rural",
+          "tipo": "text"
+        },
+        {
+          "posicion": 6,
+          "nombre": "especie",
+          "tipo": "text"
+        },
+        {
+          "posicion": 7,
+          "nombre": "producto",
+          "tipo": "text"
+        },
+        {
+          "posicion": 8,
+          "nombre": "volumen_produccion",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 9,
+          "nombre": "peso_sacrificio",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 10,
+          "nombre": "precio_med_rural",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 11,
+          "nombre": "valor_produccion",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 12,
+          "nombre": "animales_sacrificados",
+          "tipo": "float8"
+        }
+      ]
+    }
+  ]
+}

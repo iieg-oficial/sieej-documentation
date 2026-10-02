@@ -1,5 +1,5 @@
 {
-  "generado": "2026-10-01T22:28:45.442028Z",
+  "generado": "2026-10-02T16:34:57.255182Z",
   "datos_obsoletos": false,
   "fuentes": {
     "airflow": {
@@ -10,12 +10,12 @@
     "bd": {
       "estado": "ok",
       "detalle": "29 bases de datos",
-      "consultado_en": "2026-10-01T22:31:33.681752Z"
+      "consultado_en": "2026-10-02T16:37:44.412777Z"
     },
     "readme": {
       "estado": "ok",
-      "detalle": "35 README de ETL-SIEEJ; no se pudo actualizar el clon (FileNotFoundError); se usa el existente",
-      "consultado_en": "2026-10-01T22:28:45.465079Z"
+      "detalle": "35 README de ETL-SIEEJ @ 9b0ddc3",
+      "consultado_en": "2026-10-02T16:34:57.283811Z"
     }
   },
   "nombre": "escuelas",
@@ -82,8 +82,419 @@
     ],
     "descripcion_tablas": {},
     "alcance_vistas": {},
-    "commit": null
+    "commit": "9b0ddc3"
   },
-  "base": null,
+  "base": {
+    "nombre": "escuelas",
+    "es_infraestructura": false,
+    "vistas": [
+      {
+        "esquema": "public",
+        "nombre": "v_directorio_escuelas",
+        "tipo": "VIEW",
+        "descripcion": "Desnormalización completa de `stg_directorio_escuelas`: resuelve catálogos de turnos, sostenimientos, niveles, programas, regiones y medios; enriquece con nombre de municipio y entidad vía FDW a `cvegeo`.",
+        "registros": null,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "anio",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "clave_ct",
+            "tipo": "varchar(20)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "nombre_ct",
+            "tipo": "varchar(255)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "nombre_turno",
+            "tipo": "varchar(30)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "domicilio",
+            "tipo": "text",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "localidad_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "nombre_localidad",
+            "tipo": "varchar(150)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 8,
+            "nombre": "colonia_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 9,
+            "nombre": "nombre_colonia",
+            "tipo": "varchar(150)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 10,
+            "nombre": "entidad",
+            "tipo": "varchar",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 11,
+            "nombre": "municipio",
+            "tipo": "varchar",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 12,
+            "nombre": "nombre_municipio",
+            "tipo": "varchar(150)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 13,
+            "nombre": "medio",
+            "tipo": "varchar(20)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 14,
+            "nombre": "director",
+            "tipo": "varchar(255)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 15,
+            "nombre": "codigo_postal",
+            "tipo": "varchar(10)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 16,
+            "nombre": "telefono",
+            "tipo": "varchar(20)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 17,
+            "nombre": "zona_escolar",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 18,
+            "nombre": "sector",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 19,
+            "nombre": "sostenimiento",
+            "tipo": "varchar(30)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 20,
+            "nombre": "codigo_sostenimiento",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 21,
+            "nombre": "nivel",
+            "tipo": "varchar(60)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 22,
+            "nombre": "programa",
+            "tipo": "varchar(120)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 23,
+            "nombre": "region_id",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 24,
+            "nombre": "nombre_region",
+            "tipo": "varchar(80)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 25,
+            "nombre": "longitud",
+            "tipo": "float8",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 26,
+            "nombre": "latitud",
+            "tipo": "float8",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 27,
+            "nombre": "escuelas",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 28,
+            "nombre": "hombres_matriculados",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 29,
+            "nombre": "mujeres_matriculadas",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 30,
+            "nombre": "total_matriculados",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 31,
+            "nombre": "total_docentes_directivo",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 32,
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": null,
+        "en_docs": true,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      },
+      {
+        "esquema": "public",
+        "nombre": "v_estadistica_escuelas",
+        "tipo": "VIEW",
+        "descripcion": "Desnormalización de `stg_estadistica_escuelas` con nombres de nivel/programa y sostenimiento resueltos.",
+        "registros": null,
+        "columnas": [
+          {
+            "posicion": 1,
+            "nombre": "anio",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 2,
+            "nombre": "nivel_programa",
+            "tipo": "varchar(120)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 3,
+            "nombre": "sostenimiento",
+            "tipo": "varchar(30)",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 4,
+            "nombre": "escuelas",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 5,
+            "nombre": "matricula",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 6,
+            "nombre": "docentes",
+            "tipo": "integer",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          },
+          {
+            "posicion": 7,
+            "nombre": "fecha_actualizacion",
+            "tipo": "date",
+            "nullable": true,
+            "descripcion": null,
+            "origen_descripcion": null
+          }
+        ],
+        "en_bd": null,
+        "en_docs": true,
+        "solo_en_bd": false,
+        "solo_en_docs": false,
+        "archivo_md": null
+      }
+    ],
+    "tablas": [
+      {
+        "nombre": "stg_directorio_escuelas",
+        "descripcion": "Registro por centro de trabajo, turno, nivel y programa; incluye ubicación, contacto y métricas de matrícula y docentes.",
+        "filas": 15767,
+        "columnas": []
+      },
+      {
+        "nombre": "stg_estadistica_escuelas",
+        "descripcion": "Estadística agregada por año, nivel/programa y sostenimiento: número de escuelas, matrícula total y docentes.",
+        "filas": 42,
+        "columnas": []
+      },
+      {
+        "nombre": "cat_turnos",
+        "descripcion": "Turnos escolares (MATUTINO, VESPERTINO, NOCTURNO, etc.).",
+        "filas": 6,
+        "columnas": []
+      },
+      {
+        "nombre": "cat_sostenimientos",
+        "descripcion": "Tipos de sostenimiento normalizados (PÚBLICO, PRIVADO, etc.).",
+        "filas": 6,
+        "columnas": []
+      },
+      {
+        "nombre": "cat_codigos_sostenimiento",
+        "descripcion": "Códigos de sostenimiento del directorio vinculados al catálogo de sostenimientos.",
+        "filas": 22,
+        "columnas": []
+      },
+      {
+        "nombre": "cat_niveles",
+        "descripcion": "Niveles educativos (PREESCOLAR, PRIMARIA, SECUNDARIA, etc.).",
+        "filas": 8,
+        "columnas": []
+      },
+      {
+        "nombre": "cat_programas",
+        "descripcion": "Programas o servicios educativos (GENERAL, INDÍGENA, TÉCNICO, etc.).",
+        "filas": 16,
+        "columnas": []
+      },
+      {
+        "nombre": "cat_regiones",
+        "descripcion": "Regiones educativas del estado de Jalisco.",
+        "filas": 13,
+        "columnas": []
+      },
+      {
+        "nombre": "cat_medios",
+        "descripcion": "Clasificación de medio (URBANA / RURAL).",
+        "filas": 2,
+        "columnas": []
+      },
+      {
+        "nombre": "cat_niveles_programa",
+        "descripcion": "Nivel/programa combinado utilizado en la estadística agregada.",
+        "filas": 7,
+        "columnas": []
+      }
+    ],
+    "relaciones": []
+  },
+  "origen_base": "respaldo",
+  "corte_respaldo": "22 de junio de 2026",
+  "der_svg": "<svg viewBox=\"0 0 940.0 1020.0\" width=\"940.0\" xmlns=\"http://www.w3.org/2000/svg\" style=\"font-family: system-ui, -apple-system, sans-serif;\">\n  <defs>\n    <pattern id=\"erd-dots\" width=\"24\" height=\"24\" patternUnits=\"userSpaceOnUse\">\n      <circle cx=\"1\" cy=\"1\" r=\"0.8\" fill=\"#d1d5db\" />\n    </pattern>\n    <marker id=\"arr\" markerWidth=\"10\" markerHeight=\"7\" refX=\"9\" refY=\"3.5\" orient=\"auto\">\n      <polygon points=\"0 0, 10 3.5, 0 7\" fill=\"#c4cad4\" />\n    </marker>\n  </defs>\n  <rect width=\"100%\" height=\"100%\" fill=\"#f9fafb\" />\n  <rect width=\"100%\" height=\"100%\" fill=\"url(#erd-dots)\" />\n  <!-- Relaciones: catálogos → stg_directorio_escuelas -->\n  <g class=\"erd-rel\" data-from=\"cat_turnos\" data-to=\"stg_directorio_escuelas\">\n    <path d=\"M 218.0 55.0 C 288.0 55.0 268.0 260.0 338.0 260.0\" fill=\"none\" stroke=\"transparent\" stroke-width=\"18\"/>\n    <path d=\"M 218.0 55.0 C 288.0 55.0 268.0 260.0 338.0 260.0\" fill=\"none\" stroke=\"#c4cad4\" stroke-width=\"1.5\" marker-end=\"url(#arr)\"/>\n    <text x=\"238.0\" y=\"43.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">1</text>\n    <text x=\"318.0\" y=\"248.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">N</text>\n  </g>\n  <g class=\"erd-rel\" data-from=\"cat_sostenimientos\" data-to=\"stg_directorio_escuelas\">\n    <path d=\"M 218.0 160.0 C 288.0 160.0 268.0 290.0 338.0 290.0\" fill=\"none\" stroke=\"transparent\" stroke-width=\"18\"/>\n    <path d=\"M 218.0 160.0 C 288.0 160.0 268.0 290.0 338.0 290.0\" fill=\"none\" stroke=\"#c4cad4\" stroke-width=\"1.5\" marker-end=\"url(#arr)\"/>\n    <text x=\"238.0\" y=\"148.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">1</text>\n    <text x=\"318.0\" y=\"278.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">N</text>\n  </g>\n  <g class=\"erd-rel\" data-from=\"cat_niveles\" data-to=\"stg_directorio_escuelas\">\n    <path d=\"M 218.0 265.0 C 288.0 265.0 268.0 320.0 338.0 320.0\" fill=\"none\" stroke=\"transparent\" stroke-width=\"18\"/>\n    <path d=\"M 218.0 265.0 C 288.0 265.0 268.0 320.0 338.0 320.0\" fill=\"none\" stroke=\"#c4cad4\" stroke-width=\"1.5\" marker-end=\"url(#arr)\"/>\n    <text x=\"238.0\" y=\"253.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">1</text>\n    <text x=\"318.0\" y=\"308.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">N</text>\n  </g>\n  <g class=\"erd-rel\" data-from=\"cat_programas\" data-to=\"stg_directorio_escuelas\">\n    <path d=\"M 218.0 370.0 C 288.0 370.0 268.0 350.0 338.0 350.0\" fill=\"none\" stroke=\"transparent\" stroke-width=\"18\"/>\n    <path d=\"M 218.0 370.0 C 288.0 370.0 268.0 350.0 338.0 350.0\" fill=\"none\" stroke=\"#c4cad4\" stroke-width=\"1.5\" marker-end=\"url(#arr)\"/>\n    <text x=\"238.0\" y=\"358.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">1</text>\n    <text x=\"318.0\" y=\"338.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">N</text>\n  </g>\n  <g class=\"erd-rel\" data-from=\"cat_medios\" data-to=\"stg_directorio_escuelas\">\n    <path d=\"M 218.0 475.0 C 288.0 475.0 268.0 380.0 338.0 380.0\" fill=\"none\" stroke=\"transparent\" stroke-width=\"18\"/>\n    <path d=\"M 218.0 475.0 C 288.0 475.0 268.0 380.0 338.0 380.0\" fill=\"none\" stroke=\"#c4cad4\" stroke-width=\"1.5\" marker-end=\"url(#arr)\"/>\n    <text x=\"238.0\" y=\"463.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">1</text>\n    <text x=\"318.0\" y=\"368.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">N</text>\n  </g>\n  <g class=\"erd-rel\" data-from=\"cat_sostenimientos\" data-to=\"stg_estadistica_escuelas\">\n    <path d=\"M 218.0 155.0 C 288.0 155.0 698.0 760.0 698.0 830.0\" fill=\"none\" stroke=\"transparent\" stroke-width=\"18\"/>\n    <path d=\"M 218.0 155.0 C 288.0 155.0 698.0 760.0 698.0 830.0\" fill=\"none\" stroke=\"#c4cad4\" stroke-width=\"1.5\" marker-end=\"url(#arr)\"/>\n    <text x=\"238.0\" y=\"143.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">1</text>\n    <text x=\"678.0\" y=\"818.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">N</text>\n  </g>\n  <g class=\"erd-rel\" data-from=\"cat_niveles_programa\" data-to=\"stg_estadistica_escuelas\">\n    <path d=\"M 218.0 580.0 C 500.0 580.0 500.0 850.0 698.0 850.0\" fill=\"none\" stroke=\"transparent\" stroke-width=\"18\"/>\n    <path d=\"M 218.0 580.0 C 500.0 580.0 500.0 850.0 698.0 850.0\" fill=\"none\" stroke=\"#c4cad4\" stroke-width=\"1.5\" marker-end=\"url(#arr)\"/>\n    <text x=\"238.0\" y=\"568.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">1</text>\n    <text x=\"678.0\" y=\"838.0\" font-size=\"11\" font-family=\"monospace\" fill=\"#c4cad4\" text-anchor=\"middle\" dominant-baseline=\"middle\">N</text>\n  </g>\n  <!-- Catálogos columna izquierda -->\n  <g class=\"erd-node\" data-table=\"cat_turnos\" transform=\"translate(0.0, 20.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"90\" fill=\"rgba(0,0,0,0.06)\"/>\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"90\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\"/>\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#5C2472\"/>\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#5C2472\"/>\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">CatTurnos</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">nombre_turno</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">string</text>\n  </g>\n  <g class=\"erd-node\" data-table=\"cat_sostenimientos\" transform=\"translate(0.0, 125.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"90\" fill=\"rgba(0,0,0,0.06)\"/>\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"90\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\"/>\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#5C2472\"/>\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#5C2472\"/>\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">CatSostenimientos</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">sostenimiento</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">string</text>\n  </g>\n  <g class=\"erd-node\" data-table=\"cat_niveles\" transform=\"translate(0.0, 230.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"90\" fill=\"rgba(0,0,0,0.06)\"/>\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"90\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\"/>\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#5C2472\"/>\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#5C2472\"/>\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">CatNiveles</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">nivel</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">string</text>\n  </g>\n  <g class=\"erd-node\" data-table=\"cat_programas\" transform=\"translate(0.0, 335.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"90\" fill=\"rgba(0,0,0,0.06)\"/>\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"90\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\"/>\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#5C2472\"/>\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#5C2472\"/>\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">CatProgramas</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">programa</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">string</text>\n  </g>\n  <g class=\"erd-node\" data-table=\"cat_medios\" transform=\"translate(0.0, 440.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"90\" fill=\"rgba(0,0,0,0.06)\"/>\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"90\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\"/>\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#5C2472\"/>\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#5C2472\"/>\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">CatMedios</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">medio</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">string</text>\n  </g>\n  <g class=\"erd-node\" data-table=\"cat_regiones\" transform=\"translate(0.0, 545.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"90\" fill=\"rgba(0,0,0,0.06)\"/>\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"90\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\"/>\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#5C2472\"/>\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#5C2472\"/>\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">CatRegiones</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">nombre_region</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">string</text>\n  </g>\n  <g class=\"erd-node\" data-table=\"cat_niveles_programa\" transform=\"translate(0.0, 650.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"90\" fill=\"rgba(0,0,0,0.06)\"/>\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"90\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\"/>\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#5C2472\"/>\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#5C2472\"/>\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">CatNivelesPrograma</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" font-weight=\"400\" dominant-baseline=\"middle\">nivel_programa</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">string</text>\n  </g>\n  <!-- stg_directorio_escuelas (fact, columna derecha arriba) -->\n  <g class=\"erd-node\" data-table=\"stg_directorio_escuelas\" transform=\"translate(338.0, 60.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"280\" height=\"573\" fill=\"rgba(0,0,0,0.06)\"/>\n    <rect class=\"erd-card\" rx=\"7\" width=\"280\" height=\"573\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\"/>\n    <rect rx=\"7\" width=\"280\" height=\"36\" fill=\"#065f46\"/>\n    <rect y=\"29\" width=\"280\" height=\"7\" fill=\"#065f46\"/>\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">StgDirectorioEscuelas</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"272\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"270\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" dominant-baseline=\"middle\">anio</text>\n    <text x=\"272\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int</text>\n    <line x1=\"10\" y1=\"84\" x2=\"270\" y2=\"84\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"95.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" dominant-baseline=\"middle\">entidad_id</text>\n    <text x=\"272\" y=\"95.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int</text>\n    <line x1=\"10\" y1=\"105\" x2=\"270\" y2=\"105\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"116.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" dominant-baseline=\"middle\">clave_ct</text>\n    <text x=\"272\" y=\"116.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">string</text>\n    <line x1=\"10\" y1=\"126\" x2=\"270\" y2=\"126\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"137.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9a3412\" dominant-baseline=\"middle\">turno_id</text>\n    <text x=\"272\" y=\"137.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#c2410c\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">FK</text>\n    <line x1=\"10\" y1=\"147\" x2=\"270\" y2=\"147\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"158.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" dominant-baseline=\"middle\">nombre_ct</text>\n    <text x=\"272\" y=\"158.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">string</text>\n    <line x1=\"10\" y1=\"168\" x2=\"270\" y2=\"168\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"179.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" dominant-baseline=\"middle\">municipio_id</text>\n    <text x=\"272\" y=\"179.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int</text>\n    <line x1=\"10\" y1=\"189\" x2=\"270\" y2=\"189\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"200.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9a3412\" dominant-baseline=\"middle\">medio_id</text>\n    <text x=\"272\" y=\"200.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#c2410c\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">FK</text>\n    <line x1=\"10\" y1=\"210\" x2=\"270\" y2=\"210\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"221.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9a3412\" dominant-baseline=\"middle\">codigo_sostenimiento_id</text>\n    <text x=\"272\" y=\"221.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#c2410c\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">FK</text>\n    <line x1=\"10\" y1=\"231\" x2=\"270\" y2=\"231\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"242.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9a3412\" dominant-baseline=\"middle\">nivel_id</text>\n    <text x=\"272\" y=\"242.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#c2410c\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">FK</text>\n    <line x1=\"10\" y1=\"252\" x2=\"270\" y2=\"252\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"263.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9a3412\" dominant-baseline=\"middle\">programa_id</text>\n    <text x=\"272\" y=\"263.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#c2410c\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">FK</text>\n    <line x1=\"10\" y1=\"273\" x2=\"270\" y2=\"273\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"284.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9a3412\" dominant-baseline=\"middle\">region_id</text>\n    <text x=\"272\" y=\"284.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#c2410c\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">FK</text>\n    <line x1=\"10\" y1=\"294\" x2=\"270\" y2=\"294\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"305.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" dominant-baseline=\"middle\">longitud</text>\n    <text x=\"272\" y=\"305.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">float?</text>\n    <line x1=\"10\" y1=\"315\" x2=\"270\" y2=\"315\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"326.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" dominant-baseline=\"middle\">latitud</text>\n    <text x=\"272\" y=\"326.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">float?</text>\n    <line x1=\"10\" y1=\"336\" x2=\"270\" y2=\"336\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"347.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" dominant-baseline=\"middle\">escuelas</text>\n    <text x=\"272\" y=\"347.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int</text>\n    <line x1=\"10\" y1=\"357\" x2=\"270\" y2=\"357\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"368.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" dominant-baseline=\"middle\">hombres_matriculados</text>\n    <text x=\"272\" y=\"368.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int</text>\n    <line x1=\"10\" y1=\"378\" x2=\"270\" y2=\"378\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"389.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" dominant-baseline=\"middle\">mujeres_matriculadas</text>\n    <text x=\"272\" y=\"389.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int</text>\n    <line x1=\"10\" y1=\"399\" x2=\"270\" y2=\"399\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"410.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" dominant-baseline=\"middle\">total_matriculados</text>\n    <text x=\"272\" y=\"410.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int</text>\n    <line x1=\"10\" y1=\"420\" x2=\"270\" y2=\"420\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"431.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" dominant-baseline=\"middle\">total_docentes_directivo</text>\n    <text x=\"272\" y=\"431.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int</text>\n    <line x1=\"10\" y1=\"441\" x2=\"270\" y2=\"441\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"452.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" dominant-baseline=\"middle\">fecha_actualizacion</text>\n    <text x=\"272\" y=\"452.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#1d4ed8\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">date</text>\n  </g>\n  <!-- stg_estadistica_escuelas (fact, columna derecha abajo) -->\n  <g class=\"erd-node\" data-table=\"stg_estadistica_escuelas\" transform=\"translate(698.0, 760.0)\" style=\"cursor: grab;\">\n    <rect x=\"3\" y=\"3\" rx=\"7\" width=\"218\" height=\"195\" fill=\"rgba(0,0,0,0.06)\"/>\n    <rect class=\"erd-card\" rx=\"7\" width=\"218\" height=\"195\" fill=\"#ffffff\" stroke=\"#dde1e8\" stroke-width=\"1\"/>\n    <rect rx=\"7\" width=\"218\" height=\"36\" fill=\"#065f46\"/>\n    <rect y=\"29\" width=\"218\" height=\"7\" fill=\"#065f46\"/>\n    <text x=\"12\" y=\"19.0\" font-size=\"13\" font-weight=\"600\" fill=\"white\" dominant-baseline=\"middle\" style=\"letter-spacing: 0.01em;\">StgEstadisticaEscuelas</text>\n    <text x=\"10\" y=\"53.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" font-weight=\"700\" dominant-baseline=\"middle\">id</text>\n    <text x=\"210\" y=\"53.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#5C2472\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">PK</text>\n    <line x1=\"10\" y1=\"63\" x2=\"208\" y2=\"63\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"74.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" dominant-baseline=\"middle\">anio</text>\n    <text x=\"210\" y=\"74.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int</text>\n    <line x1=\"10\" y1=\"84\" x2=\"208\" y2=\"84\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"95.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9a3412\" dominant-baseline=\"middle\">nivel_programa_id</text>\n    <text x=\"210\" y=\"95.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#c2410c\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">FK</text>\n    <line x1=\"10\" y1=\"105\" x2=\"208\" y2=\"105\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"116.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#9a3412\" dominant-baseline=\"middle\">sostenimiento_id</text>\n    <text x=\"210\" y=\"116.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#c2410c\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">FK</text>\n    <line x1=\"10\" y1=\"126\" x2=\"208\" y2=\"126\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"137.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" dominant-baseline=\"middle\">escuelas</text>\n    <text x=\"210\" y=\"137.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int</text>\n    <line x1=\"10\" y1=\"147\" x2=\"208\" y2=\"147\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"158.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" dominant-baseline=\"middle\">matricula</text>\n    <text x=\"210\" y=\"158.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#6b7280\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">int</text>\n    <line x1=\"10\" y1=\"168\" x2=\"208\" y2=\"168\" stroke=\"#f0f2f5\" stroke-width=\"1\"/>\n    <text x=\"10\" y=\"179.5\" font-size=\"10\" font-family=\"'Courier New', Courier, monospace\" fill=\"#3d4552\" dominant-baseline=\"middle\">fecha_actualizacion</text>\n    <text x=\"210\" y=\"179.5\" font-size=\"9\" font-family=\"'Courier New', Courier, monospace\" fill=\"#1d4ed8\" text-anchor=\"end\" dominant-baseline=\"middle\" opacity=\"0.9\">date</text>\n  </g>\n</svg>",
   "etapas": []
 }

@@ -1,0 +1,204 @@
+{
+  "nombre": "centros_educativos",
+  "corte": "29 de mayo de 2026",
+  "tablas": [
+    {
+      "nombre": "centros",
+      "descripcion": "Tabla principal de centros de trabajo educativos (CCT) con tipo, nivel, control, domicilio, geolocalización y estadísticas de alumnos/docentes.",
+      "filas": 267368
+    },
+    {
+      "nombre": "colonias",
+      "descripcion": "Catálogo de colonias.",
+      "filas": 37319
+    },
+    {
+      "nombre": "domicilios",
+      "descripcion": "Catálogo de domicilios.",
+      "filas": 78765
+    },
+    {
+      "nombre": "localidades",
+      "descripcion": "Catálogo de localidades.",
+      "filas": 48041
+    },
+    {
+      "nombre": "niveles_educativos",
+      "descripcion": "Catálogo de niveles educativos.",
+      "filas": 9
+    },
+    {
+      "nombre": "servicios_educativos",
+      "descripcion": "Catálogo de servicios educativos.",
+      "filas": 14
+    },
+    {
+      "nombre": "tipos_controles",
+      "descripcion": "Catálogo de tipo de control (público/privado).",
+      "filas": 2
+    },
+    {
+      "nombre": "tipos_educativos",
+      "descripcion": "Catálogo de tipos educativos.",
+      "filas": 6
+    },
+    {
+      "nombre": "tipos_sostenimiento",
+      "descripcion": "Catálogo de tipos de sostenimiento.",
+      "filas": 6
+    },
+    {
+      "nombre": "turnos",
+      "descripcion": "Catálogo de turnos escolares.",
+      "filas": 5
+    }
+  ],
+  "vistas": [
+    {
+      "nombre": "v_centros_educativos",
+      "descripcion": "Vista desnormalizada de centros educativos con catálogos y geografía resueltos.",
+      "columnas": [
+        {
+          "posicion": 1,
+          "nombre": "clave_centro_trabajo",
+          "tipo": "varchar(20)"
+        },
+        {
+          "posicion": 2,
+          "nombre": "nombre_centro_trabajo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 3,
+          "nombre": "fecha_actualizacion",
+          "tipo": "date"
+        },
+        {
+          "posicion": 4,
+          "nombre": "turno",
+          "tipo": "text"
+        },
+        {
+          "posicion": 5,
+          "nombre": "tipo_educativo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 6,
+          "nombre": "nivel_educativo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 7,
+          "nombre": "servicio_educativo",
+          "tipo": "text"
+        },
+        {
+          "posicion": 8,
+          "nombre": "tipo_control",
+          "tipo": "text"
+        },
+        {
+          "posicion": 9,
+          "nombre": "tipo_sostenimiento",
+          "tipo": "text"
+        },
+        {
+          "posicion": 10,
+          "nombre": "entidad",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 11,
+          "nombre": "municipio",
+          "tipo": "varchar"
+        },
+        {
+          "posicion": 12,
+          "nombre": "clave_localidad",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 13,
+          "nombre": "localidad",
+          "tipo": "text"
+        },
+        {
+          "posicion": 14,
+          "nombre": "domicilio",
+          "tipo": "text"
+        },
+        {
+          "posicion": 15,
+          "nombre": "numero_exterior",
+          "tipo": "text"
+        },
+        {
+          "posicion": 16,
+          "nombre": "codigo_postal",
+          "tipo": "varchar(10)"
+        },
+        {
+          "posicion": 17,
+          "nombre": "entre_calle",
+          "tipo": "text"
+        },
+        {
+          "posicion": 18,
+          "nombre": "y_calle",
+          "tipo": "text"
+        },
+        {
+          "posicion": 19,
+          "nombre": "calle_posterior",
+          "tipo": "text"
+        },
+        {
+          "posicion": 20,
+          "nombre": "colonia",
+          "tipo": "text"
+        },
+        {
+          "posicion": 21,
+          "nombre": "total_alumnos_hombres",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 22,
+          "nombre": "total_alumnas_mujeres",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 23,
+          "nombre": "total_docentes_hombres",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 24,
+          "nombre": "total_docentes_mujeres",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 25,
+          "nombre": "aulas_en_uso",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 26,
+          "nombre": "aulas_existentes",
+          "tipo": "integer"
+        },
+        {
+          "posicion": 27,
+          "nombre": "latitud",
+          "tipo": "float8"
+        },
+        {
+          "posicion": 28,
+          "nombre": "longitud",
+          "tipo": "float8"
+        }
+      ]
+    }
+  ]
+}

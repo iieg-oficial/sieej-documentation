@@ -1,0 +1,107 @@
+---
+interface Props {
+  objetivo: string;
+  etiqueta: string;
+  placeholder?: string;
+  compacto?: boolean;
+}
+
+const { objetivo, etiqueta, placeholder = "Buscar", compacto = false } = Astro.props;
+---
+
+<div class:list={["buscador", { "buscador--compacto": compacto }]} data-objetivo={objetivo}>
+  <label class="visualmente-oculto" for={`buscar-${objetivo}`}>{etiqueta}</label>
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"></circle>
+    <path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+  </svg>
+  <input id={`buscar-${objetivo}`} type="search" placeholder={placeholder} autocomplete="off" />
+  <p class="buscador__vacio" role="status" hidden>Sin resultados</p>
+</div>
+
+<script>
+  const normalizar = (texto: string) =>
+    texto.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
+  document.querySelectorAll<HTMLElement>(".buscador").forEach((buscador) => {
+    const campo = buscador.querySelector("input");
+    const vacio = buscador.querySelector<HTMLElement>(".buscador__vacio");
+    const contenedores = document.querySelectorAll<HTMLElement>(`[data-buscable="${buscador.dataset.objetivo}"]`);
+    if (!campo || !vacio) return;
+    campo.addEventListener("input", () => {
+      const consulta = normalizar(campo.value.trim());
+      let visibles = 0;
+      contenedores.forEach((contenedor) => {
+        contenedor.querySelectorAll<HTMLElement>("[data-buscar]").forEach((elemento) => {
+          const coincide = !consulta || normalizar(elemento.dataset.buscar ?? "").includes(consulta);
+          elemento.hidden = !coincide;
+          if (coincide) visibles += 1;
+        });
+      });
+      vacio.hidden = visibles > 0;
+    });
+  });
+</script>
+
+<style>
+  .buscador {
+    position: relative;
+    max-width: 24rem;
+    margin: 1.25rem 0 0;
+  }
+
+  .buscador svg {
+    position: absolute;
+    left: 0.9rem;
+    top: 0.7rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    color: var(--silenciado);
+    pointer-events: none;
+  }
+
+  .buscador input {
+    width: 100%;
+    height: 2.5rem;
+    padding: 0 1rem 0 2.6rem;
+    border: 1px solid var(--linea);
+    border-radius: 999px;
+    background: var(--tarjeta);
+    color: var(--tinta);
+    font: inherit;
+  }
+
+  .buscador input:focus-visible {
+    outline: 3px solid var(--acento);
+    outline-offset: 1px;
+    border-color: transparent;
+  }
+
+  .buscador__vacio {
+    margin: 0.75rem 0 0;
+    color: var(--silenciado);
+    font-size: var(--texto-chico);
+  }
+
+  .buscador--compacto {
+    margin: 0.35rem 0 0.5rem;
+    max-width: none;
+  }
+
+  .buscador--compacto input {
+    height: 2.1rem;
+    font-size: var(--texto-chico);
+    padding-left: 2.3rem;
+  }
+
+  .buscador--compacto svg {
+    top: 0.55rem;
+    left: 0.75rem;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  :global([data-buscar][hidden]) {
+    display: none !important;
+  }
+</style>

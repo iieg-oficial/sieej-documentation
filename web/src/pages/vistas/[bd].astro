@@ -25,6 +25,20 @@ const otras = vistas.bases.map((b: any) => ({
   actual: b.nombre === base.nombre,
 }));
 
+const registros = base.vistas.reduce((n: number, v: any) => n + (v.registros ?? 0), 0);
+const cifras = [
+  { valor: base.vistas.length.toLocaleString("es-MX"), etiqueta: "vistas" },
+  {
+    valor: base.vistas.filter((v: any) => v.tipo === "MATERIALIZED VIEW").length.toLocaleString("es-MX"),
+    etiqueta: "materializadas",
+  },
+  { valor: registros ? registros.toLocaleString("es-MX") : "—", etiqueta: "registros" },
+  {
+    valor: pipeline?.titulo ?? (base.es_infraestructura ? "Infraestructura" : "—"),
+    etiqueta: "pipeline",
+  },
+];
+
 const TIPO_INSIGNIA: Record<string, string> = {
   VIEW: "insignia--neutra",
   "MATERIALIZED VIEW": "insignia--ok",
@@ -37,6 +51,8 @@ const TIPO_INSIGNIA: Record<string, string> = {
 >
   <section class="bloque" aria-labelledby="titulo-bd">
     <div class="contenedor">
+      <div class="cabecera">
+      <div class="cabecera__titulo">
       <nav aria-label="Miga de pan" class="miga">
         <a href="/#vistas">Estructura de vistas</a>
         <span aria-hidden="true"> / </span>
@@ -53,6 +69,16 @@ const TIPO_INSIGNIA: Record<string, string> = {
           </p>
         )
       }
+      </div>
+      <dl class="cifras">
+        {cifras.map((c) => (
+          <div class="cifra">
+            <dt>{c.etiqueta}</dt>
+            <dd>{c.valor}</dd>
+          </div>
+        ))}
+      </dl>
+      </div>
 
       <div class="cuerpo">
       <BarraLateral
@@ -151,6 +177,55 @@ const TIPO_INSIGNIA: Record<string, string> = {
 
   .enlace-pipeline {
     margin: 0;
+  }
+
+  .cabecera {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.5rem 2.5rem;
+    align-items: end;
+  }
+
+  .cifras {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(9rem, 1fr));
+    gap: 0.6rem;
+    margin: 0;
+  }
+
+  .cifra {
+    display: flex;
+    flex-direction: column-reverse;
+    background: var(--tarjeta);
+    border: 1px solid var(--linea);
+    border-radius: 0.75rem;
+    padding: 0.6rem 0.9rem;
+    min-width: 0;
+  }
+
+  .cifra dd {
+    margin: 0;
+    color: var(--brand);
+    font-size: 1.35rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+
+  .cifra dt {
+    color: var(--silenciado);
+    font-size: var(--texto-chico);
+  }
+
+  @media (max-width: 760px) {
+    .cabecera {
+      grid-template-columns: 1fr;
+    }
+
+    .cifras {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   .cuerpo {

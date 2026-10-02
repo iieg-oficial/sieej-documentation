@@ -1,4 +1,6 @@
 ---
+import Buscador from "./Buscador.astro";
+
 interface Props {
   vistas: any;
 }
@@ -34,10 +36,11 @@ const partes = (nombre: string) => nombre.split("_").map((parte) => parte.replac
       )
     }
 
-    <ul class="lista-bases" role="list">
+    <Buscador objetivo="vistas" etiqueta="Buscar base de datos" placeholder="Buscar base de datos" />
+    <ul class="lista-bases" role="list" data-buscable="vistas">
       {
         basesPipeline.map((base) => (
-          <li class="tarjeta base">
+          <li class="tarjeta base" data-buscar={base.nombre}>
             <h3 class="base__nombre">
               <a href={`/vistas/${base.nombre}/`} set:html={partes(base.nombre).join("_<wbr>")} />
             </h3>
@@ -57,9 +60,9 @@ const partes = (nombre: string) => nombre.split("_").map((parte) => parte.replac
           <p class="introduccion">
             Estas bases solo exponen vistas de sistema de PostGIS; no corresponden a pipelines.
           </p>
-          <ul class="lista-bases" role="list">
+          <ul class="lista-bases" role="list" data-buscable="vistas">
             {basesInfra.map((base) => (
-              <li class="tarjeta base">
+              <li class="tarjeta base" data-buscar={base.nombre}>
                 <h3 class="base__nombre">
                   <a href={`/vistas/${base.nombre}/`}>{base.nombre}</a>
                 </h3>

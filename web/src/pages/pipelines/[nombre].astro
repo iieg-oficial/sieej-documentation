@@ -1,32 +1,12 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import BarraLateral from "../../components/BarraLateral.astro";
-import Info from "../../components/Info.astro";
-import DiagramaER from "../../components/DiagramaER.astro";
-import { enLinea } from "../../lib/markdown";
-import { ESTADOS, ETAPAS, fecha, paginas, tituloDe, type Pagina } from "../../lib/pipelines";
+import SeccionPipeline from "../../components/SeccionPipeline.astro";
+import { listarPipelines, obtenerDocumento } from "../../lib/documentos";
 
-export function getStaticPaths() {
-  return paginas.map((pagina, i) => ({
-    params: { nombre: pagina.nombre },
-    props: { pagina, anterior: paginas[i - 1] ?? null, siguiente: paginas[i + 1] ?? null },
-  }));
-}
-
-interface Props {
-  pagina: Pagina;
-  anterior: Pagina | null;
-  siguiente: Pagina | null;
-}
-
-const { pagina, anterior, siguiente } = Astro.props;
-const { documento: doc, base } = pagina;
-const notaRespaldo =
-  pagina.origen_base === "respaldo"
-    ? [`Esta base no está en la BD consultada. Tablas y vistas vienen del documento técnico del pipeline, con cifras de producción al ${pagina.corte_respaldo ?? "último corte disponible"}.`]
-    : [];
-const conDiagrama = Boolean(pagina.der_svg) || Boolean(base?.tablas.some((t) => t.columnas.length > 0));
-const titulo = tituloDe(pagina);
+const clave = Astro.params.nombre ?? "";
+const [doc, lista] = await Promise.all([obtenerDocumento(clave), listarPipelines()]);
+if (!doc) return new Response(null, { status: 404 });
 
 const CLASIFICACION: Record<string, string> = {
   documentado: "En producción · documentado",
@@ -35,55 +15,41 @@ const CLASIFICACION: Record<string, string> = {
   sin_verificar: "Sin verificar contra producción",
 };
 
+const fuente = doc.secciones.find((s) => s.tipo === "fuente")?.contenido;
 const caracteristica = (etiqueta: string) =>
-  doc?.caracteristicas.find((c) => c.etiqueta.toLowerCase().startsWith(etiqueta))?.valor;
+  fuente?.caracteristicas?.find((c: { etiqueta: string }) => c.etiqueta.toLowerCase().startsWith(etiqueta))?.valor;
 const chips = [
-  base ? `BD: ${base.nombre}` : null,
+  doc.base ? `BD: ${doc.base.nombre}` : null,
   caracteristica("frecuencia"),
   caracteristica("desagregaci"),
   caracteristica("primer periodo") ? `Desde ${caracteristica("primer periodo")}` : null,
 ].filter((c): c is string => Boolean(c)).map((c) => c.replaceAll("`", ""));
 
-const tablas = (base?.tablas ?? []).map((t) => ({
-  ...t,
-  tipo: t.nombre.startsWith("cat_") ? "Catálogo" : "Primaria",
-})).sort((a, b) => (a.tipo === b.tipo ? a.nombre.localeCompare(b.nombre) : a.tipo === "Primaria" ? -1 : 1));
-const vistas = base?.vistas ?? [];
-const numero = (n: number | null) => (typeof n === "number" ? n.toLocaleString("es-MX") : "—");
-
-const secciones = [
-  doc?.descripcion.length ? { href: "#descripcion", texto: "Descripción" } : null,
-  doc ? { href: "#fuente", texto: "Fuente de datos" } : null,
-  tablas.length ? { href: "#tablas", texto: "Tablas" } : null,
-  vistas.length ? { href: "#vistas", texto: "Vistas" } : null,
-  pagina.etapas.length ? { href: "#ejecucion", texto: "Ejecución" } : null,
-  doc?.variables.length ? { href: "#variables", texto: "Variables de entorno" } : null,
-  conDiagrama ? { href: "#diagrama", texto: "Diagrama entidad-relación" } : null,
-].filter((s): s is { href: string; texto: string } => s !== null);
-
-const otros = paginas.map((p) => ({
-  href: `/pipelines/${p.nombre}/`,
-  texto: tituloDe(p),
-  actual: p.nombre === pagina.nombre,
-}));
+const ancla = (s: { tipo: string; id: string }) =>
+  ["descripcion", "fuente", "tablas", "vistas", "ejecucion", "variables", "diagrama"].includes(s.tipo) ? s.tipo : `${s.tipo}-${s.id}`;
+const secciones = doc.secciones.map((s) => ({ href: `#${ancla(s)}`, texto: s.titulo }));
+const indice = lista.findIndex((p) => p.clave === doc.clave);
+const anterior = indice > 0 ? lista[indice - 1] : null;
+const siguiente = indice >= 0 && indice < lista.length - 1 ? lista[indice + 1] : null;
+const otros = lista.map((p) => ({ href: `/pipelines/${p.clave}/`, texto: p.titulo, actual: p.clave === doc.clave }));
 ---
 
 <Layout
-  titulo={`${titulo} — Pipelines del SIEEJ`}
-  descripcion={`Documentación técnica del pipeline ${titulo} del SIEEJ: fuente, tablas, vistas, ejecución y diagrama entidad-relación.`}
+  titulo={`${doc.titulo} — Pipelines del SIEEJ`}
+  descripcion={`Documentación técnica del pipeline ${doc.titulo} del SIEEJ: fuente, tablas, vistas, ejecución y diagrama entidad-relación.`}
 >
   <section class="portada">
     <div class="contenedor">
       <nav aria-label="Miga de pan" class="miga">
         <a href="/#catalogo">Catálogo</a>
         <span aria-hidden="true"> / </span>
-        <span aria-current="page">{titulo}</span>
+        <span aria-current="page">{doc.titulo}</span>
       </nav>
-      <h1>{titulo}</h1>
-      {doc && doc.producto !== titulo && <p class="portada__producto">{doc.producto}</p>}
+      <h1>{doc.titulo}</h1>
+      {doc.producto && doc.producto !== doc.titulo && <p class="portada__producto">{doc.producto}</p>}
       <ul class="portada__chips" role="list">
         {chips.map((c) => <li>{c}</li>)}
-        <li>{CLASIFICACION[pagina.clasificacion] ?? pagina.clasificacion}</li>
+        {doc.clasificacion && <li>{CLASIFICACION[doc.clasificacion] ?? doc.clasificacion}</li>}
       </ul>
     </div>
   </section>
@@ -92,166 +58,11 @@ const otros = paginas.map((p) => ({
     <BarraLateral secciones={secciones} otros={otros} tituloOtros="Otros pipelines" />
 
     <div class="pila contenido">
-      {
-        doc?.descripcion.length ? (
-          <section id="descripcion" class="tarjeta">
-            <h2 class="titulo-tarjeta">
-              Descripción
-              {doc.avisos.length > 0 && <Info textos={doc.avisos} etiqueta="Advertencias del pipeline" />}
-            </h2>
-            {doc.descripcion.map((p) => <p set:html={enLinea(p)} />)}
-          </section>
-        ) : null
-      }
-
-      {
-        doc && (
-          <section id="fuente" class="tarjeta">
-            <h2 class="titulo-tarjeta">Fuente de datos</h2>
-            <dl class="ficha">
-              <div>
-                <dt>Producto</dt>
-                <dd>{doc.producto}</dd>
-              </div>
-              {doc.caracteristicas.map((c) => (
-                <div>
-                  <dt>{c.etiqueta}</dt>
-                  <dd set:html={enLinea(c.valor)} />
-                </div>
-              ))}
-              {base && (
-                <div>
-                  <dt>Base de datos</dt>
-                  <dd><code>{base.nombre}</code></dd>
-                </div>
-              )}
-            </dl>
-            {doc.fuente_general && <p class="enlaces">Fuente general: <span set:html={enLinea(doc.fuente_general)} /></p>}
-            {doc.descargas.map((d) => (
-              <p class="enlaces">
-                Descarga (<code>{d.variable}</code>): <span set:html={enLinea(d.url)} />
-              </p>
-            ))}
-          </section>
-        )
-      }
-
-      {
-        tablas.length > 0 && (
-          <section id="tablas" class="tarjeta">
-            <h2 class="titulo-tarjeta">
-              Tablas
-              {notaRespaldo.length > 0 && <Info textos={notaRespaldo} etiqueta="Origen de las tablas" />}
-            </h2>
-            <div class="tabla-envoltura">
-              <table>
-                <thead>
-                  <tr><th scope="col">Tabla</th><th scope="col">Tipo</th><th scope="col">Descripción</th><th scope="col" class="num">Filas</th></tr>
-                </thead>
-                <tbody>
-                  {tablas.map((t) => (
-                    <tr>
-                      <td><code>{t.nombre}</code></td>
-                      <td>{t.tipo}</td>
-                      <td set:html={t.descripcion ? enLinea(t.descripcion) : "—"} />
-                      <td class="num">{numero(t.filas)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-        )
-      }
-
-      {
-        vistas.length > 0 && base && (
-          <section id="vistas" class="tarjeta">
-            <h2 class="titulo-tarjeta">
-              Vistas
-              {notaRespaldo.length > 0 && <Info textos={notaRespaldo} etiqueta="Origen de las vistas" />}
-            </h2>
-            <div class="pila pila--corta">
-              {vistas.map((v) => (
-                <details class="vista">
-                  <summary>
-                    <code>{v.nombre}</code>
-                    <span class="vista__meta">{v.tipo === "MATERIALIZED VIEW" ? "Materializada" : "Vista"} · {v.columnas.length} columnas{typeof v.registros === "number" && ` · ${numero(v.registros)} registros`}</span>
-                  </summary>
-                  {v.descripcion && <p set:html={enLinea(v.descripcion)} />}
-                  <div class="tabla-envoltura">
-                    <table>
-                      <thead><tr><th scope="col">#</th><th scope="col">Columna</th><th scope="col">Tipo</th><th scope="col">Descripción</th></tr></thead>
-                      <tbody>
-                        {v.columnas.map((c) => (
-                          <tr><td>{c.posicion}</td><td><code>{c.nombre}</code></td><td>{c.tipo}</td><td>{c.descripcion ?? "—"}</td></tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </details>
-              ))}
-            </div>
-            <p class="enlaces"><a href={`/vistas/${base.nombre}/`}>Ver la estructura de vistas de {base.nombre}</a></p>
-          </section>
-        )
-      }
-
-      {
-        pagina.etapas.length > 0 && (
-          <section id="ejecucion" class="tarjeta">
-            <h2 class="titulo-tarjeta">Ejecución en Airflow</h2>
-            <ul class="etapas" role="list">
-              {pagina.etapas.map((e) => (
-                <li>
-                  <span class={`punto punto--${e.pausado ? "pausado" : e.ultima_corrida_estado ?? "ninguno"}`} aria-hidden="true" />
-                  <div>
-                    <p class="etapa__titulo">{e.etapa ? ETAPAS[e.etapa] ?? e.etapa : "Etapa única"} · <code>{e.dag_id}</code></p>
-                    <p class="etapa__meta">
-                      {e.pausado ? "Pausado" : e.ultima_corrida_estado ? `Última corrida ${ESTADOS[e.ultima_corrida_estado] ?? e.ultima_corrida_estado}` : "Sin corridas"}
-                      {fecha(e.ultima_corrida_fecha) && ` el ${fecha(e.ultima_corrida_fecha)}`}
-                      {e.corridas_recientes && e.corridas_recientes.total > 0 && ` · ${e.corridas_recientes.exitos} de ${e.corridas_recientes.total} recientes con éxito`}
-                      {e.programacion && ` · ${e.detalle_programacion ?? e.programacion}`}
-                    </p>
-                    {e.descripcion && <p class="etapa__meta">{e.descripcion}</p>}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )
-      }
-
-      {
-        doc?.variables.length ? (
-          <section id="variables" class="tarjeta">
-            <h2 class="titulo-tarjeta">Variables de entorno</h2>
-            <div class="tabla-envoltura">
-              <table>
-                <thead><tr><th scope="col">Variable</th><th scope="col">Descripción</th></tr></thead>
-                <tbody>
-                  {doc.variables.map((v) => (
-                    <tr><td><code>{v.etiqueta}</code></td><td set:html={enLinea(v.valor)} /></tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-        ) : null
-      }
-
-      {
-        conDiagrama && (
-          <section id="diagrama" class="tarjeta">
-            <h2 class="titulo-tarjeta">Diagrama entidad-relación</h2>
-            <DiagramaER base={base ?? { nombre: pagina.nombre, tablas: [], relaciones: [], vistas: [] }} svg={pagina.der_svg} />
-          </section>
-        )
-      }
+      {doc.secciones.map((s) => <SeccionPipeline seccion={s} doc={doc} />)}
 
       <nav class="vecinos" aria-label="Pipelines vecinos">
-        {anterior ? <a class="pildora" href={`/pipelines/${anterior.nombre}/`}>← {tituloDe(anterior)}</a> : <span />}
-        {siguiente && <a class="pildora" href={`/pipelines/${siguiente.nombre}/`}>{tituloDe(siguiente)} →</a>}
+        {anterior ? <a class="pildora" href={`/pipelines/${anterior.clave}/`}>← {anterior.titulo}</a> : <span />}
+        {siguiente && <a class="pildora" href={`/pipelines/${siguiente.clave}/`}>{siguiente.titulo} →</a>}
       </nav>
     </div>
   </div>
@@ -312,142 +123,6 @@ const otros = paginas.map((p) => ({
 
   .contenido {
     min-width: 0;
-  }
-
-  .ficha {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
-    gap: 0.75rem;
-    margin: 0;
-  }
-
-  .ficha div {
-    background: var(--fondo);
-    border-radius: 0.75rem;
-    padding: 0.65rem 0.85rem;
-    min-width: 0;
-  }
-
-  .ficha dt {
-    font-size: var(--texto-chico);
-    color: var(--silenciado);
-  }
-
-  .ficha dd {
-    margin: 0.15rem 0 0;
-    color: var(--titulo);
-    font-weight: 700;
-    overflow-wrap: anywhere;
-  }
-
-  .enlaces {
-    margin: 1rem 0 0;
-    font-size: var(--texto-chico);
-    overflow-wrap: anywhere;
-  }
-
-  .num {
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-  }
-
-  .pila--corta {
-    gap: 0.5rem;
-  }
-
-  .vista {
-    border: 1px solid var(--linea);
-    border-radius: 0.75rem;
-    padding: 0.65rem 0.9rem;
-  }
-
-  .vista summary {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.35rem 0.75rem;
-    cursor: pointer;
-    list-style: none;
-  }
-
-  .vista summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .vista summary::after {
-    content: "";
-    width: 0.45rem;
-    height: 0.45rem;
-    margin-left: auto;
-    align-self: center;
-    border-right: 2px solid var(--silenciado);
-    border-bottom: 2px solid var(--silenciado);
-    transform: rotate(45deg);
-  }
-
-  .vista[open] summary::after {
-    transform: rotate(225deg);
-  }
-
-  .vista__meta {
-    font-size: var(--texto-chico);
-    color: var(--silenciado);
-  }
-
-  .vista[open] summary {
-    margin-bottom: 0.75rem;
-  }
-
-  .etapas {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem;
-  }
-
-  .etapas li {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 0.75rem;
-    align-items: start;
-  }
-
-  .etapas p {
-    margin: 0;
-  }
-
-  .etapa__titulo {
-    color: var(--titulo);
-    font-weight: 700;
-  }
-
-  .etapa__meta {
-    font-size: var(--texto-chico);
-    color: var(--silenciado);
-  }
-
-  .punto {
-    width: 0.75rem;
-    height: 0.75rem;
-    margin-top: 0.4rem;
-    border-radius: 999px;
-    background: var(--linea);
-  }
-
-  .punto--success {
-    background: var(--exito);
-  }
-
-  .punto--failed {
-    background: var(--error);
-  }
-
-  .punto--running,
-  .punto--queued {
-    background: #2e4372;
   }
 
   .vecinos {

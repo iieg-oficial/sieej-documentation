@@ -1,34 +1,11 @@
 ---
-import inventario from "../../../data/inventario.json";
+import { ESTADOS, ETAPAS, type Resumen } from "../lib/documentos";
 
-// El catálogo se deriva por completo del inventario generado por
-// sieej_datalayer: nada de listas de pipelines escritas a mano.
-
-// Un pipeline se ejecuta por etapas (carga inicial, actualización…), cada una
-// con su propio DAG en Airflow y su propio estado.
-type Etapa = {
-  dag_id: string;
-  etapa: string | null;
-  pausado: boolean | null;
-  ultima_corrida_estado: string | null;
-  corridas_recientes: { total: number; exitos: number; fallos: number } | null;
-};
-
-const ETAPAS: Record<string, string> = {
-  bootstrap: "Carga inicial",
-  update: "Actualización",
-  incremental: "Carga incremental",
-};
-
-// Estados de corrida de Airflow, en español. `running` y `queued` son corridas
-// vivas: no tienen fecha de finalización, así que la etiqueta es lo único que
-// puede decir en qué van.
-const ESTADOS: Record<string, string> = {
-  success: "correcta",
-  failed: "con error",
-  running: "en ejecución",
-  queued: "en cola",
-};
+interface Props {
+  pipelines: Resumen[];
+  generado: string | null;
+  verificado: boolean;
+}
 
 const ETIQUETAS: Record<string, { texto: string; clase: string }> = {
   documentado: { texto: "En producción · documentado", clase: "insignia--ok" },
@@ -40,19 +17,14 @@ const ETIQUETAS: Record<string, { texto: string; clase: string }> = {
   sin_verificar: { texto: "Sin verificar contra producción", clase: "insignia--neutra" },
 };
 
-const pipelines = Object.values(inventario.pipelines).map((p) => ({
+const { pipelines: lista, generado: fechaGenerado, verificado } = Astro.props;
+const pipelines = lista.map((p) => ({
   ...p,
-  etapas: (p as { etapas?: Etapa[] }).etapas ?? [],
-  titulo: p.documento ? p.documento.titulo : p.nombre.replaceAll("_", " "),
-  etiqueta: ETIQUETAS[p.clasificacion] ?? ETIQUETAS.sin_verificar,
+  etiqueta: ETIQUETAS[p.clasificacion ?? ""] ?? ETIQUETAS.sin_verificar,
 }));
-
-const verificado = inventario.resumen.verificado_contra_produccion;
-const generado = new Date(inventario.generado).toLocaleDateString("es-MX", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
+const generado = fechaGenerado
+  ? new Date(fechaGenerado).toLocaleDateString("es-MX", { year: "numeric", month: "long", day: "numeric" })
+  : "—";
 ---
 
 <section id="catalogo" class="bloque" aria-labelledby="titulo-catalogo">
@@ -80,12 +52,12 @@ const generado = new Date(inventario.generado).toLocaleDateString("es-MX", {
               <span class={`insignia ${p.etiqueta.clase}`}>{p.etiqueta.texto}</span>
             </div>
             <p class="tarjeta-pipeline__meta">
-              <code>{p.nombre}</code>
-              {p.vistas_documentadas.length > 0 && (
-                <span> · {p.vistas_documentadas.length} vista(s) documentada(s)</span>
+              <code>{p.clave}</code>
+              {p.vistasDocumentadas > 0 && (
+                <span> · {p.vistasDocumentadas} vista(s) documentada(s)</span>
               )}
-              {typeof p.vistas_en_bd === "number" && (
-                <span> · {p.vistas_en_bd} vista(s) en BD</span>
+              {typeof p.vistasEnBd === "number" && (
+                <span> · {p.vistasEnBd} vista(s) en BD</span>
               )}
             </p>
             {p.etapas.length > 0 && (
@@ -106,16 +78,12 @@ const generado = new Date(inventario.generado).toLocaleDateString("es-MX", {
               </ul>
             )}
             <p class="tarjeta-pipeline__acciones">
-              {p.documento ? (
-                <a class="pildora" href={`/pipelines/${p.nombre}/`}>
-                  Documentación
-                  <span class="visualmente-oculto"> de {p.titulo}</span>
-                </a>
-              ) : (
-                <span class="pildora pildora--inactiva">Sin documento</span>
-              )}
-              {p.vistas_documentadas.length > 0 || typeof p.vistas_en_bd === "number" ? (
-                <a class="pildora" href={`/pipelines/${p.nombre}/#vistas`}>
+              <a class="pildora" href={`/pipelines/${p.clave}/`}>
+                Documentación
+                <span class="visualmente-oculto"> de {p.titulo}</span>
+              </a>
+              {p.vistasDocumentadas > 0 || typeof p.vistasEnBd === "number" ? (
+                <a class="pildora" href={`/pipelines/${p.clave}/#vistas`}>
                   Vistas
                   <span class="visualmente-oculto"> de {p.titulo}</span>
                 </a>

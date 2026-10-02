@@ -23,7 +23,8 @@ def test_sin_fuentes_vivas_se_escriben_los_json_y_una_pagina_por_pipeline(tmp_pa
     inventario = _leer(settings, "inventario.json")
     assert inventario["fuentes"]["airflow"]["estado"] == "sin_configurar"
     assert inventario["fuentes"]["readme"]["estado"] == "ok"
-    assert set(inventario["pipelines"]) == {"denue", "conapo", "censo_economico"}
+    esperados = {"denue", "conapo", "censo_economico", "fosas_clandestinas"}
+    assert set(inventario["pipelines"]) == esperados
     assert inventario["pipelines"]["denue"]["documento"]["titulo"] == "DENUE"
 
     pagina = _leer(settings, "pipelines/denue.json")

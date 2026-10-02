@@ -238,6 +238,20 @@ def parsear_readme(carpeta: str, md: str, commit: str | None = None) -> Document
     )
 
 
+def listar_carpetas(settings: Settings) -> dict[str, str]:
+    """Carpetas de pipeline en el clon, tengan o no README: nombre de BD -> carpeta."""
+    if not settings.etl_repo_dir:
+        return {}
+    raiz = Path(settings.etl_repo_dir) / CARPETA_PIPELINES
+    if not raiz.is_dir():
+        return {}
+    return {
+        ALIAS_NOMBRE_A_BD.get(d.name, d.name): d.name
+        for d in sorted(raiz.iterdir())
+        if d.is_dir() and not d.name.startswith((".", "_"))
+    }
+
+
 def leer_documentos(settings: Settings) -> tuple[Fuente, dict[str, DocumentoPipeline]]:
     """Documentos por nombre de pipeline (ya con alias de BD); nunca lanza.
 

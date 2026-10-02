@@ -1,5 +1,9 @@
 ---
-import numeralia from "../../../data/numeralia.json";
+interface Props {
+  numeralia: any;
+}
+
+const { numeralia } = Astro.props;
 
 // Cifras del sistema desde data/numeralia.json (generado por sieej_datalayer).
 // La sección evidencia el cross check Airflow ↔ BD ↔ documentación: cifras

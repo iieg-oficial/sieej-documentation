@@ -1,0 +1,298 @@
+---
+import Info from "./Info.astro";
+import DiagramaER from "./DiagramaER.astro";
+import { enLinea } from "../lib/markdown";
+import { ESTADOS, ETAPAS, fecha, type Documento, type Seccion } from "../lib/documentos";
+
+interface Props {
+  seccion: Seccion;
+  doc: Documento;
+}
+
+const { seccion, doc } = Astro.props;
+const { tipo, titulo, contenido } = seccion;
+const base = doc.base;
+const notas: Record<string, string> = contenido.notas ?? {};
+const numero = (n: number | null) => (typeof n === "number" ? n.toLocaleString("es-MX") : "—");
+const notaRespaldo =
+  doc.origen_base === "respaldo"
+    ? [`Esta base no está en la BD consultada. Tablas y vistas vienen del documento técnico del pipeline, con cifras de producción al ${doc.corte_respaldo ?? "último corte disponible"}.`]
+    : [];
+const tablas = (base?.tablas ?? [])
+  .map((t) => ({ ...t, tipo: t.nombre.startsWith("cat_") ? "Catálogo" : "Primaria", descripcion: notas[t.nombre] || t.descripcion }))
+  .sort((a, b) => (a.tipo === b.tipo ? a.nombre.localeCompare(b.nombre) : a.tipo === "Primaria" ? -1 : 1));
+const vistas = (base?.vistas ?? []).map((v) => ({ ...v, descripcion: notas[v.nombre] || v.descripcion }));
+const parrafos = (texto: string) => texto.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+const svg = contenido.origen === "bd" ? null : doc.der_svg;
+const baseDiagrama = contenido.origen === "repo" && doc.der_svg
+  ? { nombre: doc.clave, tablas: [], relaciones: [], vistas: [] }
+  : base ?? { nombre: doc.clave, tablas: [], relaciones: [], vistas: [] };
+const ancla = ["descripcion", "fuente", "tablas", "vistas", "ejecucion", "variables", "diagrama"].includes(tipo)
+  ? tipo
+  : `${tipo}-${seccion.id}`;
+---
+
+<section id={ancla} class="tarjeta">
+  <h2 class="titulo-tarjeta">
+    {titulo}
+    {tipo === "descripcion" && contenido.avisos?.length > 0 && <Info textos={contenido.avisos} etiqueta="Advertencias del pipeline" />}
+    {(tipo === "tablas" || tipo === "vistas") && notaRespaldo.length > 0 && <Info textos={notaRespaldo} etiqueta="Origen de los datos" />}
+  </h2>
+
+  {tipo === "descripcion" && contenido.parrafos?.map((p: string) => <p set:html={enLinea(p)} />)}
+
+  {tipo === "texto" && parrafos(contenido.markdown ?? "").map((p) => <p set:html={enLinea(p)} />)}
+
+  {
+    tipo === "fuente" && (
+      <>
+        <dl class="ficha">
+          {doc.producto && (<div><dt>Producto</dt><dd>{doc.producto}</dd></div>)}
+          {contenido.caracteristicas?.map((c: { etiqueta: string; valor: string }) => (
+            <div><dt>{c.etiqueta}</dt><dd set:html={enLinea(c.valor)} /></div>
+          ))}
+          {base && (<div><dt>Base de datos</dt><dd><code>{base.nombre}</code></dd></div>)}
+        </dl>
+        {contenido.fuente_general && <p class="enlaces">Fuente general: <span set:html={enLinea(contenido.fuente_general)} /></p>}
+        {contenido.descargas?.map((d: { variable: string; url: string }) => (
+          <p class="enlaces">Descarga (<code>{d.variable}</code>): <span set:html={enLinea(d.url)} /></p>
+        ))}
+      </>
+    )
+  }
+
+  {
+    tipo === "tablas" && (
+      tablas.length ? (
+        <div class="tabla-envoltura">
+          <table>
+            <thead><tr><th scope="col">Tabla</th><th scope="col">Tipo</th><th scope="col">Descripción</th><th scope="col" class="num">Filas</th></tr></thead>
+            <tbody>
+              {tablas.map((t) => (
+                <tr><td><code>{t.nombre}</code></td><td>{t.tipo}</td><td set:html={t.descripcion ? enLinea(t.descripcion) : "—"} /><td class="num">{numero(t.filas)}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : <p class="silencio">El sincronizador aún no reporta tablas de este pipeline.</p>
+    )
+  }
+
+  {
+    tipo === "vistas" && (
+      vistas.length ? (
+        <div class="pila pila--corta">
+          {vistas.map((v) => (
+            <details class="vista">
+              <summary>
+                <code>{v.nombre}</code>
+                <span class="vista__meta">{v.tipo === "MATERIALIZED VIEW" ? "Materializada" : "Vista"} · {v.columnas.length} columnas{typeof v.registros === "number" && ` · ${numero(v.registros)} registros`}</span>
+              </summary>
+              {v.descripcion && <p set:html={enLinea(v.descripcion)} />}
+              <div class="tabla-envoltura">
+                <table>
+                  <thead><tr><th scope="col">#</th><th scope="col">Columna</th><th scope="col">Tipo</th><th scope="col">Descripción</th></tr></thead>
+                  <tbody>
+                    {v.columnas.map((c) => (<tr><td>{c.posicion}</td><td><code>{c.nombre}</code></td><td>{c.tipo}</td><td>{c.descripcion ?? "—"}</td></tr>))}
+                  </tbody>
+                </table>
+              </div>
+            </details>
+          ))}
+          {base && <p class="enlaces"><a href={`/vistas/${base.nombre}/`}>Ver la estructura de vistas de {base.nombre}</a></p>}
+        </div>
+      ) : <p class="silencio">El sincronizador aún no reporta vistas de este pipeline.</p>
+    )
+  }
+
+  {
+    tipo === "ejecucion" && (
+      <>
+        {contenido.nota && <p set:html={enLinea(contenido.nota)} />}
+        {doc.etapas.length ? (
+          <ul class="etapas" role="list">
+            {doc.etapas.map((e) => (
+              <li>
+                <span class={`punto punto--${e.pausado ? "pausado" : e.ultima_corrida_estado ?? "ninguno"}`} aria-hidden="true" />
+                <div>
+                  <p class="etapa__titulo">{e.etapa ? ETAPAS[e.etapa] ?? e.etapa : "Etapa única"} · <code>{e.dag_id}</code></p>
+                  <p class="etapa__meta">
+                    {e.pausado ? "Pausado" : e.ultima_corrida_estado ? `Última corrida ${ESTADOS[e.ultima_corrida_estado] ?? e.ultima_corrida_estado}` : "Sin corridas"}
+                    {fecha(e.ultima_corrida_fecha) && ` el ${fecha(e.ultima_corrida_fecha)}`}
+                    {e.corridas_recientes && e.corridas_recientes.total > 0 && ` · ${e.corridas_recientes.exitos} de ${e.corridas_recientes.total} recientes con éxito`}
+                    {e.programacion && ` · ${e.detalle_programacion ?? e.programacion}`}
+                  </p>
+                  {e.descripcion && <p class="etapa__meta">{e.descripcion}</p>}
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : <p class="silencio">Airflow aún no reporta DAGs de este pipeline.</p>}
+      </>
+    )
+  }
+
+  {
+    tipo === "variables" && (
+      <div class="tabla-envoltura">
+        <table>
+          <thead><tr><th scope="col">Variable</th><th scope="col">Descripción</th></tr></thead>
+          <tbody>
+            {contenido.variables?.map((v: { etiqueta: string; valor: string }) => (<tr><td><code>{v.etiqueta}</code></td><td set:html={enLinea(v.valor)} /></tr>))}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+
+  {
+    tipo === "diagrama" && (
+      svg || baseDiagrama.tablas.some((t) => t.columnas.length > 0)
+        ? <DiagramaER base={baseDiagrama} svg={svg} />
+        : <p class="silencio">Este pipeline todavía no tiene diagrama entidad-relación.</p>
+    )
+  }
+</section>
+
+<style>
+  .ficha {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr));
+    gap: 0.75rem;
+    margin: 0;
+  }
+
+  .ficha div {
+    background: var(--fondo);
+    border-radius: 0.75rem;
+    padding: 0.65rem 0.85rem;
+    min-width: 0;
+  }
+
+  .ficha dt {
+    font-size: var(--texto-chico);
+    color: var(--silenciado);
+  }
+
+  .ficha dd {
+    margin: 0.15rem 0 0;
+    color: var(--titulo);
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+
+  .enlaces {
+    margin: 1rem 0 0;
+    font-size: var(--texto-chico);
+    overflow-wrap: anywhere;
+  }
+
+  .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .pila--corta {
+    gap: 0.5rem;
+  }
+
+  .vista {
+    border: 1px solid var(--linea);
+    border-radius: 0.75rem;
+    padding: 0.65rem 0.9rem;
+  }
+
+  .vista summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 0.75rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .vista summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .vista summary::after {
+    content: "";
+    width: 0.45rem;
+    height: 0.45rem;
+    margin-left: auto;
+    align-self: center;
+    border-right: 2px solid var(--silenciado);
+    border-bottom: 2px solid var(--silenciado);
+    transform: rotate(45deg);
+  }
+
+  .vista[open] summary::after {
+    transform: rotate(225deg);
+  }
+
+  .vista__meta {
+    font-size: var(--texto-chico);
+    color: var(--silenciado);
+  }
+
+  .vista[open] summary {
+    margin-bottom: 0.75rem;
+  }
+
+  .etapas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .etapas li {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: start;
+  }
+
+  .etapas p {
+    margin: 0;
+  }
+
+  .etapa__titulo {
+    color: var(--titulo);
+    font-weight: 700;
+  }
+
+  .etapa__meta {
+    font-size: var(--texto-chico);
+    color: var(--silenciado);
+  }
+
+  .punto {
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-top: 0.4rem;
+    border-radius: 999px;
+    background: var(--linea);
+  }
+
+  .punto--success {
+    background: var(--exito);
+  }
+
+  .punto--failed {
+    background: var(--error);
+  }
+
+  .punto--running,
+  .punto--queued {
+    background: #2e4372;
+  }
+
+
+  .silencio {
+    color: var(--silenciado);
+  }
+</style>

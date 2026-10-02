@@ -1,0 +1,71 @@
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-healthcheck: &healthcheck
+  interval: 15s
+  timeout: 5s
+  retries: 5
+  start_period: 10s
+  start_interval: 2s
+
+services:
+  builder:
+    build:
+      context: .
+      dockerfile: builder/Dockerfile
+    environment:
+      DATA_DIR: /app/data
+      ETL_REPO_DIR: /app/etl
+      AIRFLOW_BASE_URL: ${AIRFLOW_BASE_URL?}
+      AIRFLOW_USERNAME: ${AIRFLOW_USERNAME?}
+      AIRFLOW_PASSWORD: ${AIRFLOW_PASSWORD?}
+      AIRFLOW_TOKEN: ${AIRFLOW_TOKEN?}
+      AIRFLOW_TOKEN_PATH: ${AIRFLOW_TOKEN_PATH:?}
+      AIRFLOW_RECENT_RUNS: ${AIRFLOW_RECENT_RUNS:?}
+      PG_HOST: ${PG_HOST?}
+      PG_PORT: ${PG_PORT:?}
+      PG_USER: ${PG_USER?}
+      PG_PASSWORD: ${PG_PASSWORD?}
+      PG_MAINTENANCE_DB: ${PG_MAINTENANCE_DB:?}
+      PG_COUNT_TIMEOUT_MS: ${PG_COUNT_TIMEOUT_MS:?}
+      ETL_REPO_URL: ${ETL_REPO_URL?}
+      ETL_REPO_RAMA: ${ETL_REPO_RAMA:?}
+      MARIACHI_URL: ${MARIACHI_URL?}
+      MARIACHI_SYNC_KEY: ${MARIACHI_SYNC_KEY?}
+      MARIACHI_TLS_VERIFY: ${MARIACHI_TLS_VERIFY:?}
+      SITE_URL: ${SITE_URL:?}
+      REBUILD_INTERVAL_SECONDS: ${REBUILD_INTERVAL_SECONDS:?}
+    volumes:
+      - datos:/app/data
+      - etl:/app/etl
+    healthcheck:
+      <<: *healthcheck
+      test: ["CMD", "test", "-f", "/app/data/.ultima-corrida"]
+      retries: 40
+      start_period: 30s
+    logging: *logging
+
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+    environment:
+      MARIACHI_URL: ${MARIACHI_URL?}
+      MARIACHI_SYNC_KEY: ${MARIACHI_SYNC_KEY?}
+      MARIACHI_TLS_VERIFY: ${MARIACHI_TLS_VERIFY:?}
+    volumes:
+      - type: volume
+        source: datos
+        target: /app/data
+        read_only: true
+    healthcheck:
+      <<: *healthcheck
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/salud').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+    logging: *logging
+
+volumes:
+  datos:
+  etl:

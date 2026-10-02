@@ -1,0 +1,16 @@
+name: sieej-documentation
+
+services:
+  builder:
+    restart: unless-stopped
+
+  web:
+    ports:
+      - "${WEB_BIND_ADDR:?}:${WEB_PORT:?}:8080"
+    restart: unless-stopped
+
+volumes:
+  datos:
+    name: sieej-documentation_datos
+  etl:
+    name: sieej-documentation_etl

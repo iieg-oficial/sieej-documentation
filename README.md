@@ -6,38 +6,54 @@ cross check Airflow ↔ base de datos, y estructura de sus vistas materializadas
 
 ## Arquitectura
 
-Sitio **estático (Astro)** con **capa de datos en build time** y reconstrucción periódica
-(decisión documentada en [docs/arquitectura.md](docs/arquitectura.md)):
+Sitio **Astro en modo servidor** que consulta la API de mariachi en cada visita, y un
+**sincronizador** que alimenta a mariachi en ciclos (decisión original en
+[docs/arquitectura.md](docs/arquitectura.md); el cambio a mariachi, en el frente 18 de tamal-rojo):
 
 ```
-Airflow (API REST) ──┐                      ┌─> web  (nginx no-root, :8080)
-PostgreSQL (RO) ─────┼─> datalayer (Python) ─> data/ ─> astro build ─> volumen `sitio`
-README de ETL-SIEEJ ─┘        ▲                                  ▲
-                              └── builder (reconstrucción periódica) ┘
+Airflow (API REST) ──┐                                  ┌─> mariachi (schema sieej_documentacion)
+PostgreSQL (RO) ─────┼─> builder: datalayer (Python) ───┤        ▲ edición en el admin
+README de ETL-SIEEJ ─┘          │ data/*.json            │        │
+                                ▼                        └─> web: Astro SSR (Node, :8080)
+                          volumen `datos` ──────────────────────▲ respaldo si mariachi no responde
 ```
 
 - **`datalayer/`** — paquete Python que consulta Airflow y PostgreSQL (**solo lectura**), lee el
-  README de cada pipeline de un clon superficial de ETL-SIEEJ (solo `core/pipelines`) y genera
-  `data/*.json` más una página por pipeline en `data/pipelines/`: texto, tablas con filas,
-  vistas con columnas y las llaves foráneas del diagrama entidad-relación. Si la BD o los README
-  caen, conserva los últimos datos válidos marcados `datos_obsoletos`; si cae Airflow, hereda el
-  último estado de los DAG. Nunca rompe el build.
-- **`web/`** — sitio Astro. Cada pipeline tiene su página `/pipelines/<nombre>/` con el diseño del
-  sitio; un pipeline nuevo aparece con solo reconstruir, sin cambios de código. Las URL antiguas
+  README de cada pipeline de un clon superficial de ETL-SIEEJ (solo `core/pipelines`) y detecta
+  pipelines por BD, README, DAG o carpeta. Escribe `data/*.json` y una página por pipeline en
+  `data/pipelines/`, y en cada ciclo envía todo a mariachi (`PUT /api/public/sieej-documentacion/sync`,
+  llave de servicio). Si la BD o los README caen, conserva los últimos datos válidos; si cae
+  Airflow, hereda el último estado de los DAG. Nunca rompe el ciclo.
+- **`web/`** — Astro con `@astrojs/node`. Las páginas `/pipelines/<nombre>/` salen de la API pública
+  de mariachi, con caché por token de versión; si mariachi no responde, de lo último bueno y luego
+  de `data/`. Registra cada visita en la telemetría de mariachi desde el servidor. Las URL antiguas
   `/docs/<nombre>.html` redirigen con 301.
-- **`builder/`** — contenedor que regenera datos y sitio cada `REBUILD_INTERVAL_SECONDS`
-  (diario por defecto) hacia el volumen que sirve nginx.
-- La BD de producción **nunca** se expone al navegador: el cliente solo recibe JSON/HTML estático.
+- **`builder/`** — imagen Python que corre el datalayer cada `REBUILD_INTERVAL_SECONDS` (diario por
+  defecto). Ya no compila el sitio.
+- La BD de producción **nunca** se expone al navegador.
 
 ## Arranque con Docker (recomendado)
 
 ```bash
-cp .env.example .env   # completa credenciales y rutas reales
-docker compose up -d   # levanta builder + web con healthchecks
+make up       # desarrollo: crea .env.development desde .env.example y levanta builder + web
+make deploy   # producción: git pull, build, y levanta con .env.production
+make help     # el resto de los comandos
 ```
 
-El sitio queda en `http://localhost:8080` (configurable con `WEB_PORT`). Sin `.env`, el sistema
-levanta igualmente en modo degradado (sin fuentes vivas ni README de ETL-SIEEJ).
+Compose se divide en `compose.yaml` (base) más `compose.dev.yaml` o `compose.prod.yaml`, siempre
+con `-f` explícito; el Makefile arma la invocación. Los proyectos son `sieej-documentation-dev` y
+`sieej-documentation`. Todas las variables vienen del archivo de entorno y el compose falla si falta
+una; las credenciales y la URL de ETL-SIEEJ pueden ir vacías y el sitio levanta en modo degradado.
+
+| Comando | Qué hace |
+|---|---|
+| `make up` | Levanta desarrollo sin reconstruir; el sitio queda en `WEB_BIND_ADDR:WEB_PORT` |
+| `make deploy` | Actualiza el repo, reconstruye las imágenes y recrea producción |
+| `make sync` | Corre un ciclo del sincronizador ahora, sin esperar al siguiente |
+| `make mariachi-key` | Genera la clave del sincronizador y muestra la huella para mariachi |
+| `make test` | Tests del datalayer en `.venv` (lo crea si falta) |
+| `make logs` / `make status` / `make shell` | Diagnóstico del entorno activo |
+| `make down` / `make clean` | Detiene, o detiene y borra volúmenes (pide confirmación) |
 
 ### Acceso de red que necesitan los contenedores
 
@@ -62,22 +78,23 @@ viaja como `Authorization: Bearer` en cada GET. Si el token ya viene emitido, po
 # Capa de datos (Python >= 3.10)
 python3 -m venv .venv && .venv/bin/pip install -e "datalayer[dev]"
 .venv/bin/pytest datalayer                 # tests
-.venv/bin/python -m sieej_datalayer        # regenera data/*.json (lee .env)
+.venv/bin/python -m sieej_datalayer        # regenera data/*.json (lee .env.development)
 
 # Sitio (Node >= 20)
 cd web && npm install
 npm run dev
-npm run build                              # build de producción
+npm run build && node dist/server/entry.mjs  # servidor de producción (DATA_DIR, MARIACHI_URL)
 ```
 
 ## Estructura del repositorio
 
 ```
-├── docker-compose.yml    # web + builder (+ redis como perfil opcional `cache`)
-├── .env.example          # todas las variables documentadas; credenciales solo por .env
-├── web/                  # Astro + Dockerfile (node → nginx-unprivileged)
+├── compose.yaml          # builder + web; overlays compose.dev.yaml y compose.prod.yaml
+├── Makefile, make/       # make up / make deploy y comandos del repo
+├── .env.example          # plantilla de desarrollo; .env.production.example la de producción
+├── web/                  # Astro SSR + Dockerfile (node)
 ├── datalayer/            # paquete Python sieej-datalayer + tests
-├── builder/              # imagen de reconstrucción periódica
+├── builder/              # imagen del sincronizador (Python)
 ├── data/                 # JSON generados (contrato de datos del sitio)
 ├── docs/                 # arquitectura, tablero de tareas, convención de commits
 └── .claude/agents/       # definición de los agentes del proyecto

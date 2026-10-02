@@ -1,23 +1,18 @@
-# Landing SIEEJ — imagen del servicio web.
-# Multi-stage: Node construye el sitio estático; nginx sin privilegios lo sirve.
-# Contexto de build: la raíz del repositorio (necesita ../data del sitio).
-
 FROM node:22-slim AS construccion
 
-WORKDIR /app
-COPY web/package.json web/package-lock.json web/
-RUN cd web && npm ci --no-audit --no-fund
+WORKDIR /app/web
+COPY web/package.json web/package-lock.json ./
+RUN npm ci --no-audit --no-fund
+COPY web/ ./
+RUN npm run build && npm prune --omit=dev
 
-COPY data/ data/
-COPY web/ web/
-# Build de respaldo horneado en la imagen con los data/ versionados.
-# El servicio builder lo reemplaza con el sitio completo en el volumen compartido.
-RUN cd web && npm run build
+FROM node:22-slim
 
-FROM nginxinc/nginx-unprivileged:1.29-alpine
-
-COPY web/nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY --from=construccion /app/web/dist /usr/share/nginx/html
-
-# La imagen base ya corre como usuario no-root (uid 101) y escucha en 8080.
+ENV NODE_ENV=production HOST=0.0.0.0 PORT=8080 DATA_DIR=/app/data
+WORKDIR /app/web
+COPY --from=construccion --chown=node:node /app/web/node_modules ./node_modules
+COPY --from=construccion --chown=node:node /app/web/dist ./dist
+COPY --from=construccion --chown=node:node /app/web/package.json ./package.json
+USER node
 EXPOSE 8080
+CMD ["node", "dist/server/entry.mjs"]

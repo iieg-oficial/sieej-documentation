@@ -1,5 +1,11 @@
 # Arquitectura — Landing de documentación del SIEEJ
 
+> **Actualización 2026-10-02.** Lo que sigue es la decisión original. Desde el frente 18 de
+> tamal-rojo el contenido de cada pipeline vive en mariachi (schema `sieej_documentacion`) y se
+> edita desde su admin; el builder solo sincroniza (BD, Airflow, README) y el sitio es Astro en modo
+> servidor que consulta la API pública de mariachi. Ver el README del repo y
+> `ecosistema/planes/documentacion-de-pipelines-en-mariachi.md` del repo de contexto.
+
 > Plan técnico del Agente Arquitecto. Estado: **propuesta, pendiente de aprobación**.
 > Insumo: `data/inventario.json` (Agente Explorador, 2026-08-12 — parte viva pendiente de acceso de red).
 
@@ -44,8 +50,9 @@ Condiciones que justificarían migrar al híbrido: necesidad de ver éxitos/fall
 
 ```
 sieej-documentation/
-├── docker-compose.yml
-├── .env.example
+├── compose.yaml            # base; overlays compose.dev.yaml y compose.prod.yaml
+├── Makefile, make/         # make up / make deploy
+├── .env.example            # plantilla de desarrollo; .env.production.example la de producción
 ├── web/                    # Astro (estático) + Dockerfile multi-stage (node → nginx)
 │   ├── src/pages|components|layouts|styles/
 │   └── public/docs/        # HTML de pipelines + assets (copiados en build, no versionados)
@@ -69,8 +76,8 @@ Reglas de degradación: si Airflow o la BD no responden durante el build, se reu
 
 - **`web`**: build multi-stage — etapa Node ejecuta `datalayer` (refresco de JSON) + `astro build`; etapa final nginx sirviendo `dist/`, usuario no-root, healthcheck HTTP.
 - **`builder`**: imagen Python slim + Node con `supercronic`; en el cron configurado (`REBUILD_CRON`, propuesta: diario 06:00) regenera los JSON y reconstruye el sitio hacia el volumen que `web` sirve. Expone además un endpoint mínimo de *webhook* opcional para que Airflow dispare el rebuild al terminar corridas.
-- **`api`** (no incluido por defecto): definición documentada para la migración al híbrido; **`redis`** solo como perfil `--profile cache`.
-- Configuración exclusivamente por `env_file`; `.env.example` completo. La BD y Airflow son externos: los contenedores solo necesitan alcanzar `iieg-db-etl:5432` (PostgreSQL, usuario de solo lectura) y la API REST de Airflow en la red interna — a documentar en el README.
+- **`api`** (no incluido por defecto): definición documentada para la migración al híbrido; Redis se agregaría entonces como servicio, no como perfil.
+- Compose dividido en `compose.yaml` + `compose.dev.yaml` / `compose.prod.yaml` (proyectos `sieej-documentation-dev` y `sieej-documentation`), invocado por `make up` y `make deploy`. Todas las variables se interpolan con `${VAR:?}` o `${VAR?}` desde `.env.development` o `.env.production`; plantillas `.env.example` y `.env.production.example`. La BD y Airflow son externos: los contenedores solo necesitan alcanzar `iieg-db-etl:5432` (PostgreSQL, usuario de solo lectura) y la API REST de Airflow en la red interna — a documentar en el README.
 
 Restricciones duras que el diseño respeta: la BD **nunca** se expone al navegador (el cliente solo recibe JSON estático); credenciales solo por variables de entorno; todo acceso de solo lectura; ninguna visita a la landing toca la BD.
 

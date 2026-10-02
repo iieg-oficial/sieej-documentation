@@ -3,28 +3,23 @@ import Layout from "../../layouts/Layout.astro";
 import BarraLateral from "../../components/BarraLateral.astro";
 import Info from "../../components/Info.astro";
 import { enLinea } from "../../lib/markdown";
-import { paginas } from "../../lib/pipelines";
-import vistas from "../../../../data/vistas.json";
+import { leerJson } from "../../lib/datos";
+import { listarPipelines } from "../../lib/documentos";
 
-export function getStaticPaths() {
-  return vistas.bases.map((base) => ({
-    params: { bd: base.nombre },
-    props: { base },
-  }));
-}
-
-const { base } = Astro.props;
+const [vistas, pipelines] = await Promise.all([leerJson<any>("vistas.json"), listarPipelines()]);
+const base = vistas?.bases.find((b: any) => b.nombre === Astro.params.bd);
+if (!vistas || !base) return new Response(null, { status: 404 });
 const bdOk = vistas.fuentes?.bd?.estado === "ok";
 
-const pipeline = paginas.find((p) => p.nombre === base.nombre);
+const pipeline = pipelines.find((p) => p.clave === base.nombre);
 const notas = [
   base.es_infraestructura
     ? "Base de infraestructura geoespacial: sus vistas son de sistema (PostGIS), no producto de un pipeline."
     : null,
   bdOk ? null : "Estructura según la documentación del pipeline; la introspección de la BD está pendiente de acceso.",
 ].filter((n): n is string => n !== null);
-const secciones = base.vistas.map((v) => ({ href: `#vista-${v.nombre}`, texto: v.nombre }));
-const otras = vistas.bases.map((b) => ({
+const secciones = base.vistas.map((v: any) => ({ href: `#vista-${v.nombre}`, texto: v.nombre }));
+const otras = vistas.bases.map((b: any) => ({
   href: `/vistas/${b.nombre}/`,
   texto: b.nombre,
   actual: b.nombre === base.nombre,
@@ -54,7 +49,7 @@ const TIPO_INSIGNIA: Record<string, string> = {
       {
         pipeline && (
           <p class="enlace-pipeline">
-            <a href={`/pipelines/${pipeline.nombre}/`}>Documentación del pipeline</a>
+            <a href={`/pipelines/${pipeline.clave}/`}>Documentación del pipeline</a>
           </p>
         )
       }

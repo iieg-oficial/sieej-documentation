@@ -1,0 +1,6 @@
+name: sieej-documentation-dev
+
+services:
+  web:
+    ports:
+      - "${WEB_BIND_ADDR:?}:${WEB_PORT:?}:8080"

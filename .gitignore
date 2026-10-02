@@ -2,6 +2,7 @@
 .env
 .env.*
 !.env.example
+!.env.production.example
 
 # Node / Astro
 node_modules/
@@ -24,6 +25,7 @@ build/
 
 # Docker
 *.pid
+compose.local.yaml
 
 # Editor / SO
 .vscode/

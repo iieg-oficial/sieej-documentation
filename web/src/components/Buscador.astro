@@ -71,9 +71,8 @@ const { objetivo, etiqueta, placeholder = "Buscar", compacto = false } = Astro.p
   }
 
   .buscador input:focus-visible {
-    outline: 3px solid var(--acento);
-    outline-offset: 1px;
-    border-color: transparent;
+    outline: none;
+    border-color: var(--brand-oscuro);
   }
 
   .buscador__vacio {
@@ -92,6 +91,11 @@ const { objetivo, etiqueta, placeholder = "Buscar", compacto = false } = Astro.p
     border-color: var(--linea);
     font-size: var(--texto-chico);
     padding-left: 2.3rem;
+  }
+
+  .buscador--compacto input:focus-visible {
+    outline: none;
+    border-color: var(--silenciado);
   }
 
   .buscador--compacto svg {

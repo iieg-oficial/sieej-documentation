@@ -66,7 +66,8 @@
   --radio: 1rem;
   --sombra: 0 1px 3px rgba(23, 42, 85, 0.06);
   --ancho-max: 1180px;
-  --alto-encabezado: 8.75rem;
+  --alto-encabezado: 6.25rem;
+  --respiro-ancla: 1.5rem;
   --texto-titular: clamp(1.875rem, 1.871vw + 0.704rem, 2.75rem);
   --texto-seccion: clamp(1.5rem, 1.2vw + 0.9rem, 2rem);
   --texto-tarjeta: 1.25rem;
@@ -81,6 +82,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--alto-encabezado) + var(--respiro-ancla));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -211,7 +213,6 @@ a:hover {
 
 section.bloque {
   padding: 3.5rem 0 1rem;
-  scroll-margin-top: var(--alto-encabezado);
 }
 
 .introduccion {
@@ -318,6 +319,12 @@ th {
 table code {
   white-space: nowrap;
   overflow-wrap: normal;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --alto-encabezado: 7.5rem;
+  }
 }
 
 @media (max-width: 640px) {

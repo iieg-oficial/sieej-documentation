@@ -1,4 +1,6 @@
 ---
+import Buscador from "./Buscador.astro";
+
 interface Enlace {
   href: string;
   texto: string;
@@ -27,12 +29,13 @@ const { secciones, tituloSecciones = "En esta página", otros, tituloOtros } = A
         ))
       }
     </ul>
-    <details class="barra__otros">
+    <details class="barra__otros" open>
       <summary>{tituloOtros}</summary>
-      <ul class="barra__lista barra__lista--otros">
+      <Buscador objetivo="barra-otros" etiqueta={`Buscar en ${tituloOtros.toLowerCase()}`} placeholder="Buscar" compacto />
+      <ul class="barra__lista barra__lista--otros" data-buscable="barra-otros">
         {
           otros.map((o) => (
-            <li>
+            <li data-buscar={o.texto}>
               <a href={o.href} aria-current={o.actual ? "page" : undefined}>
                 {o.texto}
               </a>
@@ -107,8 +110,6 @@ const { secciones, tituloSecciones = "En esta página", otros, tituloOtros } = A
 
   .barra__otros {
     margin-top: 1rem;
-    border-top: 1px solid var(--linea);
-    padding-top: 0.75rem;
   }
 
   .barra__otros summary {

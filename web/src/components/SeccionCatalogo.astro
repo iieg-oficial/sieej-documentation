@@ -1,4 +1,5 @@
 ---
+import Buscador from "./Buscador.astro";
 import { ESTADOS, ETAPAS, type Resumen } from "../lib/documentos";
 
 interface Props {
@@ -43,10 +44,11 @@ const generado = fechaGenerado
         </p>
       )
     }
-    <ul class="rejilla" role="list">
+    <Buscador objetivo="catalogo" etiqueta="Buscar pipeline" placeholder="Buscar pipeline por nombre o fuente" />
+    <ul class="rejilla" role="list" data-buscable="catalogo">
       {
         pipelines.map((p) => (
-          <li class="tarjeta tarjeta-pipeline">
+          <li class="tarjeta tarjeta-pipeline" data-buscar={`${p.titulo} ${p.clave} ${p.producto}`}>
             <div class="tarjeta-pipeline__cabecera">
               <h3 class="tarjeta-pipeline__titulo">{p.titulo}</h3>
               <span class={`insignia ${p.etiqueta.clase}`}>{p.etiqueta.texto}</span>
@@ -140,6 +142,11 @@ const generado = fechaGenerado
     gap: 0.2rem;
     color: var(--silenciado);
     font-size: var(--texto-chico);
+  }
+
+  .tarjeta-pipeline__etapas code {
+    background: var(--linea);
+    color: var(--tinta);
   }
 
   .etapa__nombre {

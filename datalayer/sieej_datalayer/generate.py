@@ -29,9 +29,10 @@ from .crosscheck import (
     construir_paginas,
 )
 from .db_introspect import consultar_bd
-from .etl_readme import leer_documentos
-from .models import EstadoFuente
+from .etl_readme import leer_documentos, listar_carpetas
+from .models import EstadoFuente, Inventario, PaginaPipeline
 from .respaldo import svg_der
+from .sincronizar import armar_payload, enviar
 
 ARCHIVOS = ("inventario.json", "numeralia.json", "vistas.json")
 CARPETA_PAGINAS = "pipelines"
@@ -49,11 +50,12 @@ def generar(settings: Settings, transport=None, connect=None) -> dict[str, BaseM
     """Construye los modelos del contrato de datos a partir de las fuentes."""
     generado = datetime.now(timezone.utc)
     fuente_readme, documentos = leer_documentos(settings)
+    carpetas = listar_carpetas(settings)
     fuente_airflow, dags = consultar_airflow(settings, transport=transport)
     fuente_bd, bases = consultar_bd(settings, connect=connect)
 
     fuentes = {"airflow": fuente_airflow, "bd": fuente_bd, "readme": fuente_readme}
-    inventario = construir_inventario(fuentes, documentos, dags, bases, generado)
+    inventario = construir_inventario(fuentes, documentos, dags, bases, generado, carpetas)
     numeralia = construir_numeralia(fuentes, inventario, dags, bases, documentos, generado)
     vistas = construir_estructura_vistas(fuentes, bases, documentos, generado)
     paginas = construir_paginas(fuentes, inventario, vistas, documentos, bases, generado)
@@ -153,10 +155,38 @@ def _retirar_paginas_huerfanas(
             acciones[relativo] = "retirado"
 
 
+def sincronizar_con_mariachi(
+    settings: Settings, resultados: dict[str, BaseModel], transport=None
+) -> dict:
+    """Envía el ciclo a mariachi con lo que quedó en disco tras la degradación."""
+    data_dir = Path(settings.data_dir)
+    inventario = Inventario.model_validate(_leer(data_dir / "inventario.json") or {})
+    paginas = {}
+    for nombre in resultados:
+        if nombre.startswith(f"{CARPETA_PAGINAS}/"):
+            datos = _leer(data_dir / nombre)
+            if datos:
+                pagina = PaginaPipeline.model_validate(datos)
+                paginas[pagina.nombre] = pagina
+    payload = armar_payload(inventario, paginas, inventario.fuentes, inventario.generado)
+    return enviar(settings, payload, transport=transport)
+
+
 def generar_y_escribir(settings: Settings, transport=None, connect=None) -> dict[str, str]:
     """Punto de entrada del build: nunca lanza."""
     try:
         resultados = generar(settings, transport=transport, connect=connect)
-        return escribir(settings, resultados)
+        acciones = escribir(settings, resultados)
     except Exception as exc:  # último recurso: el build del sitio sigue en pie
         return {"error": f"{type(exc).__name__}: {exc}"}
+    if settings.mariachi_configurado:
+        try:
+            resultado = sincronizar_con_mariachi(settings, resultados)
+        except Exception as exc:
+            resultado = {"estado": "error", "detalle": f"{type(exc).__name__}: {exc}"}
+        acciones["mariachi"] = resultado.get("estado", "desconocido")
+        if resultado.get("nuevos"):
+            acciones["mariachi_nuevos"] = ", ".join(resultado["nuevos"])
+        if resultado.get("detalle"):
+            acciones["mariachi_detalle"] = resultado["detalle"]
+    return acciones

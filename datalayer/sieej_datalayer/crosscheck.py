@@ -129,6 +129,7 @@ def construir_inventario(
     dags: dict[str, Dag],
     bases: list[BaseDeDatos],
     generado: datetime | None = None,
+    carpetas: dict[str, str] | None = None,
 ) -> Inventario:
     generado = generado or datetime.now(timezone.utc)
     bd_ok = fuentes.get("bd", Fuente(estado=EstadoFuente.SIN_CONFIGURAR)).estado
@@ -137,7 +138,8 @@ def construir_inventario(
 
     bases_pipeline = {b.nombre: b for b in bases if not b.es_infraestructura}
 
-    nombres = set(documentos) | set(bases_pipeline)
+    carpetas = carpetas or {}
+    nombres = set(documentos) | set(bases_pipeline) | set(carpetas)
     # Se cuelan los nombres derivados de los DAG para que un pipeline que solo
     # existe en Airflow —recién desplegado, sin base ni ficha— también aparezca.
     # El precio es que un dag_id fuera de convención se vuelve un pipeline
@@ -159,6 +161,17 @@ def construir_inventario(
             vistas_en_bd=len(base_viva.vistas) if base_viva else None,
         )
         p.clasificacion = _clasificar(p, vivas_ok)
+        p.carpeta_etl = carpetas.get(nombre) or (doc.carpeta if doc else None)
+        p.fuentes_detectadas = [
+            fuente
+            for fuente, presente in (
+                ("bd", nombre in bases_pipeline),
+                ("readme", doc is not None),
+                ("airflow", bool(p.etapas)),
+                ("carpeta", nombre in carpetas),
+            )
+            if presente
+        ]
         pipelines[nombre] = p
 
     dags_sin_pipeline = sorted(

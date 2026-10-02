@@ -22,8 +22,8 @@ Scopes de este repositorio: `web` (Astro), `datalayer` (Python), `docker`, `conf
 
 ## Seguridad
 
-- **Ninguna credencial ni cadena de conexión entra al repositorio**, nunca: todo por `.env`
-  (fuera de git) documentado en `.env.example`.
+- **Ninguna credencial ni cadena de conexión entra al repositorio**, nunca: todo por `.env.development`
+  o `.env.production` (fuera de git), documentados en `.env.example` y `.env.production.example`.
 - Todo acceso a Airflow y a la BD de producción es de **solo lectura**.
 - Los hooks de pre-commit incluyen detección de secretos; instálalos antes del primer commit:
 

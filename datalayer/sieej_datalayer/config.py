@@ -7,7 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=(".env", ".env.development"),
         env_file_encoding="utf-8",
         extra="ignore",
     )
@@ -37,6 +37,12 @@ class Settings(BaseSettings):
     etl_repo_url: str | None = None
     etl_repo_rama: str = "main"
 
+    # mariachi: destino de la sincronización (vacío, solo se escriben los JSON locales)
+    mariachi_url: str | None = None
+    mariachi_sync_key: str | None = None
+    mariachi_timeout: float = 60.0
+    mariachi_tls_verify: bool = True
+
     # Salida
     data_dir: Path = Path("data")
 
@@ -45,6 +51,10 @@ class Settings(BaseSettings):
         """Hay con qué autenticar: un token ya emitido, o usuario y contraseña."""
         credenciales = self.airflow_token or (self.airflow_username and self.airflow_password)
         return bool(self.airflow_base_url and credenciales)
+
+    @property
+    def mariachi_configurado(self) -> bool:
+        return bool(self.mariachi_url and self.mariachi_sync_key)
 
     @property
     def pg_configurado(self) -> bool:

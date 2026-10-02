@@ -1,5 +1,9 @@
 ---
-import vistas from "../../../data/vistas.json";
+interface Props {
+  vistas: any;
+}
+
+const { vistas } = Astro.props;
 
 const bdOk = vistas.fuentes?.bd?.estado === "ok";
 const basesPipeline = vistas.bases.filter((b) => !b.es_infraestructura);

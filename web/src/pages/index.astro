@@ -5,6 +5,15 @@ import SeccionCatalogo from "../components/SeccionCatalogo.astro";
 import SeccionNumeralia from "../components/SeccionNumeralia.astro";
 import SeccionVistas from "../components/SeccionVistas.astro";
 import FlujoDatos from "../components/FlujoDatos.astro";
+import { leerJson } from "../lib/datos";
+import { leerInventario, listarPipelines } from "../lib/documentos";
+
+const [pipelines, inventario, numeralia, vistas] = await Promise.all([
+  listarPipelines(),
+  leerInventario(),
+  leerJson<any>("numeralia.json"),
+  leerJson<any>("vistas.json"),
+]);
 ---
 
 <Layout>
@@ -26,9 +35,13 @@ import FlujoDatos from "../components/FlujoDatos.astro";
   </section>
 
   <SeccionSieej />
-  <SeccionCatalogo />
-  <SeccionNumeralia />
-  <SeccionVistas />
+  <SeccionCatalogo
+    pipelines={pipelines}
+    generado={inventario?.generado ?? null}
+    verificado={Boolean(inventario?.resumen?.verificado_contra_produccion)}
+  />
+  {numeralia && <SeccionNumeralia numeralia={numeralia} />}
+  {vistas && <SeccionVistas vistas={vistas} />}
 </Layout>
 
 <style>

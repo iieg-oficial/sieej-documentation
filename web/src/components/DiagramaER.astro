@@ -140,6 +140,25 @@ const id = `der-${base.nombre}`;
         svg.style.width = `${natural * escala}px`;
       });
     });
+    const lienzo = der.querySelector<HTMLElement>(".der__lienzo")!;
+    let arrastre: { x: number; y: number; left: number; top: number } | null = null;
+    lienzo.addEventListener("pointerdown", (e) => {
+      if (e.pointerType !== "mouse" || e.button !== 0) return;
+      arrastre = { x: e.clientX, y: e.clientY, left: lienzo.scrollLeft, top: lienzo.scrollTop };
+      lienzo.setPointerCapture(e.pointerId);
+      lienzo.classList.add("der__lienzo--arrastrando");
+    });
+    lienzo.addEventListener("pointermove", (e) => {
+      if (!arrastre) return;
+      lienzo.scrollLeft = arrastre.left - (e.clientX - arrastre.x);
+      lienzo.scrollTop = arrastre.top - (e.clientY - arrastre.y);
+    });
+    const soltar = () => {
+      arrastre = null;
+      lienzo.classList.remove("der__lienzo--arrastrando");
+    };
+    lienzo.addEventListener("pointerup", soltar);
+    lienzo.addEventListener("pointercancel", soltar);
   });
 </script>
 
@@ -182,6 +201,12 @@ const id = `der-${base.nombre}`;
     overflow: auto;
     max-height: 75vh;
     padding: 2.75rem 0.5rem 0.5rem;
+    cursor: grab;
+  }
+
+  .der__lienzo--arrastrando {
+    cursor: grabbing;
+    user-select: none;
   }
 
   .der svg,

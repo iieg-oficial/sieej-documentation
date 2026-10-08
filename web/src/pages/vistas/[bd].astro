@@ -92,11 +92,7 @@ const TIPO_INSIGNIA: Record<string, string> = {
         base.vistas.map((vista) => (
           <article class="tarjeta vista" id={`vista-${vista.nombre}`} aria-label={`Vista ${vista.nombre}`}>
             <header class="vista__cabecera">
-              <h3>
-                <code>
-                  {vista.esquema}.{vista.nombre}
-                </code>
-              </h3>
+              <h3>{vista.esquema}.{vista.nombre}</h3>
               <p class="vista__insignias">
                 <span class={`insignia ${TIPO_INSIGNIA[vista.tipo] ?? "insignia--neutra"}`}>
                   {vista.tipo === "MATERIALIZED VIEW" ? "Vista materializada" : "Vista"}
@@ -169,6 +165,9 @@ const TIPO_INSIGNIA: Record<string, string> = {
 
   .vista {
     margin-bottom: 1.5rem;
+    border: 0;
+    border-radius: 1.5rem;
+    padding: 1.25rem 1.5rem 1.5rem 2rem;
   }
 
   .vista__descripcion {
@@ -259,14 +258,11 @@ const TIPO_INSIGNIA: Record<string, string> = {
 
   .vista__cabecera h3 {
     margin: 0;
-    font-size: var(--texto-subtitulo);
+    font-size: 1.375rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--brand);
     min-width: 0;
-  }
-
-  .titulo-bd {
-    font-family: var(--fuente-codigo);
-    font-size: var(--texto-seccion);
-    font-weight: 600;
   }
 
   .vista__insignias {
@@ -277,8 +273,9 @@ const TIPO_INSIGNIA: Record<string, string> = {
   }
 
   .vista__meta {
-    color: var(--silenciado);
-    font-size: var(--texto-chico);
+    color: var(--titulo);
+    font-weight: 700;
+    font-size: var(--texto-cuerpo);
     margin: 0.35rem 0 0.75rem;
   }
 </style>

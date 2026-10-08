@@ -8,21 +8,7 @@ interface Props {
   verificado: boolean;
 }
 
-const ETIQUETAS: Record<string, { texto: string; clase: string }> = {
-  documentado: { texto: "En producción · documentado", clase: "insignia--ok" },
-  documentacion_pendiente: { texto: "Documentación pendiente", clase: "insignia--pendiente" },
-  posible_desactualizado: {
-    texto: "Posible documentación desactualizada",
-    clase: "insignia--desactualizado",
-  },
-  sin_verificar: { texto: "Sin verificar contra producción", clase: "insignia--neutra" },
-};
-
-const { pipelines: lista, generado: fechaGenerado, verificado } = Astro.props;
-const pipelines = lista.map((p) => ({
-  ...p,
-  etiqueta: ETIQUETAS[p.clasificacion ?? ""] ?? ETIQUETAS.sin_verificar,
-}));
+const { pipelines, generado: fechaGenerado, verificado } = Astro.props;
 const generado = fechaGenerado
   ? new Date(fechaGenerado).toLocaleDateString("es-MX", { year: "numeric", month: "long", day: "numeric" })
   : "—";
@@ -51,7 +37,6 @@ const generado = fechaGenerado
           <li class="tarjeta tarjeta-pipeline" data-buscar={`${p.titulo} ${p.clave} ${p.producto}`}>
             <div class="tarjeta-pipeline__cabecera">
               <h3 class="tarjeta-pipeline__titulo">{p.titulo}</h3>
-              <span class={`insignia ${p.etiqueta.clase}`}>{p.etiqueta.texto}</span>
             </div>
             <p class="tarjeta-pipeline__meta">
               <code>{p.clave}</code>

@@ -61,6 +61,10 @@
   --alerta-borde: #ffd29a;
   --error: #b3261e;
   --error-fondo: #fbe4e2;
+  --etiqueta-naranja: #fff2e5;
+  --etiqueta-azul: #dde7ff;
+  --etiqueta-morado: #f3eaff;
+  --borde-documento: #e6eeff;
   --fuente-principal: "Garet", system-ui, sans-serif;
   --fuente-codigo: "JetBrains Mono", Consolas, Menlo, monospace;
   --radio: 1rem;
@@ -69,7 +73,9 @@
   --alto-encabezado: 6.25rem;
   --respiro-ancla: 1.5rem;
   --texto-titular: clamp(1.875rem, 1.871vw + 0.704rem, 2.75rem);
-  --texto-seccion: clamp(1.5rem, 1.2vw + 0.9rem, 2rem);
+  --texto-seccion: clamp(1.875rem, 1.871vw + 0.704rem, 2.75rem);
+  --texto-h3: clamp(1.875rem, 1.871vw + 0.704rem, 2.25rem);
+  --texto-h4: clamp(1.5rem, 1.871vw + 0.704rem, 1.75rem);
   --texto-tarjeta: 1.25rem;
   --texto-subtitulo: 1.05rem;
   --texto-cuerpo: 1rem;
@@ -141,18 +147,20 @@ h1 {
 h2 {
   font-size: var(--texto-seccion);
   font-weight: 800;
+  line-height: 1.15;
   margin: 0 0 0.75rem;
 }
 
 h3 {
-  font-size: var(--texto-tarjeta);
+  font-size: var(--texto-h3);
   font-weight: 700;
+  line-height: 1.2;
   margin: 1.5rem 0 0.5rem;
 }
 
 h4 {
-  font-size: var(--texto-subtitulo);
-  font-weight: 700;
+  font-size: var(--texto-h4);
+  font-weight: 800;
   color: var(--brand-vivo);
   margin: 1.25rem 0 0.5rem;
 }
@@ -221,8 +229,9 @@ section.bloque {
 }
 
 h2.titulo-tarjeta {
-  font-size: var(--texto-tarjeta);
+  font-size: var(--texto-h3);
   font-weight: 700;
+  line-height: 1.2;
   margin: 0 0 0.5rem;
 }
 
@@ -250,37 +259,39 @@ h2.titulo-tarjeta {
 }
 
 .insignia {
-  display: inline-block;
-  border-radius: 999px;
-  padding: 0.15rem 0.7rem;
-  font-size: 0.78rem;
-  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 0.75rem;
+  padding: 0.5rem 1rem;
+  font-size: var(--texto-chico);
+  font-weight: 700;
+  line-height: 1.5;
   border: 1px solid transparent;
   white-space: nowrap;
 }
 
 .insignia--ok {
-  background: #e3f1e9;
-  border-color: #b7e0c8;
-  color: var(--exito);
+  background: var(--etiqueta-naranja);
+  border-color: rgba(255, 131, 0, 0.3);
+  color: var(--acento);
 }
 
 .insignia--pendiente {
-  background: var(--alerta-fondo);
-  border-color: var(--alerta-borde);
-  color: #9e5200;
+  background: var(--etiqueta-morado);
+  border-color: rgba(92, 36, 114, 0.3);
+  color: var(--brand);
 }
 
 .insignia--desactualizado {
   background: var(--error-fondo);
-  border-color: #f5c6c2;
+  border-color: rgba(179, 38, 30, 0.3);
   color: var(--error);
 }
 
 .insignia--neutra {
-  background: var(--linea);
-  border-color: var(--linea);
-  color: var(--tinta);
+  background: var(--etiqueta-azul);
+  border-color: rgba(22, 42, 85, 0.3);
+  color: var(--titulo);
 }
 
 .aviso {

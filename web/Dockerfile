@@ -1,4 +1,4 @@
-FROM node:22-slim AS construccion
+FROM node:26-slim AS construccion
 
 WORKDIR /app/web
 COPY web/package.json web/package-lock.json ./
@@ -6,7 +6,7 @@ RUN npm ci --no-audit --no-fund
 COPY web/ ./
 RUN npm run build && npm prune --omit=dev
 
-FROM node:22-slim
+FROM node:26-slim
 
 ENV NODE_ENV=production HOST=0.0.0.0 PORT=8080 DATA_DIR=/app/data
 WORKDIR /app/web

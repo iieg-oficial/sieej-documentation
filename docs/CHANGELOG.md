@@ -5,6 +5,12 @@ Todos los cambios notables en este proyecto se documentan en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/) y el proyecto
 adhiere a [Semantic Versioning](https://semver.org/lang/es/). La versión vive en `web/package.json`.
 
+## [No publicado]
+
+### Cambiado
+
+- Imágenes base a Python 3.15 y Node 26.
+
 ## [0.2.0] - 2026-10-02
 
 ### Agregado
